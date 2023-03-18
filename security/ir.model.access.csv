@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_casino_maquina_user,access_casino_maquina_user,model_casino_maquina,,1,0,0,0
+access_casino_maquina_manager,access_casino_maquina_manager,model_casino_maquina,ttg_casino.group_casino_manager,1,1,1,1
+access_casino_marca_user,access_casino_marca_user,model_casino_maquina_marca,,1,0,0,0
+access_casino_maquina_marca_manager,access_casino_maquina_marca_manager,model_casino_maquina_marca,ttg_casino.group_casino_manager,1,1,1,1
+access_casino_modelo_user,access_casino_modelo_user,model_casino_maquina_modelo,,1,0,0,0
+access_casino_maquina_modelo_manager,access_casino_maquina_modelo_manager,model_casino_maquina_modelo,ttg_casino.group_casino_manager,1,1,1,1

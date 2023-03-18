@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('base.group_casino_manager'))]" name="groups_id"/>
+    </record>
+
+    <record model="res.users" id="base.user_admin">
+        <field eval="[(4,ref('base.group_casino_manager'))]" name="groups_id"/>
+    </record>
+
+    <data noupdate="1">
+
+        <record id="ttg_casino.module_casino" model="ir.module.category">
+            <field name="name">Casino</field>
+            <field name="description">Control de los Ingresos del Casino.</field>
+            <field name="sequence">12</field>
+        </record>
+
+        <record id="group_casino_user" model="res.groups">
+            <field name="name">Registro de Ingresos Casino</field>
+            <field name="category_id" ref="ttg_casino.module_casino"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_casino_audit" model="res.groups">
+            <field name="name">Auditor de Ingresos Casino</field>
+            <field name="category_id" ref="ttg_casino.module_casino"/>
+            <field name="implied_ids" eval="[(4, ref('group_casino_user'))]"/>
+        </record>
+
+        <record id="group_casino_accountant" model="res.groups">
+            <field name="name">Contabilidad de Ingresos Casino</field>
+            <field name="category_id" ref="ttg_casino.module_casino"/>
+            <field name="implied_ids" eval="[(4, ref('group_casino_audit'))]"/>
+        </record>
+
+        <record id="group_casino_manager" model="res.groups">
+            <field name="name">Administrador de Casino</field>
+            <field name="category_id" ref="ttg_casino.module_casino"/>
+            <field name="implied_ids" eval="[(4, ref('group_casino_accountant'))]"/>
+        </record>
+
+        <record id="casino_control_comp_rule" model="ir.rule">
+            <field name="name">Ingresos de Casino por Empresa</field>
+            <field name="model_id" ref="model_casino_control"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,45 @@
+<odoo>
+    <record id="view_maquina_tree" model="ir.ui.view">
+        <field name="name">casino.maquina</field>
+        <field name="model">casino.maquina</field>
+        <field name="arch" type="xml">
+            <tree string="Maquinas" editable="bottom">
+                <field name="code" required="True"/>
+                <field name="name" required="True"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_maquinas" model="ir.actions.act_window">
+        <field name="name">Maquinas</field>
+        <field name="res_model">casino.maquina</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_maquina_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Crear Nuevas maquinas.
+            </p><p>
+            Este listado contiene las maquinas en uso del casino.
+            </p>
+        </field>
+    </record>
+
+    <!-- MENUITEMS -->
+    <menuitem id="menu_casino_root"
+        name="Casino"
+        web_icon="ttg_casino,static/description/icon.png"
+        groups="ttg_casino.group_casino_user"
+        sequence="29"/>
+
+    <menuitem id="menu_casino_ingresos"
+        name="Ingresos"
+        sequence="10"/>
+    
+    <menuitem id="menu_casino_maquinas"
+        name="Maquinas"
+        groups="ttg_casino.group_casino_manager"
+        parent="ttg_casino.menu_casino_root"
+        action="ttg_casino.action_maquinas"
+        sequence="60"/>
+</odoo>
