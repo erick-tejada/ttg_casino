@@ -13,7 +13,7 @@
     'website': 'https://www.tejadatech.com',
     'data': [
         'security/module_security.xml',
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         #'data/account.account.csv',
         'views/casino_views.xml',
     ],

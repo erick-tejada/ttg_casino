@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record model="res.users" id="base.user_root">
-        <field eval="[(4,ref('base.group_casino_manager'))]" name="groups_id"/>
-    </record>
-
-    <record model="res.users" id="base.user_admin">
-        <field eval="[(4,ref('base.group_casino_manager'))]" name="groups_id"/>
-    </record>
-
     <data noupdate="1">
 
         <record id="ttg_casino.module_casino" model="ir.module.category">
@@ -43,9 +35,17 @@
 
         <record id="casino_control_comp_rule" model="ir.rule">
             <field name="name">Ingresos de Casino por Empresa</field>
-            <field name="model_id" ref="model_casino_control"/>
+            <field name="model_id" ref="model_casino_maquina"/>
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
 
     </data>
+
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('ttg_casino.group_casino_manager'))]" name="groups_id"/>
+    </record>
+
+    <record model="res.users" id="base.user_admin">
+        <field eval="[(4,ref('ttg_casino.group_casino_manager'))]" name="groups_id"/>
+    </record>
 </odoo>
