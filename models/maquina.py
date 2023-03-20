@@ -11,7 +11,7 @@ class Maquina(models.Model):
     _order = 'code'
 
     code = fields.Integer('Secuencia', default=1, required=True)
-    name = fields.Char('Nombre', compute='_compute_name', store=True, required=True)
+    name = fields.Char('Nombre', compute='_compute_name', store=True)
     company_id = fields.Many2one('res.company', 'Compañia', required=True, index=True, default=lambda self: self.env.company)
     brand_id = fields.Many2one('casino.maquina.marca', string='Marca', related='model_id.brand_id', store=True, ondelete='restrict')
     model_id = fields.Many2one('casino.maquina.modelo', string='Modelo', required=True)

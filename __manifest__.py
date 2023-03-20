@@ -14,7 +14,7 @@
     'data': [
         'security/module_security.xml',
         'security/ir.model.access.csv',
-        #'data/account.account.csv',
+        'data/maquinas_data.xml',
         'views/casino_views.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],

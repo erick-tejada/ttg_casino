@@ -28,92 +28,96 @@
     </data>
     
     <data noupdate="1">
-        <record id="modelo_as560h" model="casino.maquina.marca">
+        <record id="modelo_as560h" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_ainsworth"/>
             <field name="name">A560-H</field>
         </record>
-        <record id="modelo_mkvi" model="casino.maquina.marca">
+        <record id="modelo_mkvi" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_aristocrat"/>
             <field name="name">MK-VI</field>
         </record>
-        <record id="modelo_helix" model="casino.maquina.marca">
+        <record id="modelo_helix" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_aristocrat"/>
             <field name="name">HELIX</field>
         </record>
-        <record id="modelo_alphapro2" model="casino.maquina.marca">
+        <record id="modelo_alphapro2" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_bally"/>
             <field name="name">ALPHA PRO 2</field>
         </record>
-        <record id="modelo_egtvs24" model="casino.maquina.marca">
+        <record id="modelo_egtvs24" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_egt"/>
             <field name="name">EGT-VS24</field>
         </record>
-        <record id="modelo_lumina" model="casino.maquina.marca">
+        <record id="modelo_lumina" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_gold_club"/>
             <field name="name">LUMINA</field>
         </record>
-        <record id="modelo_huolong" model="casino.maquina.marca">
+        <record id="modelo_huolong" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_gold_club"/>
             <field name="name">HUO LONG</field>
         </record>
-        <record id="modelo_s2" model="casino.maquina.marca">
+        <record id="modelo_s2" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_gold_club"/>
             <field name="name">S2</field>
         </record>
-        <record id="modelo_s3multi" model="casino.maquina.marca">
+        <record id="modelo_s3multi" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_gold_club"/>
             <field name="name">S3 MULTI</field>
         </record>
-        <record id="modelo_crystalcurve" model="casino.maquina.marca">
+        <record id="modelo_crystalcurve" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_igt"/>
             <field name="name">CRYSTAL CURVE</field>
         </record>
-        <record id="modelo_smld" model="casino.maquina.marca">
+        <record id="modelo_smld" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_igt"/>
             <field name="name">SMLD</field>
         </record>
-        <record id="modelo_g23" model="casino.maquina.marca">
+        <record id="modelo_g23" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_igt"/>
             <field name="name">G23 SLANT TOP</field>
         </record>
-        <record id="modelo_crystaldual" model="casino.maquina.marca">
+        <record id="modelo_crystaldual" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_igt"/>
             <field name="name">CRYSTAL DUAL</field>
         </record>
-        <record id="modelo_fv600" model="casino.maquina.marca">
+        <record id="modelo_fv600" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_novomatic"/>
             <field name="name">FV-600</field>
         </record>
-        <record id="modelo_fv623" model="casino.maquina.marca">
+        <record id="modelo_fv623" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_novomatic"/>
             <field name="name">FV-623</field>
         </record>
-        <record id="modelo_fv640f2" model="casino.maquina.marca">
+        <record id="modelo_fv640f2" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_novomatic"/>
             <field name="name">FV-640 F2</field>
         </record>
-        <record id="modelo_bb2" model="casino.maquina.marca">
+        <record id="modelo_fv640b" model="casino.maquina.modelo">
+            <field name="brand_id" ref="marca_novomatic"/>
+            <field name="name">FV-640 B</field>
+        </record>
+        <record id="modelo_bb2" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_wms"/>
             <field name="name">BB2</field>
         </record>
-        <record id="modelo_bb2xd" model="casino.maquina.marca">
+        <record id="modelo_bb2xd" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_wms"/>
             <field name="name">BB2 XD</field>
         </record>
-        <record id="modelo_bb2xdgold" model="casino.maquina.marca">
+        <record id="modelo_bb2xdgold" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_wms"/>
             <field name="name">BB2 XD GOLD</field>
         </record>
-        <record id="modelo_bb2slant" model="casino.maquina.marca">
+        <record id="modelo_bb2slant" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_wms"/>
             <field name="name">BB2 SLANT</field>
         </record>
-        <record id="modelo_bladegremlins" model="casino.maquina.marca">
+        <record id="modelo_bladegremlins" model="casino.maquina.modelo">
             <field name="brand_id" ref="marca_wms"/>
             <field name="name">BLADE GREMLINS</field>
         </record>
     </data>
-    
+
     <data noupdate="1">
         <record id="maquina_1" model="casino.maquina">
             <field name="code">1</field>
@@ -267,10 +271,345 @@
             <field name="code">38</field>
             <field name="model_id" ref="modelo_fv640f2"/>
         </record>
+
+        <record id="maquina_40" model="casino.maquina">
+            <field name="code">40</field>
+            <field name="model_id" ref="modelo_egtvs24"/>
+        </record>
+        <record id="maquina_41" model="casino.maquina">
+            <field name="code">41</field>
+            <field name="model_id" ref="modelo_egtvs24"/>
+        </record>
         
-        <record id="maquina_3" model="casino.maquina">
-            <field name="code">3</field>
-            <field name="model_id" ref="modelo_fv640f2"/>
+        <record id="maquina_42" model="casino.maquina">
+            <field name="code">42</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        <record id="maquina_43" model="casino.maquina">
+            <field name="code">43</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        <record id="maquina_44" model="casino.maquina">
+            <field name="code">44</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        <record id="maquina_45" model="casino.maquina">
+            <field name="code">45</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        <record id="maquina_46" model="casino.maquina">
+            <field name="code">46</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        <record id="maquina_47" model="casino.maquina">
+            <field name="code">47</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        <record id="maquina_48" model="casino.maquina">
+            <field name="code">48</field>
+            <field name="model_id" ref="modelo_alphapro2"/>
+        </record>
+        
+        <record id="maquina_50" model="casino.maquina">
+            <field name="code">50</field>
+            <field name="model_id" ref="modelo_s3multi"/>
+        </record>
+        <record id="maquina_51" model="casino.maquina">
+            <field name="code">51</field>
+            <field name="model_id" ref="modelo_s3multi"/>
+        </record>
+        <record id="maquina_52" model="casino.maquina">
+            <field name="code">52</field>
+            <field name="model_id" ref="modelo_s3multi"/>
+        </record>
+        <record id="maquina_53" model="casino.maquina">
+            <field name="code">53</field>
+            <field name="model_id" ref="modelo_s3multi"/>
+        </record>
+        
+        <record id="maquina_54" model="casino.maquina">
+            <field name="code">54</field>
+            <field name="model_id" ref="modelo_egtvs24"/>
+        </record>
+        
+        <record id="maquina_55" model="casino.maquina">
+            <field name="code">55</field>
+            <field name="model_id" ref="modelo_mkvi"/>
+        </record>
+        <record id="maquina_56" model="casino.maquina">
+            <field name="code">56</field>
+            <field name="model_id" ref="modelo_mkvi"/>
+        </record>
+        <record id="maquina_57" model="casino.maquina">
+            <field name="code">57</field>
+            <field name="model_id" ref="modelo_mkvi"/>
+        </record>
+        <record id="maquina_58" model="casino.maquina">
+            <field name="code">58</field>
+            <field name="model_id" ref="modelo_mkvi"/>
+        </record>
+
+        <record id="maquina_59" model="casino.maquina">
+            <field name="code">59</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_60" model="casino.maquina">
+            <field name="code">60</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_61" model="casino.maquina">
+            <field name="code">61</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_62" model="casino.maquina">
+            <field name="code">62</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_63" model="casino.maquina">
+            <field name="code">63</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_64" model="casino.maquina">
+            <field name="code">64</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_65" model="casino.maquina">
+            <field name="code">65</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        <record id="maquina_66" model="casino.maquina">
+            <field name="code">66</field>
+            <field name="model_id" ref="modelo_crystalcurve"/>
+        </record>
+        
+        <record id="maquina_67" model="casino.maquina">
+            <field name="code">67</field>
+            <field name="model_id" ref="modelo_smld"/>
+        </record>
+        <record id="maquina_68" model="casino.maquina">
+            <field name="code">68</field>
+            <field name="model_id" ref="modelo_smld"/>
+        </record>
+        <record id="maquina_69" model="casino.maquina">
+            <field name="code">69</field>
+            <field name="model_id" ref="modelo_fv640b"/>
+        </record>
+
+        <record id="maquina_70" model="casino.maquina">
+            <field name="code">70</field>
+            <field name="model_id" ref="modelo_smld"/>
+        </record>
+        <record id="maquina_71" model="casino.maquina">
+            <field name="code">71</field>
+            <field name="model_id" ref="modelo_smld"/>
+        </record>
+        
+        <record id="maquina_72" model="casino.maquina">
+            <field name="code">72</field>
+            <field name="model_id" ref="modelo_fv640b"/>
+        </record>
+                
+        <record id="maquina_73" model="casino.maquina">
+            <field name="code">73</field>
+            <field name="model_id" ref="modelo_g23"/>
+        </record>
+        <record id="maquina_74" model="casino.maquina">
+            <field name="code">74</field>
+            <field name="model_id" ref="modelo_g23"/>
+        </record>
+        <record id="maquina_75" model="casino.maquina">
+            <field name="code">75</field>
+            <field name="model_id" ref="modelo_g23"/>
+        </record>
+        <record id="maquina_76" model="casino.maquina">
+            <field name="code">76</field>
+            <field name="model_id" ref="modelo_g23"/>
+        </record>
+        <record id="maquina_77" model="casino.maquina">
+            <field name="code">77</field>
+            <field name="model_id" ref="modelo_g23"/>
+        </record>
+        <record id="maquina_78" model="casino.maquina">
+            <field name="code">78</field>
+            <field name="model_id" ref="modelo_g23"/>
+        </record>
+
+        <record id="maquina_79" model="casino.maquina">
+            <field name="code">79</field>
+            <field name="model_id" ref="modelo_as560h"/>
+        </record>
+        <record id="maquina_80" model="casino.maquina">
+            <field name="code">80</field>
+            <field name="model_id" ref="modelo_as560h"/>
+        </record>
+        <record id="maquina_81" model="casino.maquina">
+            <field name="code">81</field>
+            <field name="model_id" ref="modelo_as560h"/>
+        </record>
+        <record id="maquina_82" model="casino.maquina">
+            <field name="code">82</field>
+            <field name="model_id" ref="modelo_as560h"/>
+        </record>
+        <record id="maquina_83" model="casino.maquina">
+            <field name="code">83</field>
+            <field name="model_id" ref="modelo_as560h"/>
+        </record>
+        <record id="maquina_84" model="casino.maquina">
+            <field name="code">84</field>
+            <field name="model_id" ref="modelo_fv640b"/>
+        </record>
+        <record id="maquina_86" model="casino.maquina">
+            <field name="code">86</field>
+            <field name="model_id" ref="modelo_fv640b"/>
+        </record>
+        <record id="maquina_87" model="casino.maquina">
+            <field name="code">87</field>
+            <field name="model_id" ref="modelo_fv640b"/>
+        </record>
+        
+        <record id="maquina_88" model="casino.maquina">
+            <field name="code">88</field>
+            <field name="model_id" ref="modelo_s3multi"/>
+        </record>
+        <record id="maquina_89" model="casino.maquina">
+            <field name="code">89</field>
+            <field name="model_id" ref="modelo_s3multi"/>
+        </record>
+        
+        <record id="maquina_90" model="casino.maquina">
+            <field name="code">90</field>
+            <field name="model_id" ref="modelo_helix"/>
+        </record>
+        <record id="maquina_91" model="casino.maquina">
+            <field name="code">91</field>
+            <field name="model_id" ref="modelo_helix"/>
+        </record>
+        <record id="maquina_92" model="casino.maquina">
+            <field name="code">92</field>
+            <field name="model_id" ref="modelo_helix"/>
+        </record>
+        <record id="maquina_93" model="casino.maquina">
+            <field name="code">93</field>
+            <field name="model_id" ref="modelo_helix"/>
+        </record>
+        <record id="maquina_94" model="casino.maquina">
+            <field name="code">94</field>
+            <field name="model_id" ref="modelo_helix"/>
+        </record>
+        <record id="maquina_95" model="casino.maquina">
+            <field name="code">95</field>
+            <field name="model_id" ref="modelo_helix"/>
+        </record>
+        
+        <record id="maquina_96" model="casino.maquina">
+            <field name="code">96</field>
+            <field name="model_id" ref="modelo_bb2xd"/>
+        </record>
+        <record id="maquina_97" model="casino.maquina">
+            <field name="code">97</field>
+            <field name="model_id" ref="modelo_bb2xd"/>
+        </record>
+        <record id="maquina_98" model="casino.maquina">
+            <field name="code">98</field>
+            <field name="model_id" ref="modelo_bb2xd"/>
+        </record>
+        <record id="maquina_99" model="casino.maquina">
+            <field name="code">99</field>
+            <field name="model_id" ref="modelo_bb2xd"/>
+        </record>
+        
+        <record id="maquina_100" model="casino.maquina">
+            <field name="code">100</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_101" model="casino.maquina">
+            <field name="code">101</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_102" model="casino.maquina">
+            <field name="code">102</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_103" model="casino.maquina">
+            <field name="code">103</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_104" model="casino.maquina">
+            <field name="code">104</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_105" model="casino.maquina">
+            <field name="code">105</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_106" model="casino.maquina">
+            <field name="code">106</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        <record id="maquina_107" model="casino.maquina">
+            <field name="code">107</field>
+            <field name="model_id" ref="modelo_bb2xdgold"/>
+        </record>
+        
+        <record id="maquina_108" model="casino.maquina">
+            <field name="code">108</field>
+            <field name="model_id" ref="modelo_bb2slant"/>
+        </record>
+        <record id="maquina_109" model="casino.maquina">
+            <field name="code">109</field>
+            <field name="model_id" ref="modelo_bb2slant"/>
+        </record>
+        <record id="maquina_110" model="casino.maquina">
+            <field name="code">110</field>
+            <field name="model_id" ref="modelo_bb2slant"/>
+        </record>
+        <record id="maquina_111" model="casino.maquina">
+            <field name="code">111</field>
+            <field name="model_id" ref="modelo_bb2slant"/>
+        </record>
+        <record id="maquina_112" model="casino.maquina">
+            <field name="code">112</field>
+            <field name="model_id" ref="modelo_bb2slant"/>
+        </record>
+        
+        <record id="maquina_113" model="casino.maquina">
+            <field name="code">113</field>
+            <field name="model_id" ref="modelo_bb2"/>
+        </record>
+        <record id="maquina_114" model="casino.maquina">
+            <field name="code">114</field>
+            <field name="model_id" ref="modelo_bb2"/>
+        </record>
+
+        <record id="maquina_115" model="casino.maquina">
+            <field name="code">115</field>
+            <field name="model_id" ref="modelo_fv640b"/>
+        </record>
+        
+        <record id="maquina_116" model="casino.maquina">
+            <field name="code">116</field>
+            <field name="model_id" ref="modelo_bladegremlins"/>
+        </record>
+        <record id="maquina_117" model="casino.maquina">
+            <field name="code">117</field>
+            <field name="model_id" ref="modelo_bladegremlins"/>
+        </record>
+        
+        <record id="maquina_118" model="casino.maquina">
+            <field name="code">118</field>
+            <field name="model_id" ref="modelo_crystaldual"/>
+        </record>
+        <record id="maquina_119" model="casino.maquina">
+            <field name="code">119</field>
+            <field name="model_id" ref="modelo_crystaldual"/>
+        </record>
+        <record id="maquina_120" model="casino.maquina">
+            <field name="code">120</field>
+            <field name="model_id" ref="modelo_crystaldual"/>
+        </record>
+        <record id="maquina_121" model="casino.maquina">
+            <field name="code">121</field>
+            <field name="model_id" ref="modelo_crystaldual"/>
         </record>
     </data>
 </odoo>
