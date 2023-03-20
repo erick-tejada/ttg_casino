@@ -1,0 +1,95 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_bill_drop_tree" model="ir.ui.view">
+        <field name="name">casino.bill.drop</field>
+        <field name="model">casino.bill.drop</field>
+        <field name="arch" type="xml">
+            <tree string="Bill Drop" create="0" delete="0" editable="top">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" optional="show"/>
+                <field name="maquina_id" optional="show"/>
+                <field name="brand_id" optional="hide"/>
+                <field name="model_id" optional="hide"/>
+                
+                <field name="qty_50" optional="show"/>
+                <field name="amount_50" optional="show"/>
+                <field name="qty_100" optional="show"/>
+                <field name="amount_100" optional="show"/>
+                <field name="qty_200" optional="show"/>
+                <field name="amount_200" optional="show"/>
+                <field name="qty_500" optional="show"/>
+                <field name="amount_500" optional="show"/>
+                <field name="qty_1000" optional="show"/>
+                <field name="amount_1000" optional="show"/>
+                <field name="qty_2000" optional="show"/>
+                <field name="amount_2000" optional="show"/>
+
+                <field name="amount_total" optional="show" decoration-bf="1"/>
+
+                <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bill_drop_readonly_tree" model="ir.ui.view">
+        <field name="name">casino.bill.drop</field>
+        <field name="model">casino.bill.drop</field>
+        <field name="arch" type="xml">
+            <tree string="Bill Drop" create="0" delete="0" edit="0">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" optional="show"/>
+                <field name="maquina_id" optional="show"/>
+                <field name="brand_id" optional="hide"/>
+                <field name="model_id" optional="hide"/>
+                
+                <field name="qty_50" optional="show"/>
+                <field name="amount_50" optional="show"/>
+                <field name="qty_100" optional="show"/>
+                <field name="amount_100" optional="show"/>
+                <field name="qty_200" optional="show"/>
+                <field name="amount_200" optional="show"/>
+                <field name="qty_500" optional="show"/>
+                <field name="amount_500" optional="show"/>
+                <field name="qty_1000" optional="show"/>
+                <field name="amount_1000" optional="show"/>
+                <field name="qty_2000" optional="show"/>
+                <field name="amount_2000" optional="show"/>
+
+                <field name="amount_total" optional="show" decoration-bf="1"/>
+
+                <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_bill_drop" model="ir.actions.act_window">
+        <field name="name">Bill Drop</field>
+        <field name="res_model">casino.maquina.marca</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_bill_drop_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Bill Drop.
+            </p>
+        </field>
+    </record>
+    
+    <record id="action_bill_drop_readonly" model="ir.actions.act_window">
+        <field name="name">Bill Drop</field>
+        <field name="res_model">casino.maquina.marca</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_bill_drop_readonly_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Bill Drop.
+            </p><p>
+            Esta es una vista únicamente de Consulta.
+            </p>
+        </field>
+    </record>
+</odoo>

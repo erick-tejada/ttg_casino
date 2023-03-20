@@ -117,7 +117,7 @@
             <field name="name">BLADE GREMLINS</field>
         </record>
     </data>
-
+    
     <data noupdate="1">
         <record id="maquina_1" model="casino.maquina">
             <field name="code">1</field>

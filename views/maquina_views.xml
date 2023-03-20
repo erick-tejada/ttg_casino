@@ -1,0 +1,84 @@
+<odoo>
+    <record id="maquina_marca_form" model="ir.ui.view">
+        <field name="name">casino.maquina.marca.form</field>
+        <field name="model">casino.maquina.marca</field>
+        <field name="arch" type="xml">
+          <form string="Marca" create="false">
+            <sheet>
+                <div class="oe_title">
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group name="main_header">
+                    <group name="details">
+                        <field name="active"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Modelos" name="model_ids_page">
+                        <field name="model_ids" mode="tree">
+                            <tree editable="bottom" context="{'default_brand_id': id}">
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+          </form>
+        </field>
+    </record>
+
+    <record id="view_maquina_tree" model="ir.ui.view">
+        <field name="name">casino.maquina</field>
+        <field name="model">casino.maquina</field>
+        <field name="arch" type="xml">
+            <tree string="Maquinas" editable="bottom">
+                <field name="code" required="True"/>
+                <field name="brand_id" required="True"/>
+                <field name="model_id" required="True" options="{'no_create': True, 'no_open': True}"/>
+                <field name="name" required="True" groups="base.group_no_one" force_save="1"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_maquina_marca_tree" model="ir.ui.view">
+        <field name="name">casino.maquina.marca</field>
+        <field name="model">casino.maquina.marca</field>
+        <field name="arch" type="xml">
+            <tree string="Marcas y Modelos">
+                <field name="name" required="True"/>
+                <field name="model_ids" widget="many2many_tags"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_maquinas" model="ir.actions.act_window">
+        <field name="name">Maquinas</field>
+        <field name="res_model">casino.maquina</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Crear Nuevas maquinas.
+            </p><p>
+            Este listado contiene las maquinas en uso del casino.
+            </p>
+        </field>
+    </record>
+    
+    <record id="action_maquinas_marcas" model="ir.actions.act_window">
+        <field name="name">Marcas y Modelos</field>
+        <field name="res_model">casino.maquina.marca</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_maquina_marca_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Crear Nuevas marcas y modelos.
+            </p><p>
+            Este listado contiene las marcas y modelos de maquinas en uso del casino.
+            </p>
+        </field>
+    </record>
+</odoo>

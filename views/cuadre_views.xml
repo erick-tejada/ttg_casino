@@ -1,0 +1,70 @@
+<odoo>
+
+    <record id="cuadre_form" model="ir.ui.view">
+        <field name="name">casino.cuadre.form</field>
+        <field name="model">casino.cuadre</field>
+        <field name="arch" type="xml">
+          <form string="Cuadre" create="false">
+            <header>
+                <field name="state" widget="statusbar" statusbar_visible="draft,audit,accounting,done"/>
+            </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="open_bill_drop" icon="fa-money" type="object">
+                        <div class="o_field_widget o_stat_info">
+                            <span>
+                                Bill Drop
+                            </span>
+                        </div>
+                    </button>
+                </div>
+                <div class="oe_title">
+                    <h1>
+                        <field name="date"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="currency_usd_id" invisible="1"/>
+                    </h1>
+                </div>
+                <group name="group_maquina">
+                    <group name="group_maquina_1">
+                        <field name="bill_drop_total"/>
+                    </group>
+                </group>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids"/>
+                <field name="activity_ids"/>
+                <field name="message_ids"/>
+            </div>
+          </form>
+        </field>
+    </record>
+    
+    <record id="view_cuadre_tree" model="ir.ui.view">
+        <field name="name">casino.cuadre</field>
+        <field name="model">casino.cuadre</field>
+        <field name="arch" type="xml">
+            <tree string="Cuadre">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                
+                <field name="bill_drop_total" optional="show"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+                <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_cuadre" model="ir.actions.act_window">
+        <field name="name">Cuadre de Caja</field>
+        <field name="res_model">casino.cuadre</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_cuadre_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Cuadres de Caja.
+            </p>
+        </field>
+    </record>
+</odoo>
