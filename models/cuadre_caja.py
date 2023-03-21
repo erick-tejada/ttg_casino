@@ -37,8 +37,12 @@ class CuadreDeCaja(models.Model):
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------
     bill_drop_ids = fields.One2many('casino.bill.drop', 'cuadre_id', 'Detalle Bill Drop')
-    bill_drop_total = fields.Monetary('Bill Drop', compute='_compute_bill_drop')
-    tarjetas_cashout = fields.Monetary('Tarjetas Cashout', states={'done': [('readonly', True)]})
+    bill_drop_total = fields.Monetary('Total Bill Drop', compute='_compute_bill_drop') # Ingreso
+    
+    tarjetas_cashout = fields.Monetary('Tarjetas Cashout', states={'done': [('readonly', True)]}) # (Pagos) Egreso
+    
+    devolucion_ids = fields.One2many('casino.devolucion', 'cuadre_id', 'Detalle Devoluciones')
+    devolucion_total = fields.Monetary('Total Devoluciones', compute='_compute_devoluciones') # Egreso
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
@@ -61,14 +65,39 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
+    @api.depends('devolucion_ids', 'devolucion_ids.amount')
+    def _compute_devoluciones(self):
+        for record in self:
+            total = 0
+            for line in record.devolucion_ids:
+                total += line.amount
+            record.devolucion_total = total
+    
+    def open_devoluciones(self):
+        devolucion_ids = self.mapped('devolucion_ids')
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_devolucion")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
     @api.model
     def create(self, vals):
         cuadre = super(CuadreDeCaja, self).create(vals)
         if not cuadre.bill_drop_ids:
             maquina_ids = self.env['casino.maquina'].search([('company_id','=',cuadre.company_id.id)])
             for maquina in maquina_ids:
-                self.env['casino.bill.drop'].create({
+                self.env['casino.devolucion'].create({
                     'cuadre_id': cuadre.id,
                     'maquina_id': maquina.id,
                 })
         return cuadre
+
+    def unlink(self):
+        if any(cuadre.state != 'draft' for cuadre in self):
+            raise ValidationError('CUADRE NO ESTA EN BORRADOR: No puede borrar un Cuadre si no está en borrador.')
+        
+        res = super(CuadreDeCaja, self).unlink()
+        return res

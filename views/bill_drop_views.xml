@@ -125,7 +125,7 @@
 
                 <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
 
-                <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
         </field>
     </record>

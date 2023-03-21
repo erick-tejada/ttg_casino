@@ -19,6 +19,7 @@
         'views/cuadre_views.xml',
         'views/bill_drop_views.xml',
         'views/casino_views.xml',
+        'views/devolucion_views.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,

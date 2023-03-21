@@ -9,6 +9,7 @@
                 <field name="state" widget="statusbar" statusbar_visible="draft,audit,accounting,done"/>
             </header>
             <sheet>
+                <!--
                 <div class="oe_button_box" name="button_box">
                     <button class="oe_stat_button" name="open_bill_drop" icon="fa-money" type="object">
                         <div class="o_field_widget o_stat_info">
@@ -18,6 +19,7 @@
                         </div>
                     </button>
                 </div>
+                -->
                 <div class="oe_title">
                     <h1>
                         <field name="date"/>
@@ -27,17 +29,19 @@
                 </div>
                 <group name="group_maquina" string="Maquinas">
                     <group name="group_maquina_1">
-                        <field name="bill_drop_total"/>
-                        <!--
                         <label for="bill_drop_total"/>
                         <div class="o_row">
                             <field name="bill_drop_total"/>
-                            <button name="open_bill_drop" class="btn btn-primary fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
+                            <button name="open_bill_drop" class="btn fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
                         </div>
-                        -->
                     </group>
                     <group name="group_maquina_2">
                         <field name="tarjetas_cashout"/>
+                        <label for="devolucion_total"/>
+                        <div class="o_row">
+                            <field name="devolucion_total"/>
+                            <button name="open_devoluciones" class="btn fa fa-list" type="object" aria-label="Devoluciones por Máquina/Cliente" title="Devoluciones por Máquina/Cliente" role="img"/>
+                        </div>
                     </group>
                 </group>
             </sheet>
@@ -61,7 +65,7 @@
                 
                 <field name="bill_drop_total" optional="show"/>
                 <field name="activity_ids" widget="list_activity" optional="show"/>
-                <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+                <field name="state" optional="show" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
         </field>
     </record>
