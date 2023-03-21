@@ -1,33 +1,128 @@
 <odoo>
 <!-- FORM -->
+    
+
+    <record id="view_bill_drop_form" model="ir.ui.view">
+        <field name="name">casino.bill.drop.form</field>
+        <field name="model">casino.bill.drop</field>
+        <field name="arch" type="xml">
+            <form string="Bill Drop" create="0" delete="0">
+                <sheet>
+                    <field name="state" invisible="1"/>
+                    <field name="cuadre_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    
+                    <div class="oe_title">
+                        <h2>
+                            <field name="date"/>
+                        </h2>
+                        <h1>
+                            <field name="maquina_id" readonly="1" force_save="1" options="{'no_open': True, 'no_create': True}"/>
+                        </h1>
+                    </div>
+
+                    <group name="group_maquina">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th class="text-center">Denominación</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Monto</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">2000</td>
+                                            <td class="text-center">
+                                                <field name="qty_2000" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <field name="amount_2000"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">1000</td>
+                                            <td class="text-center">
+                                                <field name="qty_1000" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <field name="amount_1000"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">500</td>
+                                            <td class="text-center">
+                                                <field name="qty_500" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <field name="amount_500"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">200</td>
+                                            <td class="text-center">
+                                                <field name="qty_200" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <field name="amount_200"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">100</td>
+                                            <td class="text-center">
+                                                <field name="qty_100" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <field name="amount_100"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">50</td>
+                                            <td class="text-center">
+                                                <field name="qty_50" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <field name="amount_50"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right">
+                                                <strong><field name="amount_total"/></strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </group>
+
+                </sheet>
+          </form>
+        </field>
+    </record>
 
     <record id="view_bill_drop_tree" model="ir.ui.view">
         <field name="name">casino.bill.drop</field>
         <field name="model">casino.bill.drop</field>
         <field name="arch" type="xml">
-            <tree string="Bill Drop" create="0" delete="0" editable="top">
+            <tree string="Bill Drop" create="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
-                <field name="cuadre_id" optional="show"/>
-                <field name="maquina_id" optional="show"/>
-                <field name="brand_id" optional="hide"/>
-                <field name="model_id" optional="hide"/>
+                <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                <field name="maquina_id" readonly="1" force_save="1" optional="show"/>
+                <field name="brand_id" readonly="1" force_save="1" optional="hide"/>
+                <field name="model_id" readonly="1" force_save="1" optional="hide"/>
                 
-                <field name="qty_50" optional="show"/>
-                <field name="amount_50" optional="show"/>
-                <field name="qty_100" optional="show"/>
-                <field name="amount_100" optional="show"/>
-                <field name="qty_200" optional="show"/>
-                <field name="amount_200" optional="show"/>
-                <field name="qty_500" optional="show"/>
-                <field name="amount_500" optional="show"/>
-                <field name="qty_1000" optional="show"/>
-                <field name="amount_1000" optional="show"/>
-                <field name="qty_2000" optional="show"/>
-                <field name="amount_2000" optional="show"/>
+                <field name="qty_2000" sum="Total" optional="show"/>
+                <field name="qty_1000" sum="Total" optional="show"/>
+                <field name="qty_500" sum="Total" optional="show"/>
+                <field name="qty_200" sum="Total" optional="show"/>
+                <field name="qty_100" sum="Total" optional="show"/>
+                <field name="qty_50" sum="Total" optional="show"/>
 
-                <field name="amount_total" optional="show" decoration-bf="1"/>
+                <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
 
                 <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
@@ -47,30 +142,54 @@
                 <field name="brand_id" optional="hide"/>
                 <field name="model_id" optional="hide"/>
                 
-                <field name="qty_50" optional="show"/>
-                <field name="amount_50" optional="show"/>
-                <field name="qty_100" optional="show"/>
-                <field name="amount_100" optional="show"/>
-                <field name="qty_200" optional="show"/>
-                <field name="amount_200" optional="show"/>
-                <field name="qty_500" optional="show"/>
-                <field name="amount_500" optional="show"/>
-                <field name="qty_1000" optional="show"/>
-                <field name="amount_1000" optional="show"/>
-                <field name="qty_2000" optional="show"/>
+                <field name="qty_2000" sum="Total" optional="show"/>
                 <field name="amount_2000" optional="show"/>
+                <field name="qty_1000" sum="Total" optional="show"/>
+                <field name="amount_1000" optional="show"/>
+                <field name="qty_500" sum="Total" optional="show"/>
+                <field name="amount_500" optional="show"/>
+                <field name="qty_200" sum="Total" optional="show"/>
+                <field name="amount_200" optional="show"/>
+                <field name="qty_100" sum="Total" optional="show"/>
+                <field name="amount_100" optional="show"/>
+                <field name="qty_50" sum="Total" optional="show"/>
+                <field name="amount_50" optional="show"/>
 
-                <field name="amount_total" optional="show" decoration-bf="1"/>
+                <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
 
                 <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
         </field>
     </record>
+
+    <record id="bill_drop_search" model="ir.ui.view">
+        <field name="name">casino.bill.drop.search</field>
+        <field name="model">casino.bill.drop</field>
+        <field name="arch" type="xml">
+            <search string="Search Bill Drop">
+                <!-- Search fields -->
+                <field name="code"/>
+                <field name="maquina_id"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
+
+                <!-- Groups -->
+                <group expand="0" string="Group By">
+                    <filter string="Marca" name="brand_id"
+                            domain="[]"
+                            context="{'group_by':'brand_id'}"/>
+                    <filter string="Modelo" name="model_id"
+                            domain="[]"
+                            context="{'group_by':'model_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
     
     <record id="action_bill_drop" model="ir.actions.act_window">
         <field name="name">Bill Drop</field>
-        <field name="res_model">casino.maquina.marca</field>
-        <field name="view_mode">tree</field>
+        <field name="res_model">casino.bill.drop</field>
+        <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_bill_drop_tree"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -81,7 +200,7 @@
     
     <record id="action_bill_drop_readonly" model="ir.actions.act_window">
         <field name="name">Bill Drop</field>
-        <field name="res_model">casino.maquina.marca</field>
+        <field name="res_model">casino.bill.drop</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_bill_drop_readonly_tree"/>
         <field name="help" type="html">

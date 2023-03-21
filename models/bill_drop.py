@@ -9,14 +9,16 @@ class BillDrop(models.Model):
     _name = 'casino.bill.drop'
     _description = "Bill Drop"
     _order = 'cuadre_id, maquina_id'
+    _rec_name = 'maquina_id'
 
-    cuadre_id = fields.Many2one('casino.cuadre', string='Cuadre de Caja', required=True)
+    cuadre_id = fields.Many2one('casino.cuadre', string='Cuadre de Caja', required=True, ondelete='cascade')
     company_id = fields.Many2one('res.company', string='Compañía', related='cuadre_id.company_id', store=True)
     currency_id = fields.Many2one('res.currency', string='Moneda', related='cuadre_id.currency_id', store=True)
     date = fields.Date('Fecha', related='cuadre_id.date', store=True)
     state = fields.Selection(related='cuadre_id.state', string='Estado')
 
     maquina_id = fields.Many2one('casino.maquina', string='Maquina', required=True)
+    code = fields.Integer('Código', related='maquina_id.code', store=True)
     brand_id = fields.Many2one('casino.maquina.marca', string='Marca', related='maquina_id.brand_id', store=True)
     model_id = fields.Many2one('casino.maquina.modelo', string='Modelo', related='maquina_id.model_id', store=True)
 
@@ -53,3 +55,10 @@ class BillDrop(models.Model):
                 'amount_2000': amount_2000,
                 'amount_total': amount_50 + amount_100 + amount_200 + amount_500 + amount_1000 + amount_2000
             })
+    
+    @api.constrains('cuadre_id', 'maquina_id')
+    def _cuadre_maquina_constrains(self):
+        for record in self:
+            cant_bill_drop = self.env['casino.bill.drop'].search_count([('company_id','=',record.company_id.id), ('cuadre_id','=',record.cuadre_id.id), ('maquina_id','=',record.maquina_id.id)])
+            if cant_bill_drop > 1:
+                raise ValidationError('MAQUINA REPETIDA EN CUADRE: Esta máquina ya fue reportada para este cuadre!')

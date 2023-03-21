@@ -25,9 +25,19 @@
                         <field name="currency_usd_id" invisible="1"/>
                     </h1>
                 </div>
-                <group name="group_maquina">
+                <group name="group_maquina" string="Maquinas">
                     <group name="group_maquina_1">
                         <field name="bill_drop_total"/>
+                        <!--
+                        <label for="bill_drop_total"/>
+                        <div class="o_row">
+                            <field name="bill_drop_total"/>
+                            <button name="open_bill_drop" class="btn btn-primary fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
+                        </div>
+                        -->
+                    </group>
+                    <group name="group_maquina_2">
+                        <field name="tarjetas_cashout"/>
                     </group>
                 </group>
             </sheet>
