@@ -21,6 +21,7 @@ class BillDrop(models.Model):
     code = fields.Integer('Código', related='maquina_id.code', store=True)
     brand_id = fields.Many2one('casino.maquina.marca', string='Marca', related='maquina_id.brand_id', store=True)
     model_id = fields.Many2one('casino.maquina.modelo', string='Modelo', related='maquina_id.model_id', store=True)
+    maquina_state = fields.Selection(related='maquina_id.state', string="Estado Máquina")
 
     qty_50 = fields.Integer('Cant. 50')
     qty_100 = fields.Integer('Cant. 100')

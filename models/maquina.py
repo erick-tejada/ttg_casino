@@ -16,6 +16,10 @@ class Maquina(models.Model):
     brand_id = fields.Many2one('casino.maquina.marca', string='Marca', related='model_id.brand_id', store=True, ondelete='restrict')
     model_id = fields.Many2one('casino.maquina.modelo', string='Modelo', required=True)
     active = fields.Boolean('Activo', default=True)
+    state = fields.Selection([
+        ('operational', 'En Uso'),
+        ('not_operational', 'Fuera de Servicio')
+        ], string='Estado', copy=False, required=True, default='operational')
 
     _sql_constraints = [
         ('unique_code', 'unique(code)', 'El código de la maquina debe de ser único!'),

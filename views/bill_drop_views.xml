@@ -106,9 +106,10 @@
         <field name="name">casino.bill.drop</field>
         <field name="model">casino.bill.drop</field>
         <field name="arch" type="xml">
-            <tree string="Bill Drop" create="0" delete="0">
+            <tree string="Bill Drop" create="0" delete="0" decoration-danger="maquina_state == 'not_operational'">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
+                <field name="maquina_state" invisible="1"/>
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
                 <field name="maquina_id" readonly="1" force_save="1" optional="show"/>
@@ -133,9 +134,10 @@
         <field name="name">casino.bill.drop</field>
         <field name="model">casino.bill.drop</field>
         <field name="arch" type="xml">
-            <tree string="Bill Drop" create="0" delete="0" edit="0">
+            <tree string="Bill Drop" create="0" delete="0" edit="0" decoration-danger="maquina_state == 'not_operational'">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
+                <field name="maquina_state" invisible="1"/>
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" optional="show"/>
                 <field name="maquina_id" optional="show"/>

@@ -11,7 +11,7 @@
                     </h1>
                 </div>
                 <group name="main_header">
-                    <group name="details">
+                    <group name="details2">
                         <field name="active"/>
                     </group>
                 </group>
@@ -33,11 +33,12 @@
         <field name="name">casino.maquina</field>
         <field name="model">casino.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Maquinas" editable="bottom">
+            <tree string="Maquinas" editable="bottom" decoration-danger="state == 'not_operational'">
                 <field name="code" required="True"/>
                 <field name="brand_id" required="True"/>
                 <field name="model_id" required="True" options="{'no_create': True, 'no_open': True}"/>
                 <field name="name" required="True" groups="base.group_no_one" force_save="1"/>
+                <field name="state"/>
                 <field name="active" widget="boolean_toggle"/>
             </tree>
         </field>
