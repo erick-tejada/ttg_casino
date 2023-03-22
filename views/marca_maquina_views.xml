@@ -1,0 +1,53 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_marca_maquina_tree" model="ir.ui.view">
+        <field name="name">casino.marca.maquina</field>
+        <field name="model">casino.marca.maquina</field>
+        <field name="arch" type="xml">
+            <tree string="Marcas Maquinas" editable="bottom">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                
+                <field name="partner_id"  options="{'no_create': True}" optional="show"/>
+                <field name="ref"  optional="show"/>
+                <field name="amount" sum="Total" optional="show"/>
+                <field name="note" optional="show"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="marca_maquina_search" model="ir.ui.view">
+        <field name="name">casino.marca.maquina.search</field>
+        <field name="model">casino.marca.maquina</field>
+        <field name="arch" type="xml">
+            <search string="Search Marca Maquina">
+                <!-- Search fields -->
+                <field name="partner_id"/>
+                <field name="ref"/>
+
+                <!-- Groups -->
+                <group expand="0" string="Group By">
+                    <filter string="Cliente" name="partner_id"
+                            domain="[]"
+                            context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_marca_maquina" model="ir.actions.act_window">
+        <field name="name">marca</field>
+        <field name="res_model">casino.marca.maquina</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_marca_maquina_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Marcas de Maquinas.
+            </p>
+        </field>
+    </record>
+</odoo>

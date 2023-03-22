@@ -33,7 +33,13 @@
                         <div class="o_row">
                             <field name="bill_drop_total"/>
                             <button name="open_bill_drop" class="btn fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
+                        </div>                        
+                        <label for="marca_maquina_total"/>
+                        <div class="o_row">
+                            <field name="marca_maquina_total"/>
+                            <button name="open_marca_maquinas" class="btn fa fa-list" type="object" aria-label="Marcas por Máquina/Cliente" title="Marcas por Máquina/Cliente" role="img"/>
                         </div>
+                        <field name="recarga_tarjeta"/>
                     </group>
                     <group name="group_maquina_2">
                         <field name="tarjetas_cashout"/>
@@ -41,6 +47,11 @@
                         <div class="o_row">
                             <field name="devolucion_total"/>
                             <button name="open_devoluciones" class="btn fa fa-list" type="object" aria-label="Devoluciones por Máquina/Cliente" title="Devoluciones por Máquina/Cliente" role="img"/>
+                        </div>
+                        <label for="otros_pagos_total"/>
+                        <div class="o_row">
+                            <field name="otros_pagos_total"/>
+                            <button name="open_otros_pagos" class="btn fa fa-list" type="object" aria-label="Otros Pagos por Máquina/Cliente" title="Otros Pagos por Máquina/Cliente" role="img"/>
                         </div>
                     </group>
                 </group>

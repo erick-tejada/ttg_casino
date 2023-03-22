@@ -1,11 +1,11 @@
 <odoo>
 <!-- FORM -->
 
-    <record id="view_devolucion_tree" model="ir.ui.view">
-        <field name="name">casino.devolucion</field>
-        <field name="model">casino.devolucion</field>
+    <record id="view_otros_pagos_tree" model="ir.ui.view">
+        <field name="name">casino.otros.pagos</field>
+        <field name="model">casino.otros.pagos</field>
         <field name="arch" type="xml">
-            <tree string="Devoluciones" decoration-danger="maquina_state == 'not_operational'" editable="bottom">
+            <tree string="Otros Pagos" decoration-danger="maquina_state == 'not_operational'" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="maquina_state" invisible="1"/>
@@ -24,11 +24,11 @@
         </field>
     </record>
 
-    <record id="devolucion_search" model="ir.ui.view">
-        <field name="name">casino.devolucion.search</field>
-        <field name="model">casino.devolucion</field>
+    <record id="otros_pagos_search" model="ir.ui.view">
+        <field name="name">casino.otros.pagos.search</field>
+        <field name="model">casino.otros.pagos</field>
         <field name="arch" type="xml">
-            <search string="Search Devolucion">
+            <search string="Search Otros Pagos">
                 <!-- Search fields -->
                 <field name="partner_id"/>
                 <field name="ref"/>
@@ -53,14 +53,14 @@
         </field>
     </record>
     
-    <record id="action_devolucion" model="ir.actions.act_window">
-        <field name="name">Devolucion</field>
-        <field name="res_model">casino.devolucion</field>
+    <record id="action_otros_pagos" model="ir.actions.act_window">
+        <field name="name">Otros Pagos</field>
+        <field name="res_model">casino.otros.pagos</field>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_devolucion_tree"/>
+        <field name="view_id" ref="view_otros_pagos_tree"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-            Detalles de Devoluciones.
+            Detalles de Otros Pagos.
             </p>
         </field>
     </record>

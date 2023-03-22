@@ -8,4 +8,6 @@ access_casino_maquina_modelo_manager,access_casino_maquina_modelo_manager,model_
 access_cuadre_user,access_cuadre_user,model_casino_cuadre,ttg_casino.group_casino_user,1,1,1,0
 access_cuadre_manager,access_cuadre_manager,model_casino_cuadre,ttg_casino.group_casino_accountant,1,1,1,1
 access_bill_drop_user,access_bill_drop_user,model_casino_bill_drop,ttg_casino.group_casino_user,1,1,1,0
-access_devolucion_user,access_devolucion_user,model_casino_devolucion,ttg_casino.group_casino_user,1,1,1,1
+access_devolucion_user,access_devolucion_user,model_casino_devolucion,ttg_casino.group_casino_user,1,1,1,0
+access_marca_maquina,access_marca_maquina,model_casino_marca_maquina,ttg_casino.group_casino_user,1,1,1,0
+access_otros_pagos_maquina,access_otros_pagos_maquina,model_casino_otros_pagos,ttg_casino.group_casino_user,1,1,1,0

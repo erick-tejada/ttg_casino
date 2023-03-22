@@ -43,6 +43,14 @@ class CuadreDeCaja(models.Model):
     
     devolucion_ids = fields.One2many('casino.devolucion', 'cuadre_id', 'Detalle Devoluciones')
     devolucion_total = fields.Monetary('Total Devoluciones', compute='_compute_devoluciones') # Egreso
+    
+    marca_maquina_ids = fields.One2many('casino.marca.maquina', 'cuadre_id', 'Detalle Marcas Maquina')
+    marca_maquina_total = fields.Monetary('Total Marcas Maquina', compute='_compute_marcas_maquina') # Egreso
+    
+    recarga_tarjeta = fields.Monetary('Recarga de Tarjeta', states={'done': [('readonly', True)]}) # Ingreso
+    
+    otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Otros Pagos')
+    otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos') # Egreso
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
@@ -74,8 +82,41 @@ class CuadreDeCaja(models.Model):
             record.devolucion_total = total
     
     def open_devoluciones(self):
-        devolucion_ids = self.mapped('devolucion_ids')
         action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_devolucion")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('marca_maquina_ids', 'marca_maquina_ids.amount')
+    def _compute_marcas_maquina(self):
+        for record in self:
+            total = 0
+            for line in record.marca_maquina_ids:
+                total += line.amount
+            record.marca_maquina_total = total
+    
+    def open_marca_maquinas(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_maquina")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('marca_maquina_ids', 'marca_maquina_ids.amount')
+    def _compute_otros_pagos(self):
+        for record in self:
+            total = 0
+            for line in record.otros_pagos_ids:
+                total += line.amount
+            record.otros_pagos_total = total
+    
+    def open_otros_pagos(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_otros_pagos")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,

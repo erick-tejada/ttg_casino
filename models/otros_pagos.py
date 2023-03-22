@@ -5,9 +5,9 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class Devolucion(models.Model):
-    _name = 'casino.devolucion'
-    _description = "Devolucion Maquinas"
+class OtrosPagos(models.Model):
+    _name = 'casino.otros.pagos'
+    _description = "Otros Pagos Maquinas"
     _rec_name = 'partner_id'
     _order = 'cuadre_id,partner_id'
 
@@ -30,6 +30,6 @@ class Devolucion(models.Model):
 
     def unlink(self):
         if any(record.state == 'done' for record in self):
-            raise ValidationError('CUADRE CERRADO: No puede borrar una Devolución si el Cuadre está cerrado.')
-        res = super(Devolucion, self).unlink()
+            raise ValidationError('CUADRE CERRADO: No puede borrar un Pago si el Cuadre está cerrado.')
+        res = super(OtrosPagos, self).unlink()
         return res

@@ -20,6 +20,8 @@
         'views/bill_drop_views.xml',
         'views/casino_views.xml',
         'views/devolucion_views.xml',
+        'views/marca_maquina_views.xml',
+        'views/otros_pagos_views.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,

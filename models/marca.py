@@ -5,9 +5,11 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class Marca(models.Model):
-    _name = 'casino.maquina.marca'
+class MarcaMaquina(models.Model):
+    _name = 'casino.marca.maquina'
     _description = "Marca Maquinas"
+    _rec_name = 'partner_id'
+    _order = 'cuadre_id,partner_id'
 
     cuadre_id = fields.Many2one('casino.cuadre', string='Cuadre de Caja', required=True, ondelete='cascade')
     company_id = fields.Many2one('res.company', string='Compañía', related='cuadre_id.company_id', store=True)
@@ -15,6 +17,13 @@ class Marca(models.Model):
     date = fields.Date('Fecha', related='cuadre_id.date', store=True)
     state = fields.Selection(related='cuadre_id.state', string='Estado')
 
-    partner_id = fields.Many2one('res.partner', required=True)
+    partner_id = fields.Many2one('res.partner', string="Cliente", required=True)
+    ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
     amount = fields.Monetary('Monto', required=True)
-    
+    note = fields.Char('Nota')
+
+    def unlink(self):
+        if any(record.state == 'done' for record in self):
+            raise ValidationError('CUADRE CERRADO: No puede borrar una Marca si el Cuadre está cerrado.')
+        res = super(MarcaMaquina, self).unlink()
+        return res
