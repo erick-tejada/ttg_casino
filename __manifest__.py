@@ -23,6 +23,7 @@
         'views/otros_pagos_views.xml',
         'views/marca_mesa_views.xml',
         'views/res_partner_views.xml',
+        'views/res_config_settings_views.xml',
         'views/casino_views.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],

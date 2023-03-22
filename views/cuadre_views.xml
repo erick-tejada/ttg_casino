@@ -74,6 +74,23 @@
                         <field name="pago_apuestas_mesas_usd"/>
                     </group>
                 </group>
+                
+                <h2 style="border-bottom: solid 1px #444b5a;">Divisas, Cambios y Cierre</h2>
+                <group name="group3">
+                    <group name="group3_group1" string="Cambio Divisa">
+                        <label for="casino_tasa_usd"/>
+                        <div class="o_row">
+                            <field name="casino_tasa_usd" readonly="1" force_save="1"/>
+                            <button name="action_refresh_tasa_usd"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-refresh" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                        </div>
+                        <field name="cambio_dolares"/>
+                        <field name="dop_cambio_dolares"/>
+                    </group>
+                    <group name="group3_group2">
+                        <field name="apuestas_mesas_usd"/>
+                        <field name="pago_apuestas_mesas_usd"/>
+                    </group>
+                </group>
             </sheet>
             <div class="oe_chatter">
                 <field name="message_follower_ids"/>

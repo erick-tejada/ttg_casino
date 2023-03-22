@@ -15,6 +15,11 @@ class CuadreDeCaja(models.Model):
     def _default_currency_usd_id(self):
         return self.env['res.currency'].search([('name','=','USD')]).id
     
+    def _default_casino_tasa_usd(self):
+        casino_tasa_usd = self.env.company.casino_tasa_usd
+        return casino_tasa_usd
+
+    
     @api.constrains('company_id', 'date')
     def _date_company_id(self):
         for record in self:
@@ -61,6 +66,13 @@ class CuadreDeCaja(models.Model):
     
     marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
     marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas') # Ingreso
+
+    # DIVISAS
+    # ----------------------------------------------------------------------------------------------------------------
+    casino_tasa_usd = fields.Float('Tasa USD', default=_default_casino_tasa_usd, help='Tasa USD utilizada para el cambio de Divisas.')    
+    cambio_dolares = fields.Monetary('Cambio Dolares', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Ingresos
+    dop_cambio_dolares = fields.Monetary('DOP Entregado', compute='_compute_dop_cambio_dolares', states={'done': [('readonly', True)]}) # Egresos
+    
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
@@ -150,6 +162,14 @@ class CuadreDeCaja(models.Model):
         }
         action['context'] = context
         return action
+
+    @api.depends('casino_tasa_usd', 'cambio_dolares')
+    def _compute_dop_cambio_dolares(self):
+        for record in self:
+            record.dop_cambio_dolares = record.casino_tasa_usd * record.cambio_dolares
+    
+    def action_refresh_tasa_usd(self):
+        self.casino_tasa_usd = self.env.company.casino_tasa_usd
 
     @api.model
     def create(self, vals):

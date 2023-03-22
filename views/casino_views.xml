@@ -57,6 +57,7 @@
     <!-- CONTABILIDAD -->
     <menuitem id="menu_casino_contabilidad_root"
         parent="ttg_casino.menu_casino_root"
+        groups="ttg_casino.group_casino_accountant"
         name="Contabilidad"
         sequence="80"/>
     
@@ -65,4 +66,8 @@
         parent="ttg_casino.menu_casino_contabilidad_root"
         action="ttg_casino.action_casino_partner_prestamista"
         sequence="20"/>
+
+    <!-- CONFIGURACIONES -->
+    <menuitem id="menu_casino_config" name="Configuraciones" parent="menu_casino_root"
+        sequence="100" action="action_casino_config" groups="ttg_casino.group_casino_accountant"/>
 </odoo>
