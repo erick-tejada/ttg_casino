@@ -22,6 +22,7 @@
         'views/devolucion_views.xml',
         'views/marca_maquina_views.xml',
         'views/otros_pagos_views.xml',
+        'views/marca_mesa_views.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,

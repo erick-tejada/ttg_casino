@@ -45,12 +45,23 @@ class CuadreDeCaja(models.Model):
     devolucion_total = fields.Monetary('Total Devoluciones', compute='_compute_devoluciones') # Egreso
     
     marca_maquina_ids = fields.One2many('casino.marca.maquina', 'cuadre_id', 'Detalle Marcas Maquina')
-    marca_maquina_total = fields.Monetary('Total Marcas Maquina', compute='_compute_marcas_maquina') # Egreso
+    marca_maquina_total = fields.Monetary('Total Marcas Maquina', compute='_compute_marcas_maquina') # Ingreso
     
     recarga_tarjeta = fields.Monetary('Recarga de Tarjeta', states={'done': [('readonly', True)]}) # Ingreso
     
     otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Otros Pagos')
     otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos') # Egreso
+
+    # MESAS
+    # ----------------------------------------------------------------------------------------------------------------
+    apuestas_mesas = fields.Monetary('Apuestas en Mesas', states={'done': [('readonly', True)]}) # Ingresos
+    pago_apuestas_mesas = fields.Monetary('Pago Apuestas', states={'done': [('readonly', True)]}) # Egreso
+
+    apuestas_mesas_usd = fields.Monetary('Apuestas en Mesas USD', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Ingresos
+    pago_apuestas_mesas_usd = fields.Monetary('Pago Apuestas USD', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Egreso
+    
+    marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
+    marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas') # Ingreso
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
@@ -124,6 +135,23 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
+    @api.depends('marca_mesa_ids', 'marca_mesa_ids.amount')
+    def _compute_marcas_mesas(self):
+        for record in self:
+            total = 0
+            for line in record.marca_mesa_ids:
+                total += line.amount
+            record.marca_mesa_total = total
+    
+    def open_marca_mesas(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_mesa")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+
     @api.model
     def create(self, vals):
         cuadre = super(CuadreDeCaja, self).create(vals)

@@ -23,12 +23,12 @@
                 <div class="oe_title">
                     <h1>
                         <field name="date"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="currency_usd_id" invisible="1"/>
                     </h1>
                 </div>
                 <group name="group_maquina" string="Maquinas">
                     <group name="group_maquina_1">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="currency_usd_id"/>
                         <label for="bill_drop_total"/>
                         <div class="o_row">
                             <field name="bill_drop_total"/>
@@ -53,6 +53,22 @@
                             <field name="otros_pagos_total"/>
                             <button name="open_otros_pagos" class="btn fa fa-list" type="object" aria-label="Otros Pagos por Máquina/Cliente" title="Otros Pagos por Máquina/Cliente" role="img"/>
                         </div>
+                    </group>
+                </group>
+                
+                <group name="group_mesa" string="Mesas">
+                    <group name="group_mesa_1">
+                        <field name="apuestas_mesas"/>
+                        <field name="pago_apuestas_mesas"/>
+                        <label for="marca_mesa_total"/>
+                        <div class="o_row">
+                            <field name="marca_mesa_total"/>
+                            <button name="open_marca_mesas" class="btn fa fa-list" type="object" aria-label="Marcas Mesas" title="Marcas Mesas" role="img"/>
+                        </div>
+                    </group>
+                    <group name="group_mesa_2">
+                        <field name="apuestas_mesas_usd"/>
+                        <field name="pago_apuestas_mesas_usd"/>
                     </group>
                 </group>
             </sheet>
