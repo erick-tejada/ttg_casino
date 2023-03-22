@@ -86,9 +86,14 @@
                         <field name="cambio_dolares"/>
                         <field name="dop_cambio_dolares"/>
                     </group>
-                    <group name="group3_group2">
-                        <field name="apuestas_mesas_usd"/>
-                        <field name="pago_apuestas_mesas_usd"/>
+                    <group name="group3_group2" string="Tarjeta de Crédito">
+                        <label for="cobro_tc_total"/>
+                        <div class="o_row">
+                            <field name="cobro_tc_total"/>
+                            <button name="open_cobros_tc"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                        </div>
+                        <field name="cobro_tc_comision_total"/>
+                        <field name="cobro_tc_pagado_total"/>
                     </group>
                 </group>
             </sheet>

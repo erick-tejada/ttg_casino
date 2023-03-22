@@ -41,20 +41,20 @@ class CuadreDeCaja(models.Model):
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------
     bill_drop_ids = fields.One2many('casino.bill.drop', 'cuadre_id', 'Detalle Bill Drop')
-    bill_drop_total = fields.Monetary('Total Bill Drop', compute='_compute_bill_drop') # Ingreso
+    bill_drop_total = fields.Monetary('Total Bill Drop', compute='_compute_bill_drop', store=True) # Ingreso
     
     tarjetas_cashout = fields.Monetary('Tarjetas Cashout', states={'done': [('readonly', True)]}) # (Pagos) Egreso
     
     devolucion_ids = fields.One2many('casino.devolucion', 'cuadre_id', 'Detalle Devoluciones')
-    devolucion_total = fields.Monetary('Total Devoluciones', compute='_compute_devoluciones') # Egreso
+    devolucion_total = fields.Monetary('Total Devoluciones', compute='_compute_devoluciones', store=True) # Egreso
     
     marca_maquina_ids = fields.One2many('casino.marca.maquina', 'cuadre_id', 'Detalle Marcas Maquina')
-    marca_maquina_total = fields.Monetary('Total Marcas Maquina', compute='_compute_marcas_maquina') # Ingreso
+    marca_maquina_total = fields.Monetary('Total Marcas Maquina', compute='_compute_marcas_maquina', store=True) # Ingreso
     
     recarga_tarjeta = fields.Monetary('Recarga de Tarjeta', states={'done': [('readonly', True)]}) # Ingreso
     
     otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Otros Pagos')
-    otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos') # Egreso
+    otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos', store=True) # Egreso
 
     # MESAS
     # ----------------------------------------------------------------------------------------------------------------
@@ -65,13 +65,20 @@ class CuadreDeCaja(models.Model):
     pago_apuestas_mesas_usd = fields.Monetary('Pago Apuestas USD', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Egreso
     
     marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
-    marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas') # Ingreso
+    marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas', store=True) # Ingreso
 
     # DIVISAS
     # ----------------------------------------------------------------------------------------------------------------
     casino_tasa_usd = fields.Float('Tasa USD', default=_default_casino_tasa_usd, help='Tasa USD utilizada para el cambio de Divisas.')    
     cambio_dolares = fields.Monetary('Cambio Dolares', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Ingresos
-    dop_cambio_dolares = fields.Monetary('DOP Entregado', compute='_compute_dop_cambio_dolares', states={'done': [('readonly', True)]}) # Egresos
+    dop_cambio_dolares = fields.Monetary('DOP Entregado', compute='_compute_dop_cambio_dolares', states={'done': [('readonly', True)]}, store=True) # Egresos
+    
+    # TERJETA DE CREDITO
+    # ----------------------------------------------------------------------------------------------------------------
+    cobro_tc_ids = fields.One2many('casino.cobro.tc', 'cuadre_id', 'Detalle Cobros TC')
+    cobro_tc_total = fields.Monetary('Total Cobro Tarjeta Crédito', compute='_compute_tc', store=True) # Ingreso
+    cobro_tc_comision_total = fields.Monetary('Total Comision TC', compute='_compute_tc', store=True) # Ingreso
+    cobro_tc_pagado_total = fields.Monetary('Total Efectivo Pagado por TC', compute='_compute_tc', store=True) # Egreso
     
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
@@ -170,6 +177,27 @@ class CuadreDeCaja(models.Model):
     
     def action_refresh_tasa_usd(self):
         self.casino_tasa_usd = self.env.company.casino_tasa_usd
+
+    @api.depends('cobro_tc_ids', 'cobro_tc_ids.amount', 'cobro_tc_ids.amount_fee')
+    def _compute_tc(self):
+        for record in self:
+            total = 0
+            total_fee = 0
+            for line in record.cobro_tc_ids:
+                total += line.amount
+                total_fee += line.amount_fee
+            record.cobro_tc_total = total
+            record.cobro_tc_comision_total = total_fee
+            record.cobro_tc_pagado_total = total - total_fee
+    
+    def open_cobros_tc(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_cobro_tc")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
 
     @api.model
     def create(self, vals):

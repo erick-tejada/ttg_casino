@@ -1,0 +1,54 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_cobro_tc_tree" model="ir.ui.view">
+        <field name="name">casino.cobro.tc</field>
+        <field name="model">casino.cobro.tc</field>
+        <field name="arch" type="xml">
+            <tree string="Cobros TC" editable="bottom">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                
+                <field name="partner_id"  options="{'no_create': True}" optional="show"/>
+                <field name="ref"  optional="show"/>
+                <field name="amount" sum="Total" optional="show"/>
+                <field name="amount_fee" sum="Total" optional="show"/>
+                <field name="note" optional="show"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="cobro_tc_search" model="ir.ui.view">
+        <field name="name">casino.cobro.tc.search</field>
+        <field name="model">casino.cobro.tc</field>
+        <field name="arch" type="xml">
+            <search string="Search Cobro TC">
+                <!-- Search fields -->
+                <field name="partner_id"/>
+                <field name="ref"/>
+
+                <!-- Groups -->
+                <group expand="0" string="Group By">
+                    <filter string="Cliente" name="partner_id"
+                            domain="[]"
+                            context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_cobro_tc" model="ir.actions.act_window">
+        <field name="name">cobro.tc</field>
+        <field name="res_model">casino.cobro.tc</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_cobro_tc_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Cobros de Tarjeta de Crédito.
+            </p>
+        </field>
+    </record>
+</odoo>

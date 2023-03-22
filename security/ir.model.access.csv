@@ -12,3 +12,4 @@ access_devolucion_user,access_devolucion_user,model_casino_devolucion,ttg_casino
 access_marca_maquina,access_marca_maquina,model_casino_marca_maquina,ttg_casino.group_casino_user,1,1,1,0
 access_otros_pagos_maquina,access_otros_pagos_maquina,model_casino_otros_pagos,ttg_casino.group_casino_user,1,1,1,0
 access_marca_mesa,access_marca_mesa,model_casino_marca_mesa,ttg_casino.group_casino_user,1,1,1,0
+access_cobro_tc,access_cobro_tc,model_casino_cobro_tc,ttg_casino.group_casino_user,1,1,1,0
