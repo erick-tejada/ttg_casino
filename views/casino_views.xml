@@ -8,6 +8,7 @@
         groups="ttg_casino.group_casino_user"
         sequence="29"/>
 
+    <!-- INGRESOS -->
     <menuitem id="menu_casino_ingresos"
         parent="ttg_casino.menu_casino_root"
         name="Ingresos"
@@ -18,14 +19,23 @@
         parent="ttg_casino.menu_casino_ingresos"
         action="ttg_casino.action_cuadre"
         sequence="10"/>
+
+    <menuitem id="menu_casino_clientes"
+        name="Clientes Casino"
+        parent="ttg_casino.menu_casino_ingresos"
+        action="ttg_casino.action_casino_partner_cliente"
+        sequence="20"/>
     
+    <!--
     <menuitem id="menu_bill_drop"
         name="Historico Bill Drop"
         groups="ttg_casino.group_casino_accountant"
         parent="ttg_casino.menu_casino_ingresos"
         action="ttg_casino.action_bill_drop_readonly"
         sequence="60"/>
+    -->
     
+    <!-- MQUINAS -->
     <menuitem id="menu_casino_maquinas_root"
         name="Maquinas"
         groups="ttg_casino.group_casino_manager"
@@ -42,5 +52,17 @@
         name="Marcas y Modelos"
         parent="ttg_casino.menu_casino_maquinas_root"
         action="ttg_casino.action_maquinas_marcas"
+        sequence="20"/>
+
+    <!-- CONTABILIDAD -->
+    <menuitem id="menu_casino_contabilidad_root"
+        parent="ttg_casino.menu_casino_root"
+        name="Contabilidad"
+        sequence="80"/>
+    
+    <menuitem id="menu_casino_prestamistas"
+        name="Prestamistas"
+        parent="ttg_casino.menu_casino_contabilidad_root"
+        action="ttg_casino.action_casino_partner_prestamista"
         sequence="20"/>
 </odoo>

@@ -4,3 +4,4 @@ from . import bill_drop
 from . import devolucion
 from . import marca
 from . import otros_pagos
+from . import res_partner

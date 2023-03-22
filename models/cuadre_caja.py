@@ -12,9 +12,8 @@ class CuadreDeCaja(models.Model):
     _rec_name = 'date'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    @api.model
     def _default_currency_usd_id(self):
-        return self.env['res.currency'].search([('name','=','USD')])
+        return self.env['res.currency'].search([('name','=','USD')]).id
     
     @api.constrains('company_id', 'date')
     def _date_company_id(self):
@@ -26,7 +25,7 @@ class CuadreDeCaja(models.Model):
     date = fields.Date('Fecha', required=True, default=lambda self: fields.Date.context_today(self), states={'done': [('readonly', True)]}, copy=False, index=True, tracking=3)
     company_id = fields.Many2one('res.company', string='Compañía', required=True, default=lambda self: self.env.company)
     currency_id = fields.Many2one('res.currency', string='Moneda', related='company_id.currency_id', store=True)
-    currency_usd_id = fields.Many2one('res.currency', string='Moneda USD', readonly=True, default=_default_currency_usd_id)
+    currency_usd_id = fields.Many2one('res.currency', string='Moneda USD', default=_default_currency_usd_id)
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('audit', 'Auditoría'),
@@ -158,7 +157,7 @@ class CuadreDeCaja(models.Model):
         if not cuadre.bill_drop_ids:
             maquina_ids = self.env['casino.maquina'].search([('company_id','=',cuadre.company_id.id)])
             for maquina in maquina_ids:
-                self.env['casino.devolucion'].create({
+                self.env['casino.bill.drop'].create({
                     'cuadre_id': cuadre.id,
                     'maquina_id': maquina.id,
                 })

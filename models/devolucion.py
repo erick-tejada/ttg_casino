@@ -23,7 +23,7 @@ class Devolucion(models.Model):
     model_id = fields.Many2one('casino.maquina.modelo', string='Modelo', related='maquina_id.model_id', store=True)
     maquina_state = fields.Selection(related='maquina_id.state', string="Estado Máquina")
 
-    partner_id = fields.Many2one('res.partner', string="Cliente", required=True)
+    partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
     ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
     amount = fields.Monetary('Monto', required=True)
     note = fields.Char('Nota')

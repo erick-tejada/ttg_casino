@@ -25,10 +25,12 @@
                         <field name="date"/>
                     </h1>
                 </div>
-                <group name="group_maquina" string="Maquinas">
+
+                <h2 style="border-bottom: solid 1px #444b5a;">Máquinas</h2>
+                <group name="group_maquina">
                     <group name="group_maquina_1">
                         <field name="currency_id" invisible="1"/>
-                        <field name="currency_usd_id"/>
+                        <field name="currency_usd_id" invisible="1" readonly="1" force_save="1"/>
                         <label for="bill_drop_total"/>
                         <div class="o_row">
                             <field name="bill_drop_total"/>
@@ -56,7 +58,8 @@
                     </group>
                 </group>
                 
-                <group name="group_mesa" string="Mesas">
+                <h2 style="border-bottom: solid 1px #444b5a;">Mesas</h2>
+                <group name="group_mesa">
                     <group name="group_mesa_1">
                         <field name="apuestas_mesas"/>
                         <field name="pago_apuestas_mesas"/>

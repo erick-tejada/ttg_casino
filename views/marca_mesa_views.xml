@@ -14,6 +14,7 @@
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="show"/>
                 <field name="amount" sum="Total" optional="show"/>
+                <field name="lender_partner_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
@@ -28,12 +29,16 @@
                 <!-- Search fields -->
                 <field name="partner_id"/>
                 <field name="ref"/>
+                <field name="lender_partner_id"/>
 
                 <!-- Groups -->
                 <group expand="0" string="Group By">
                     <filter string="Cliente" name="partner_id"
                             domain="[]"
                             context="{'group_by':'partner_id'}"/>
+                    <filter string="Prestamista" name="lender_partner_id"
+                            domain="[]"
+                            context="{'group_by':'lender_partner_id'}"/>
                 </group>
             </search>
         </field>
