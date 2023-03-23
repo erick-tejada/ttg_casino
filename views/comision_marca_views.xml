@@ -1,0 +1,101 @@
+<odoo>
+
+    <record id="comision_marca_form" model="ir.ui.view">
+        <field name="name">casino.comision.marca.form</field>
+        <field name="model">casino.comision.marca</field>
+        <field name="arch" type="xml">
+          <form string="Cuadre">
+            <header>
+                <button name="action_load_comisiones" string="Cargar Comisiones" type="object" states="draft" class="oe_highlight"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+            </header>
+            <sheet>
+                <!--
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="open_bill_drop" icon="fa-money" type="object">
+                        <div class="o_field_widget o_stat_info">
+                            <span>
+                                Bill Drop
+                            </span>
+                        </div>
+                    </button>
+                </div>
+                -->
+                <div class="oe_title">
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group name="group1">
+                    <group name="group1_group1">
+                        <field name="company_id" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="year" options="{'format': 0}"/>
+                        <field name="month"/>
+                    </group>
+                    <group name="group1_group2">
+                        <field name="lender_partner_id" options="{'no_open': True, 'no_create': True}"/>
+                        <field name="amount"/>
+                    </group>
+                </group>
+                <group name="group2">
+                    <field name="note"/>
+                </group>
+
+                <notebook>
+                    <page name="page1" string="Detalles">
+                        <field name="line_ids">
+                            <tree create="0" edit="0" delete="0">
+                                <field name="comision_id" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="date"/>
+                                <field name="amount_marcas"/>
+                                <field name="amount_percent"/>
+                                <field name="amount_fee"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids"/>
+                <field name="activity_ids"/>
+                <field name="message_ids"/>
+            </div>
+          </form>
+        </field>
+    </record>
+    
+    <record id="view_comision_marca_tree" model="ir.ui.view">
+        <field name="name">casino.comision.marca</field>
+        <field name="model">casino.comision.marca</field>
+        <field name="arch" type="xml">
+            <tree string="Cuadre">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                
+                <field name="name" optional="show"/>
+                <field name="year" optional="show" widget="integer" options="{'format': 0}"/>
+                <field name="month" optional="show"/>
+                <field name="lender_partner_id" optional="show"/>
+                <field name="note" optional="show"/>
+                <field name="amount" optional="show"/>
+
+                <field name="state" optional="show" widget="badge" decoration-success="state == 'done'"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_comision_marca" model="ir.actions.act_window">
+        <field name="name">Comision de Marca</field>
+        <field name="res_model">casino.comision.marca</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_comision_marca_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Cuadres de Caja.
+            </p>
+        </field>
+    </record>
+</odoo>

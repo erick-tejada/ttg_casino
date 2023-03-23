@@ -9,3 +9,4 @@ from . import res_company
 from . import res_config_settings
 from . import cobro_tc
 from . import sobrante_faltante
+from . import comision_marca
