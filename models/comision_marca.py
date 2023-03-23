@@ -11,6 +11,7 @@ class ComisionMarca(models.Model):
     _name = 'casino.comision.marca'
     _description = "Comision por Marcas"
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'name desc'
 
     def _default_currency_usd_id(self):
         return self.env['res.currency'].search([('name','=','USD')]).id
@@ -87,18 +88,18 @@ class ComisionMarca(models.Model):
     def action_load_comisiones(self):
         record = self
         # Clear old data
-        self.env['casino.comision.marca.linea'].search(['comision_id','=',record.id]).unlink()
+        self.env['casino.comision.marca.linea'].search([('comision_id','=',record.id)]).unlink()
         record.amount = 0
         
         # TODO Verify all cuadre are done
 
         # Date range
-        date_start = '%s-%s-1' % (record.year, str(record.month).zfill(2))
+        date_start = '%s-%s-01' % (record.year, str(record.month).zfill(2))
 
         if record.month == 12:
-            date_end = '%s-%s-1' % (record.year + 1, str(1).zfill(2))
+            date_end = '%s-%s-01' % (record.year + 1, str(1).zfill(2))
         else:
-            date_end = '%s-%s-1' % (record.year, str(int(record.month) + 1).zfill(2))
+            date_end = '%s-%s-01' % (record.year, str(int(record.month) + 1).zfill(2))
 
         # get all
         marca_ids = self.env['casino.marca.mesa'].search([
@@ -106,7 +107,7 @@ class ComisionMarca(models.Model):
             ('date','>=',date_start),
             ('date','<',date_end),
             ('lender_partner_id','=',record.lender_partner_id.id),
-            ('state','=','done'),
+            #('state','=','done'),
         ])
 
         totals_by_date = {}
@@ -138,6 +139,7 @@ class ComisionMarca(models.Model):
 class ComisionMarcaLinea(models.Model):
     _name = 'casino.comision.marca.linea'
     _description = "Linea de Comision por Marcas"
+    _order = 'date desc'
 
     comision_id = fields.Many2one('casino.comision.marca', string='Reporte de Comision', required=True, ondelete='cascade')
     currency_id = fields.Many2one('res.currency', string='Moneda', related='comision_id.currency_id', store=True)

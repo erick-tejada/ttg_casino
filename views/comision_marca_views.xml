@@ -50,7 +50,7 @@
                                 <field name="currency_id" invisible="1"/>
                                 <field name="date"/>
                                 <field name="amount_marcas"/>
-                                <field name="amount_percent"/>
+                                <field name="amount_percent" widget="percentage"/>
                                 <field name="amount_fee"/>
                             </tree>
                         </field>
@@ -80,6 +80,7 @@
                 <field name="month" optional="show"/>
                 <field name="lender_partner_id" optional="show"/>
                 <field name="note" optional="show"/>
+                <field name="line_ids"/>
                 <field name="amount" optional="show"/>
 
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'done'"/>

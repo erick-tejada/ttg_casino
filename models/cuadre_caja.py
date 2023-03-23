@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class CuadreDeCaja(models.Model):
     _name = 'casino.cuadre'
     _description = "Cuadre de Caja"
-    _order = 'date'
+    _order = 'date desc'
     _rec_name = 'date'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
