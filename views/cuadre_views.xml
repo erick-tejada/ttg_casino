@@ -95,6 +95,18 @@
                         <field name="cobro_tc_comision_total"/>
                         <field name="cobro_tc_pagado_total"/>
                     </group>
+                    <group name="group3_group3" string="Sobrantes y Faltantes">
+                        <label for="sobrante_total"/>
+                        <div class="o_row">
+                            <field name="sobrante_total"/>
+                            <button name="open_sobrante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                        </div>
+                        <label for="faltante_total"/>
+                        <div class="o_row">
+                            <field name="faltante_total"/>
+                            <button name="open_faltante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                        </div>
+                    </group>
                 </group>
             </sheet>
             <div class="oe_chatter">

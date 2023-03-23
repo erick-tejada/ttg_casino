@@ -8,7 +8,7 @@
     'category': 'Accounting/Accounting',
     'description': """
         Agrega funcionalidades para tener mejor control operativo de los ingresos en Caja del Casino.""",
-    'depends': ['account'],
+    'depends': ['account', 'hr'],
     'summary': 'Agrega funcionalidades para tener mejor control operativo de los ingresos en Caja del Casino.',
     'website': 'https://www.tejadatech.com',
     'data': [
@@ -24,6 +24,8 @@
         'views/marca_mesa_views.xml',
         'views/res_partner_views.xml',
         'views/cobro_tc_views.xml',
+        'views/faltante_views.xml',
+        'views/sobrante_views.xml',
         'views/res_config_settings_views.xml',
         'views/casino_views.xml',
     ],

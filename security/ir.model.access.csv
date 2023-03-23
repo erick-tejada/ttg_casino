@@ -13,3 +13,5 @@ access_marca_maquina,access_marca_maquina,model_casino_marca_maquina,ttg_casino.
 access_otros_pagos_maquina,access_otros_pagos_maquina,model_casino_otros_pagos,ttg_casino.group_casino_user,1,1,1,0
 access_marca_mesa,access_marca_mesa,model_casino_marca_mesa,ttg_casino.group_casino_user,1,1,1,0
 access_cobro_tc,access_cobro_tc,model_casino_cobro_tc,ttg_casino.group_casino_user,1,1,1,0
+access_sobrante,access_sobrante,model_casino_sobrante,ttg_casino.group_casino_user,1,1,1,0
+access_faltante,access_faltante,model_casino_faltante,ttg_casino.group_casino_user,1,1,1,0

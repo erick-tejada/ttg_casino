@@ -80,6 +80,13 @@ class CuadreDeCaja(models.Model):
     cobro_tc_comision_total = fields.Monetary('Total Comision TC', compute='_compute_tc', store=True) # Ingreso
     cobro_tc_pagado_total = fields.Monetary('Total Efectivo Pagado por TC', compute='_compute_tc', store=True) # Egreso
     
+    # SOBRANTES Y FALTANTES
+    # ----------------------------------------------------------------------------------------------------------------
+    faltante_ids = fields.One2many('casino.faltante', 'cuadre_id', 'Detalle Faltantes')
+    faltante_total = fields.Monetary('Total Faltante', compute='_compute_faltante', store=True)
+    sobrante_ids = fields.One2many('casino.sobrante', 'cuadre_id', 'Detalle Sobrantes')
+    sobrante_total = fields.Monetary('Total Sobrante', compute='_compute_sobrante', store=True)
+    
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
@@ -192,6 +199,40 @@ class CuadreDeCaja(models.Model):
     
     def open_cobros_tc(self):
         action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_cobro_tc")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('faltante_ids', 'faltante_ids.amount')
+    def _compute_faltante(self):
+        for record in self:
+            total = 0
+            for line in record.faltante_ids:
+                total += line.amount
+            record.faltante_total = total
+    
+    def open_faltante(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_faltante")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('sobrante_ids', 'sobrante_ids.amount')
+    def _compute_sobrante(self):
+        for record in self:
+            total = 0
+            for line in record.sobrante_ids:
+                total += line.amount
+            record.sobrante_total = total
+    
+    def open_sobrante(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_sobrante")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,

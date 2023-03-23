@@ -1,0 +1,51 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_sobrante_tree" model="ir.ui.view">
+        <field name="name">casino.sobrante</field>
+        <field name="model">casino.sobrante</field>
+        <field name="arch" type="xml">
+            <tree string="Sobrantes" editable="bottom">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                
+                <field name="employee_id"  options="{'no_create': True, 'no_open': True}" optional="show"/>
+                <field name="amount" sum="Total" optional="show"/>
+                <field name="note" optional="show"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="sobrante_search" model="ir.ui.view">
+        <field name="name">casino.sobrante.search</field>
+        <field name="model">casino.sobrante</field>
+        <field name="arch" type="xml">
+            <search string="Search Sobrantes">
+                <!-- Search fields -->
+                <field name="employee_id"/>
+
+                <!-- Groups -->
+                <group expand="0" string="Group By">
+                    <filter string="Cajero" name="employee_id"
+                            domain="[]"
+                            context="{'group_by':'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_sobrante" model="ir.actions.act_window">
+        <field name="name">Sobrantes</field>
+        <field name="res_model">casino.sobrante</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_sobrante_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Sobrantes.
+            </p>
+        </field>
+    </record>
+</odoo>
