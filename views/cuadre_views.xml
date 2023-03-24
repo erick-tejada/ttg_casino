@@ -60,18 +60,20 @@
                 
                 <h2 style="border-bottom: solid 1px #444b5a;">Mesas</h2>
                 <group name="group_mesa">
-                    <group name="group_mesa_1">
-                        <field name="apuestas_mesas"/>
-                        <field name="pago_apuestas_mesas"/>
+                    <group name="group_mesa_1" string="Pesos DOP">
+                        <field name="apuestas_mesas" string="Apuestas"/>
+                        <field name="pago_apuestas_mesas" string="Pagos"/>
+                    </group>
+                    <group name="group_mesa_2" string="Dólares USD">
+                        <field name="apuestas_mesas_usd" string="Apuestas"/>
+                        <field name="pago_apuestas_mesas_usd" string="Pagos"/>
+                    </group>
+                    <group name="group_mesa_3" string="Marcas">
                         <label for="marca_mesa_total"/>
                         <div class="o_row">
                             <field name="marca_mesa_total"/>
                             <button name="open_marca_mesas" class="btn fa fa-list" type="object" aria-label="Marcas Mesas" title="Marcas Mesas" role="img"/>
                         </div>
-                    </group>
-                    <group name="group_mesa_2">
-                        <field name="apuestas_mesas_usd"/>
-                        <field name="pago_apuestas_mesas_usd"/>
                     </group>
                 </group>
                 

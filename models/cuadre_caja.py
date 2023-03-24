@@ -78,7 +78,8 @@ class CuadreDeCaja(models.Model):
     cobro_tc_ids = fields.One2many('casino.cobro.tc', 'cuadre_id', 'Detalle Cobros TC')
     cobro_tc_total = fields.Monetary('Total Cobro Tarjeta Crédito', compute='_compute_tc', store=True) # Ingreso
     cobro_tc_comision_total = fields.Monetary('Total Comision TC', compute='_compute_tc', store=True) # Ingreso
-    cobro_tc_pagado_total = fields.Monetary('Total Efectivo Pagado por TC', compute='_compute_tc', store=True) # Egreso
+    # Liquidacion
+    cobro_tc_pagado_total = fields.Monetary('Monto a Reponer TC', compute='_compute_tc', store=True) # Egreso
     
     # SOBRANTES Y FALTANTES
     # ----------------------------------------------------------------------------------------------------------------
