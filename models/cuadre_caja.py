@@ -143,7 +143,7 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
-    @api.depends('marca_maquina_ids', 'marca_maquina_ids.amount')
+    @api.depends('otros_pagos_ids', 'otros_pagos_ids.amount')
     def _compute_otros_pagos(self):
         for record in self:
             total = 0
