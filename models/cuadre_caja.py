@@ -80,6 +80,8 @@ class CuadreDeCaja(models.Model):
     cobro_tc_comision_total = fields.Monetary('Total Comision TC', compute='_compute_tc', store=True) # Ingreso
     # Liquidacion
     cobro_tc_pagado_total = fields.Monetary('Monto a Reponer TC', compute='_compute_tc', store=True) # Egreso
+    itbis_retenido_tc = fields.Monetary('Monto ITBIS Retenido TC', compute='_compute_tc', store=True) # Egreso
+    gasto_comision_tc = fields.Monetary('Monto Gasto Comision TC', compute='_compute_tc', store=True) # Egreso
     
     # SOBRANTES Y FALTANTES
     # ----------------------------------------------------------------------------------------------------------------
@@ -189,6 +191,12 @@ class CuadreDeCaja(models.Model):
     @api.depends('cobro_tc_ids', 'cobro_tc_ids.amount', 'cobro_tc_ids.amount_fee')
     def _compute_tc(self):
         for record in self:
+            tc_itbis_percent = record.company_id.tc_itbis_percent
+            tc_comision_percent = record.company_id.tc_comision_percent
+
+            if (not tc_itbis_percent or not tc_comision_percent):
+                raise ValidationError('COBROS TC NO CONFIGURADOS: Los Cobros con Tarjeta de Crédito no estan configurados.')
+
             total = 0
             total_fee = 0
             for line in record.cobro_tc_ids:
@@ -197,6 +205,9 @@ class CuadreDeCaja(models.Model):
             record.cobro_tc_total = total
             record.cobro_tc_comision_total = total_fee
             record.cobro_tc_pagado_total = total - total_fee
+
+            record.itbis_retenido_tc = record.currency_id.round(total * tc_itbis_percent)
+            record.gasto_comision_tc = record.currency_id.round(total * tc_comision_percent)
     
     def open_cobros_tc(self):
         action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_cobro_tc")

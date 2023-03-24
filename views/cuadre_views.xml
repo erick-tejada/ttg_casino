@@ -26,90 +26,104 @@
                     </h1>
                 </div>
 
-                <h2 style="border-bottom: solid 1px #444b5a;">Máquinas</h2>
-                <group name="group_maquina">
-                    <group name="group_maquina_1">
-                        <field name="currency_id" invisible="1"/>
-                        <field name="currency_usd_id" invisible="1" readonly="1" force_save="1"/>
-                        <label for="bill_drop_total"/>
-                        <div class="o_row">
-                            <field name="bill_drop_total"/>
-                            <button name="open_bill_drop" class="btn fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
-                        </div>                        
-                        <label for="marca_maquina_total"/>
-                        <div class="o_row">
-                            <field name="marca_maquina_total"/>
-                            <button name="open_marca_maquinas" class="btn fa fa-list" type="object" aria-label="Marcas por Máquina/Cliente" title="Marcas por Máquina/Cliente" role="img"/>
-                        </div>
-                        <field name="recarga_tarjeta"/>
-                    </group>
-                    <group name="group_maquina_2">
-                        <field name="tarjetas_cashout"/>
-                        <label for="devolucion_total"/>
-                        <div class="o_row">
-                            <field name="devolucion_total"/>
-                            <button name="open_devoluciones" class="btn fa fa-list" type="object" aria-label="Devoluciones por Máquina/Cliente" title="Devoluciones por Máquina/Cliente" role="img"/>
-                        </div>
-                        <label for="otros_pagos_total"/>
-                        <div class="o_row">
-                            <field name="otros_pagos_total"/>
-                            <button name="open_otros_pagos" class="btn fa fa-list" type="object" aria-label="Otros Pagos por Máquina/Cliente" title="Otros Pagos por Máquina/Cliente" role="img"/>
-                        </div>
-                    </group>
-                </group>
-                
-                <h2 style="border-bottom: solid 1px #444b5a;">Mesas</h2>
-                <group name="group_mesa">
-                    <group name="group_mesa_1" string="Pesos DOP">
-                        <field name="apuestas_mesas" string="Apuestas"/>
-                        <field name="pago_apuestas_mesas" string="Pagos"/>
-                    </group>
-                    <group name="group_mesa_2" string="Dólares USD">
-                        <field name="apuestas_mesas_usd" string="Apuestas"/>
-                        <field name="pago_apuestas_mesas_usd" string="Pagos"/>
-                    </group>
-                    <group name="group_mesa_3" string="Marcas">
-                        <label for="marca_mesa_total"/>
-                        <div class="o_row">
-                            <field name="marca_mesa_total"/>
-                            <button name="open_marca_mesas" class="btn fa fa-list" type="object" aria-label="Marcas Mesas" title="Marcas Mesas" role="img"/>
-                        </div>
-                    </group>
-                </group>
-                
-                <h2 style="border-bottom: solid 1px #444b5a;">Divisas, Cambios y Cierre</h2>
-                <group name="group3">
-                    <group name="group3_group1" string="Cambio Divisa">
-                        <label for="casino_tasa_usd"/>
-                        <div class="o_row">
-                            <field name="casino_tasa_usd" readonly="1" force_save="1"/>
-                            <button name="action_refresh_tasa_usd"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-refresh" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
-                        </div>
-                        <field name="cambio_dolares"/>
-                        <field name="dop_cambio_dolares"/>
-                    </group>
-                    <group name="group3_group2" string="Tarjeta de Crédito">
-                        <label for="cobro_tc_total"/>
-                        <div class="o_row">
-                            <field name="cobro_tc_total"/>
-                            <button name="open_cobros_tc"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
-                        </div>
-                        <field name="cobro_tc_comision_total"/>
-                        <field name="cobro_tc_pagado_total"/>
-                    </group>
-                    <group name="group3_group3" string="Sobrantes y Faltantes">
-                        <label for="sobrante_total"/>
-                        <div class="o_row">
-                            <field name="sobrante_total"/>
-                            <button name="open_sobrante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
-                        </div>
-                        <label for="faltante_total"/>
-                        <div class="o_row">
-                            <field name="faltante_total"/>
-                            <button name="open_faltante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
-                        </div>
-                    </group>
-                </group>
+                <notebook>
+                    <page name="detalles" string="Detalles Cierre">
+                        <h2 style="border-bottom: solid 1px #444b5a;">Máquinas</h2>
+                        <group name="group_maquina">
+                            <group name="group_maquina_1">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="currency_usd_id" invisible="1" readonly="1" force_save="1"/>
+                                <label for="bill_drop_total"/>
+                                <div class="o_row">
+                                    <field name="bill_drop_total"/>
+                                    <button name="open_bill_drop" class="btn fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
+                                </div>                        
+                                <label for="marca_maquina_total"/>
+                                <div class="o_row">
+                                    <field name="marca_maquina_total"/>
+                                    <button name="open_marca_maquinas" class="btn fa fa-list" type="object" aria-label="Marcas por Máquina/Cliente" title="Marcas por Máquina/Cliente" role="img"/>
+                                </div>
+                                <field name="recarga_tarjeta"/>
+                            </group>
+                            <group name="group_maquina_2">
+                                <field name="tarjetas_cashout"/>
+                                <label for="devolucion_total"/>
+                                <div class="o_row">
+                                    <field name="devolucion_total"/>
+                                    <button name="open_devoluciones" class="btn fa fa-list" type="object" aria-label="Devoluciones por Máquina/Cliente" title="Devoluciones por Máquina/Cliente" role="img"/>
+                                </div>
+                                <label for="otros_pagos_total"/>
+                                <div class="o_row">
+                                    <field name="otros_pagos_total"/>
+                                    <button name="open_otros_pagos" class="btn fa fa-list" type="object" aria-label="Otros Pagos por Máquina/Cliente" title="Otros Pagos por Máquina/Cliente" role="img"/>
+                                </div>
+                            </group>
+                        </group>
+                        
+                        <h2 style="border-bottom: solid 1px #444b5a;">Mesas</h2>
+                        <group name="group_mesa">
+                            <group name="group_mesa_1" string="Pesos DOP">
+                                <field name="apuestas_mesas" string="Apuestas"/>
+                                <field name="pago_apuestas_mesas" string="Pagos"/>
+                            </group>
+                            <group name="group_mesa_2" string="Dólares USD">
+                                <field name="apuestas_mesas_usd" string="Apuestas"/>
+                                <field name="pago_apuestas_mesas_usd" string="Pagos"/>
+                            </group>
+                            <group name="group_mesa_3" string="Marcas">
+                                <label for="marca_mesa_total"/>
+                                <div class="o_row">
+                                    <field name="marca_mesa_total"/>
+                                    <button name="open_marca_mesas" class="btn fa fa-list" type="object" aria-label="Marcas Mesas" title="Marcas Mesas" role="img"/>
+                                </div>
+                            </group>
+                        </group>
+                        
+                        <h2 style="border-bottom: solid 1px #444b5a;">Divisas, Cambios y Cierre</h2>
+                        <group name="group3">
+                            <group name="group3_group1" string="Cambio Divisa">
+                                <label for="casino_tasa_usd"/>
+                                <div class="o_row">
+                                    <field name="casino_tasa_usd" readonly="1" force_save="1"/>
+                                    <button name="action_refresh_tasa_usd"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-refresh" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                </div>
+                                <field name="cambio_dolares"/>
+                                <field name="dop_cambio_dolares"/>
+                            </group>
+                            <group name="group3_group2" string="Tarjeta de Crédito">
+                                <label for="cobro_tc_total"/>
+                                <div class="o_row">
+                                    <field name="cobro_tc_total"/>
+                                    <button name="open_cobros_tc"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                </div>
+                                <field name="cobro_tc_comision_total"/>
+                            </group>
+                            <group name="group3_group3" string="Sobrantes y Faltantes">
+                                <label for="sobrante_total"/>
+                                <div class="o_row">
+                                    <field name="sobrante_total"/>
+                                    <button name="open_sobrante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                </div>
+                                <label for="faltante_total"/>
+                                <div class="o_row">
+                                    <field name="faltante_total"/>
+                                    <button name="open_faltante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                </div>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="accounting" string="Contabilidad" groups="ttg_casino.group_casino_accountant">
+                        <group name="accounting_g1">
+                            <group name="accounting_g1_g1">
+                            </group>
+                            <group name="accounting_g1_g2" string="Tarjeta de Crédito">
+                                <field name="cobro_tc_pagado_total" string="Monto a Reponer"/>
+                                <field name="itbis_retenido_tc" string="Monto ITBIS Retenido"/>
+                                <field name="gasto_comision_tc" string="Monto Gasto Comision"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
             </sheet>
             <div class="oe_chatter">
                 <field name="message_follower_ids"/>
