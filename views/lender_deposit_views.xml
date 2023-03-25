@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_casino_lender_deposit_tree" model="ir.ui.view">
+            <field name="name">view_casino_lender_deposit_tree</field>
+            <field name="model">casino.lender.deposit</field>
+            <field name="arch" type="xml">
+                <tree string="Depósitos" delete="0" editable="top">
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="partner_id" invisible="1"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                    <field name="note"/>
+                    <field name="create_uid" string="Creado Por" optional="hide"/>
+                    <field name="create_date" string="Creado En" optional="hide"/>
+                    <field name="write_uid" string="Actualizado Por" optional="hide"/>
+                    <field name="write_date" string="Actualizado En" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_lender_deposit" model="ir.actions.act_window">
+            <field name="name">Depositos Prestamista</field>
+            <field name="res_model">casino.lender.deposit</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo depósito realizado por el prestamista.
+              </p>
+            </field>
+        </record>
+</odoo>

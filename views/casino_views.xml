@@ -26,6 +26,12 @@
         action="ttg_casino.action_casino_partner_cliente"
         sequence="20"/>
     
+    <menuitem id="menu_casino_prestamistas_user"
+        name="Prestamistas"
+        parent="ttg_casino.menu_casino_ingresos"
+        action="ttg_casino.action_casino_partner_prestamista_user"
+        sequence="30"/>
+    
     <!--
     <menuitem id="menu_bill_drop"
         name="Historico Bill Drop"

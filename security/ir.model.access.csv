@@ -17,4 +17,4 @@ access_sobrante,access_sobrante,model_casino_sobrante,ttg_casino.group_casino_us
 access_faltante,access_faltante,model_casino_faltante,ttg_casino.group_casino_user,1,1,1,0
 access_comision_marca,access_comision_marca,model_casino_comision_marca,ttg_casino.group_casino_accountant,1,1,1,1
 access_comision_marca_linea,access_comision_marca_linea,model_casino_comision_marca_linea,ttg_casino.group_casino_accountant,1,1,1,1
-access_lender_deposit,access_lender_deposit,model_casino_lender_deposit,ttg_casino.group_casino_user,1,0,1,0
+access_lender_deposit,access_lender_deposit,model_casino_lender_deposit,ttg_casino.group_casino_user,1,1,1,0

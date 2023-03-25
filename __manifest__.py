@@ -29,6 +29,7 @@
         'views/sobrante_views.xml',
         'views/res_config_settings_views.xml',
         'views/comision_marca_views.xml',
+        'views/lender_deposit_views.xml',
         'views/casino_views.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
