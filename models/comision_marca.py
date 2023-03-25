@@ -122,13 +122,14 @@ class ComisionMarca(models.Model):
 
         total = 0
         for date, amount in totals_by_date.items():
-            amount_fee = amount * x_tier2_percent if amount > x_tier2_amount else amount * x_tier1_percent
+            percent_to_use = x_tier2_percent if (x_tier2_amount > 0) and (amount > x_tier2_amount) else x_tier1_percent
+            amount_fee = amount * percent_to_use
             self.env['casino.comision.marca.linea'].create({
                 'comision_id': record.id,
                 'date': date,
                 'amount_marcas': amount,
                 'amount_fee': amount_fee,
-                'amount_percent': x_tier2_percent if amount > x_tier2_amount else x_tier1_percent,
+                'amount_percent': percent_to_use,
             })
             total += amount_fee
         
