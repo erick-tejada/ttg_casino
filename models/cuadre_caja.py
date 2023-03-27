@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare
+from dateutil.relativedelta import relativedelta
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class CuadreDeCaja(models.Model):
             if cant_cuadres > 1:
                 raise ValidationError('FECHA REPETIDA: Existe otro cuadre para la misma fecha!')
 
-    date = fields.Date('Fecha', required=True, default=lambda self: fields.Date.context_today(self), states={'done': [('readonly', True)]}, copy=False, index=True, tracking=3)
+    date = fields.Date('Fecha', required=True, default=lambda self: fields.Date.context_today(self) - relativedelta(days=1), states={'done': [('readonly', True)]}, copy=False, index=True, tracking=3)
     company_id = fields.Many2one('res.company', string='Compañía', required=True, default=lambda self: self.env.company)
     currency_id = fields.Many2one('res.currency', string='Moneda', related='company_id.currency_id', store=True)
     currency_usd_id = fields.Many2one('res.currency', string='Moneda USD', default=_default_currency_usd_id)
