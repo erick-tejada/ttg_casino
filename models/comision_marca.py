@@ -25,6 +25,11 @@ class ComisionMarca(models.Model):
         today = fields.Date.context_today(self)
         month = today.month
         return str(month)
+    
+    def _default_quincena(self):
+        today = fields.Date.context_today(self)
+        quicena = '1' if today.day > 15 else '2'
+        return str(quicena)
 
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -47,6 +52,10 @@ class ComisionMarca(models.Model):
         ('11', 'Noviembre'),
         ('12', 'Diciembre'),
         ], string='Mes', required=True, states={'done': [('readonly', True)]}, copy=False, index=True, tracking=3, default=_default_month)
+    month_period = fields.Selection([
+        ('1', '1ra Quincena'),
+        ('2', '2da Quincena'),
+        ], string='Quincena', required=True, copy=False, index=True, tracking=3, default=_default_quincena)
     year = fields.Integer('Año', required=True, default=_default_year)
     lender_partner_id = fields.Many2one('res.partner', string="Prestamista", required=True, domain="[('x_is_lender', '=', True)]")
     note = fields.Text('Notas')
@@ -65,8 +74,9 @@ class ComisionMarca(models.Model):
             
             count = self.env['casino.comision.marca'].search_count([
                 ('company_id','=',record.company_id.id), 
-                ('year','=',record.year), 
-                ('month','=',record.month), 
+                ('year','=',record.year),
+                ('month','=',record.month),
+                ('month_period','=',record.month_period), 
                 ('lender_partner_id','=',record.lender_partner_id.id)
             ])
 
@@ -94,12 +104,17 @@ class ComisionMarca(models.Model):
         # TODO Verify all cuadre are done
 
         # Date range
-        date_start = '%s-%s-01' % (record.year, str(record.month).zfill(2))
-
-        if record.month == 12:
-            date_end = '%s-%s-01' % (record.year + 1, str(1).zfill(2))
+        if record.month_period == '1':
+            # Primera Quincena: from year-month-01 to < year-month-16
+            date_start = '%s-%s-01' % (record.year, str(record.month).zfill(2))
+            date_end = '%s-%s-16' % (record.year, str(int(record.month)).zfill(2))
         else:
-            date_end = '%s-%s-01' % (record.year, str(int(record.month) + 1).zfill(2))
+            # Segunda Quincena: from year-month-16 to < (next_)year-next_month-01
+            date_start = '%s-%s-16' % (record.year, str(record.month).zfill(2))
+            if record.month == 12:
+                date_end = '%s-%s-01' % (record.year + 1, str(1).zfill(2)) # next_year-01-01
+            else:
+                date_end = '%s-%s-01' % (record.year, str(int(record.month) + 1).zfill(2)) # same_year-next_month-01
 
         # get all
         marca_ids = self.env['casino.marca.mesa'].search([

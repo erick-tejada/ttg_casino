@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
           <form string="Cuadre">
             <header>
-                <button name="action_load_comisiones" string="Cargar Comisiones" type="object" states="draft" class="oe_highlight"/>
+                <button name="action_load_comisiones" string="Calcular Comisiones" type="object" states="draft" class="oe_highlight"/>
                 <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
             </header>
             <sheet>
@@ -30,12 +30,14 @@
                     <group name="group1_group1">
                         <field name="company_id" invisible="1"/>
                         <field name="currency_id" invisible="1"/>
+                        <field name="lender_partner_id" options="{'no_open': True, 'no_create': True}"/>
                         <field name="year" options="{'format': 0}"/>
                         <field name="month"/>
+                        <field name="month_period"/>
                     </group>
                     <group name="group1_group2">
-                        <field name="lender_partner_id" options="{'no_open': True, 'no_create': True}"/>
-                        <field name="amount"/>
+                        <label for="amount"/>
+                        <h2><field name="amount"/></h2>
                     </group>
                 </group>
                 <group name="group2">
@@ -78,6 +80,7 @@
                 <field name="name" optional="show"/>
                 <field name="year" optional="show" widget="integer" options="{'format': 0}"/>
                 <field name="month" optional="show"/>
+                <field name="month_period" optional="show"/>
                 <field name="lender_partner_id" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="line_ids"/>
