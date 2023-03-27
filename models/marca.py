@@ -29,7 +29,7 @@ class MarcaMaquina(models.Model):
     
     def _verify_amount(self):
         if self.amount > self.lender_partner_id.x_amount_available:
-            raise ValidationError('MONTO MAYOR AL DISPONIBLE: No puede crear/modificar una marca con un monto MAYOR al que tiene actualmente disponible el Prestamista.')
+            raise ValidationError('MONTO MAYOR AL DISPONIBLE: %s actualmente solo dispone de %.2f.' % (self.lender_partner_id.name, self.lender_partner_id.x_amount_available))
     
     def unlink(self):
         if any(record.state == 'done' for record in self):
@@ -75,7 +75,7 @@ class MarcaMesa(models.Model):
     
     def _verify_amount(self):
         if self.amount > self.lender_partner_id.x_amount_available:
-            raise ValidationError('MONTO MAYOR AL DISPONIBLE: El Prestamista %s actualmente solo dispone de %s.' % ())
+            raise ValidationError('MONTO MAYOR AL DISPONIBLE: %s actualmente solo dispone de %.2f.' % (self.lender_partner_id.name, self.lender_partner_id.x_amount_available))
 
     def unlink(self):
         if any(record.state == 'done' for record in self):

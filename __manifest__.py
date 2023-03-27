@@ -31,6 +31,8 @@
         'views/comision_marca_views.xml',
         'views/lender_deposit_views.xml',
         'views/casino_views.xml',
+        'report/comision_marca_templates.xml',
+        'report/comision_marca_report.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,

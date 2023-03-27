@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_comision_marca_document">
+    <t t-call="web.internal_layout">
+        <t t-set="doc" t-value="doc.with_context(lang=doc.lender_partner_id.lang)" />
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h2 class="mt16">
+                <span>Reporte de Comisiones # </span>
+                <span t-field="doc.name"/>
+            </h2>
+            <br/>
+            <div class="row mt32 mb32" id="informations">
+                <div class="col-auto col-3 mw-100 mb-2">
+                    <strong>Prestamista:</strong>
+                    <p class="m-0" t-field="doc.lender_partner_id"/>
+                </div>
+                <div class="col-auto col-3 mw-100 mb-2">
+                    <strong>Periodo:</strong>
+                    <p class="m-0">
+                        <span class="m-0" t-field="doc.month"/> 
+                        <span class="m-0" t-esc="str(doc.year)"/>
+                    </p>
+                </div>
+                <div class="col-auto col-3 mw-100 mb-2">
+                    <strong>Quincena:</strong>
+                    <p class="m-0" t-esc="'1ra Quincena' if doc.month_period == '1' else '2da Quincena'"/>
+                </div>
+                <div class="col-auto col-3 mw-100 mb-2">
+                    <strong>Total a Pagar:</strong>
+                    <p class="m-0" t-field="doc.amount"/>
+                </div>
+            </div>
+            <br/>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th name="th_date" class="text-left">Fecha</th>
+                        <th name="th_amount_marcas" class="text-right">Total Prestado</th>
+                        <th name="th_amount_percent" class="text-right">Porciento Comisión</th>
+                        <th name="th_amount_fee" class="text-right">Monto Comisión</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+
+                    <t t-set="current_subtotal" t-value="0"/>
+
+                    <t t-foreach="doc.line_ids" t-as="line">
+
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.amount_fee"/>
+
+                        <tr>
+                            <t>
+                                <td name="td_date"><span t-field="line.date"/></td>
+                                <td name="td_amount_marcas" class="text-right">
+                                    <span t-field="line.amount_marcas"/>
+                                </td>
+                                <td name="td_amount_percent" class="text-right">
+                                    <span t-esc="line.amount_percent * 100"/>%
+                                </td>
+                                <td name="td_amount_fee" class="text-right">
+                                    <span t-field="line.amount_fee"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                    <tr class="is-subtotal text-right">
+                        <td name="td_section_subtotal" colspan="99">
+                            <strong class="mr16">Total</strong>
+                            <strong> 
+                                <span t-esc="current_subtotal"
+                                t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</template>
+
+
+<template id="report_comision_marca">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_comision_marca_document" t-lang="doc.lender_partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+</odoo>
