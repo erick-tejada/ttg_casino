@@ -23,11 +23,31 @@ class MarcaMaquina(models.Model):
     lender_partner_id = fields.Many2one('res.partner', string="Prestamista", required=True, domain="[('x_is_lender', '=', True)]")
     note = fields.Char('Nota')
 
+    def _verify_state(self):
+        if self.state == 'done':
+            raise ValidationError('CUADRE CERRADO: No puede crear/modificar una marca si el Cuadre al que pertenece esta Cerrado.')
+    
+    def _verify_amount(self):
+        if self.amount > self.lender_partner_id.x_amount_available:
+            raise ValidationError('MONTO MAYOR AL DISPONIBLE: No puede crear/modificar una marca con un monto MAYOR al que tiene actualmente disponible el Prestamista.')
+    
     def unlink(self):
         if any(record.state == 'done' for record in self):
             raise ValidationError('CUADRE CERRADO: No puede borrar una Marca si el Cuadre está cerrado.')
         res = super(MarcaMaquina, self).unlink()
         return res
+
+    @api.model
+    def create(self, vals):
+        marca = super(MarcaMaquina, self).create(vals)
+        marca._verify_state()
+        marca._verify_amount()
+        return marca
+
+    def write(self, vals):
+        marca = super(MarcaMaquina, self).write(vals)
+        marca._verify_state()
+        return marca
 
 
 class MarcaMesa(models.Model):
@@ -48,8 +68,29 @@ class MarcaMesa(models.Model):
     lender_partner_id = fields.Many2one('res.partner', string="Prestamista", required=True, domain="[('x_is_lender', '=', True)]")
     note = fields.Char('Nota')
 
+    def _verify_state(self):
+        for record in self:
+            if record.state == 'done':
+                raise ValidationError('CUADRE CERRADO: No puede crear/modificar una marca si el Cuadre al que pertenece esta Cerrado.')
+    
+    def _verify_amount(self):
+        if self.amount > self.lender_partner_id.x_amount_available:
+            raise ValidationError('MONTO MAYOR AL DISPONIBLE: El Prestamista %s actualmente solo dispone de %s.' % ())
+
     def unlink(self):
         if any(record.state == 'done' for record in self):
             raise ValidationError('CUADRE CERRADO: No puede borrar una Marca si el Cuadre está cerrado.')
         res = super(MarcaMaquina, self).unlink()
         return res
+    
+    @api.model
+    def create(self, vals):
+        marca = super(MarcaMesa, self).create(vals)
+        marca._verify_state()
+        marca._verify_amount()
+        return marca
+
+    def write(self, vals):
+        marca = super(MarcaMesa, self).write(vals)
+        marca._verify_state()
+        return marca

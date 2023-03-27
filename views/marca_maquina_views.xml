@@ -11,10 +11,10 @@
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
                 
-                <field name="partner_id"  options="{'no_create': True}" optional="show"/>
-                <field name="ref"  optional="show"/>
-                <field name="amount" sum="Total" optional="show"/>
                 <field name="lender_partner_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
+                <field name="partner_id"  options="{'no_create': True}" optional="show"/>
+                <field name="ref"  optional="hide"/>
+                <field name="amount" sum="Total" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
