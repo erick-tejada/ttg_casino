@@ -6,7 +6,7 @@
             <div class="oe_structure"/>
 
             <h2 class="mt16 text-center">
-                <span>Cuadre de Maquinas</span>
+                <span>CUADRE DE MAQUINAS</span>
                 <br/>
                 <span t-field="doc.date"/>
             </h2>
@@ -115,6 +115,122 @@
             <div class="row text-center">
                 <div class="col-5" style="border-top: 1px solid #bbb;">
                     ENTREGADO POR
+                    <br/>
+                    <span t-field="doc.create_uid"/>
+                </div>
+                <div class="col-2"/>
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    RECIBIDO POR
+                </div>
+            </div>
+            
+        </div>
+    </t>
+</template>
+
+<template id="report_casino_cuadre_mesa_document">
+    <t t-call="web.internal_layout">
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h2 class="mt16 text-center">
+                <span>CUADRE DE MESAS</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h2>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">APUESTAS EN MESAS DOP</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>APUESTAS EN MESAS DOP</td>
+                        <td class="text-right"><span t-field="doc.apuestas_mesas"/></td>
+                    </tr>
+                    <tr>
+                        <td>MARCA EN MESAS DOP</td>
+                        <td class="text-right"><span t-field="doc.marca_mesa_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>PAGO APUESTAS EN MESAS DOP</td>
+                        <td class="text-right"><span t-field="doc.pago_apuestas_mesas"/></td>
+                    </tr>
+                    <tr>
+                        <td><strong>GANANCIA / PÉRDIDA DOP</strong></td>
+                        <td class="text-right"><strong><span t-field="doc.total_dop_mesa"/></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">APUESTAS EN MESAS USD</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>APUESTAS EN MESAS USD</td>
+                        <td class="text-right"><span t-field="doc.apuestas_mesas_usd"/></td>
+                    </tr>
+                    <tr>
+                        <td>PAGO APUESTAS EN MESAS USD</td>
+                        <td class="text-right"><span t-field="doc.pago_apuestas_mesas_usd"/></td>
+                    </tr>
+                    <tr>
+                        <td><strong>GANANCIA / PÉRDIDA USD</strong></td>
+                        <td class="text-right"><strong><span t-field="doc.total_usd_mesa"/></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">CAMBIOS</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>CAMBIO DE DOLARES</td>
+                        <td class="text-right"><span t-field="doc.cambio_dolares"/></td>
+                    </tr>
+                    <tr>
+                        <td>EFECTIVO TARJETA DE CREDITO</td>
+                        <td class="text-right"><span t-field="doc.cobro_tc_total"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+
+            <div class="row text-center">
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    ENTREGADO POR
+                    <br/>
+                    <span t-field="doc.create_uid"/>
                 </div>
                 <div class="col-2"/>
                 <div class="col-5" style="border-top: 1px solid #bbb;">
@@ -131,6 +247,14 @@
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="doc">
             <t t-call="ttg_casino.report_casino_cuadre_maquina_document"/>
+        </t>
+    </t>
+</template>
+
+<template id="report_casino_cuadre_mesa">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_cuadre_mesa_document"/>
         </t>
     </t>
 </template>

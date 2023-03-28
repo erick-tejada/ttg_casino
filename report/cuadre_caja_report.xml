@@ -7,7 +7,17 @@
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">ttg_casino.report_casino_cuadre_maquina</field>
             <field name="report_file">ttg_casino.report_casino_cuadre_maquina</field>
-            <field name="print_report_name">'Cuadre de Caja %s' % object.date</field>
+            <field name="print_report_name">'Cuadre de Maquinas %s' % object.date</field>
+            <field name="binding_model_id" ref="model_casino_cuadre"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_cuadre_caja_mesa" model="ir.actions.report">
+            <field name="name">Cuadre de Mesas</field>
+            <field name="model">casino.cuadre</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ttg_casino.report_casino_cuadre_mesa</field>
+            <field name="report_file">ttg_casino.report_casino_cuadre_mesa</field>
+            <field name="print_report_name">'Cuadre de Mesas %s' % object.date</field>
             <field name="binding_model_id" ref="model_casino_cuadre"/>
             <field name="binding_type">report</field>
         </record>
