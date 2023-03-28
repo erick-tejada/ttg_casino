@@ -204,7 +204,7 @@
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
                 <thead style="display: table-row-group">
                     <tr class="active">
-                        <th colspan="2" class="text-center">CAMBIOS</th>
+                        <th colspan="2" class="text-center">OTROS INGRESOS</th>
                     </tr>
                     <tr>
                         <th name="th_descripcion" class="text-left">Descripción</th>
@@ -213,11 +213,36 @@
                 </thead>
                 <tbody class="sale_tbody">
                     <tr>
-                        <td>CAMBIO DE DOLARES</td>
+                        <td>CAMBIO DE DÓLARES (TOTAL DE USD RECIBIDO)</td>
                         <td class="text-right"><span t-field="doc.cambio_dolares"/></td>
                     </tr>
                     <tr>
-                        <td>EFECTIVO TARJETA DE CREDITO</td>
+                        <td>COMISIÓN COBRADA POR TARJETA DE CRÉDITO</td>
+                        <td class="text-right"><span t-field="doc.cobro_tc_comision_total"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">OTROS PAGOS</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>REPOSICIÓN PAGADA POR CAMBIO DE DÓLARES</td>
+                        <td class="text-right"><span t-field="doc.dop_cambio_dolares"/></td>
+                    </tr>
+                    <tr>
+                        <td>EFECTIVO ENTREGADO TARJETA DE CRÉDITO</td>
                         <td class="text-right"><span t-field="doc.cobro_tc_total"/></td>
                     </tr>
                 </tbody>
