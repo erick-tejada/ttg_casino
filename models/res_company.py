@@ -12,3 +12,9 @@ class ResComapany(models.Model):
     tc_itbis_account_id = fields.Many2one('account.account', 'Cuenta de Retencion ITBIS', help='Cuenta donde se registrará el ITBIS Retenido en los cobros de Tarjeta de Crédito.')
     tc_comision_percent = fields.Float('% Gasto de Comision', default=0.0345, help='%% de Comisión Retenida en los cobros de Tarjeta de Crédito.')
     tc_comision_account_id = fields.Many2one('account.account', 'Cuenta de Gasto de Comisión', help='Cuenta donde se registrará la Comisión Retenida en los cobros de Tarjeta de Crédito.')
+
+    # Fondos
+    dop_boveda_fondo = fields.Float('Fondo Boveda DOP', default=2000000, help='Fondo en DOP a mantener en la Bóveda de Pesos.')
+    dop_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda DOP', help='Cuenta con valor en Bóveda de Pesos.')
+    usd_boveda_fondo = fields.Float('Fondo Boveda USD', default=10000, help='Fondo en USD a mantener en la Bóveda de Dólares.')
+    usd_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda USD', help='Cuenta con valor en Bóveda de Dólares.')

@@ -101,6 +101,67 @@ class CuadreDeCaja(models.Model):
     sobrante_ids = fields.One2many('casino.sobrante', 'cuadre_id', 'Detalle Sobrantes')
     sobrante_total = fields.Monetary('Total Sobrante', compute='_compute_sobrante', store=True)
 
+    # FONDOS
+    # ----------------------------------------------------------------------------------------------------------------
+    # DOP
+    dop_boveda_fondo = fields.Monetary('Fondo Boveda DOP', compute='_compute_fondos', store=True)
+    dop_boveda_fondo_diponible = fields.Monetary('Fondo Disponible Boveda DOP', compute='_compute_fondos', store=True)
+    dop_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda DOP', compute='_compute_fondos', store=True)
+    # USD
+    usd_boveda_fondo = fields.Monetary('Fondo Boveda USD', currency_field='currency_usd_id', compute='_compute_fondos', store=True, help='Fondo en USD a mantener en la Bóveda de Dólares.')
+    usd_boveda_fondo_diponible = fields.Monetary('Fondo Disponible Boveda USD', currency_field='currency_usd_id', compute='_compute_fondos', store=True)
+    usd_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda USD', compute='_compute_fondos', store=True, help='Cuenta con valor en Bóveda de Dólares.')
+
+    def _compute_balance_at_date(self, account_id, date, is_foreign_currency=False):
+        if is_foreign_currency:
+            sql_query = '''
+                    SELECT SUM(aml.amount_currency)
+                    FROM account_move_line aml
+                    WHERE aml.account_id = %s AND aml.date < %s
+                    '''
+        else:
+            sql_query = '''
+                        SELECT SUM(aml.balance)
+                        FROM account_move_line aml
+                        WHERE aml.account_id = %s AND aml.date < %s
+                        '''
+        self.env.cr.execute(sql_query, (account_id.id, date))
+        balance = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+        return balance if balance else 0.0
+
+    
+    @api.depends('date')
+    def _compute_fondos(self):
+        for record in self:
+            dop_boveda_fondo = 0.0
+            dop_boveda_fondo_diponible = 0.0
+            dop_boveda_account_id = False
+            usd_boveda_fondo = 0.0
+            usd_boveda_fondo_diponible = 0.0
+            usd_boveda_account_id = False
+
+            if record.date:
+                # DOP
+                dop_boveda_fondo = record.company_id.dop_boveda_fondo
+                dop_boveda_account_id = record.company_id.dop_boveda_account_id
+                if dop_boveda_account_id:
+                    dop_boveda_fondo_diponible = record._compute_balance_at_date(dop_boveda_account_id, record.date)
+                
+                # USD
+                usd_boveda_fondo = record.company_id.usd_boveda_fondo
+                usd_boveda_account_id = record.company_id.usd_boveda_account_id
+                if usd_boveda_account_id:
+                    usd_boveda_fondo_diponible = record._compute_balance_at_date(usd_boveda_account_id, record.date, True)
+            
+            record.write({
+                'dop_boveda_fondo': dop_boveda_fondo,
+                'dop_boveda_fondo_diponible': dop_boveda_fondo_diponible,
+                'dop_boveda_account_id': dop_boveda_account_id,
+                'usd_boveda_fondo': usd_boveda_fondo,
+                'usd_boveda_fondo_diponible': usd_boveda_fondo_diponible,
+                'usd_boveda_account_id': usd_boveda_account_id,
+            })
+    
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
         for record in self:

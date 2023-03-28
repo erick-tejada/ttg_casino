@@ -113,6 +113,19 @@
                         </group>
                     </page>
                     <page name="accounting" string="Contabilidad" groups="ttg_casino.group_casino_accountant">
+                        <h2 style="border-bottom: solid 1px #444b5a;">Fondos</h2>
+                        <group name="group_fondos">
+                            <group name="fondos_dop" string="Fondos de Bóveda">
+                                <field name="dop_boveda_fondo"/>
+                                <field name="usd_boveda_fondo"/>
+                            </group>
+                            <group name="fondos_usd" string="Fondos Disponibles Antes del Cuadre">
+                                <field name="dop_boveda_fondo_diponible" string="Disponible DOP"/>
+                                <field name="dop_boveda_account_id" groups="base.group_no_one"/>
+                                <field name="usd_boveda_fondo_diponible" string="Disponible USD"/>
+                                <field name="usd_boveda_account_id" groups="base.group_no_one"/>
+                            </group>
+                        </group>
                         <group name="accounting_g1">
                             <group name="accounting_g1_g1" string="Cuadre Maquina">
                                 <field name="ingreso_maquina" string="Ingreso Efectivo"/>

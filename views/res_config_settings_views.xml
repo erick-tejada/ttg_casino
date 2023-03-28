@@ -25,6 +25,51 @@
                                 </div>
                             </div>
                         </div>
+                        
+
+                        <h2>Fondos de Bóveda</h2>
+                        <div class="row mt16 o_settings_container" name="tc_setting_container">
+                            <div class="col-lg-6 col-12 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="dop_boveda_fondo" class="col-lg-3 o_light_label"/>
+                                            <field name="dop_boveda_fondo"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Monto que se desea siempre permanezca en la Bóveda de Pesos.
+                                        </div>                                        
+                                        <div class="row mt16">
+                                            <label for="dop_boveda_account_id" class="col-lg-3 o_light_label"/>
+                                            <field name="dop_boveda_account_id" options="{'no_create': True}"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Cuenta contable que mantiene el balance de Fondo de Bóveda DOP.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="usd_boveda_fondo" class="col-lg-3 o_light_label"/>
+                                            <field name="usd_boveda_fondo"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Monto que se desea siempre permanezca en la Bóveda de Dólares.
+                                        </div>                                        
+                                        <div class="row mt16">
+                                            <label for="usd_boveda_account_id" class="col-lg-3 o_light_label"/>
+                                            <field name="usd_boveda_account_id" options="{'no_create': True}"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Cuenta contable que mantiene el balance de Fondo de Bóveda USD.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <h2>Tarjeta de Crédito</h2>
                         <div class="row mt16 o_settings_container" name="tc_setting_container">
