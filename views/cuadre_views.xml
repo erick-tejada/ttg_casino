@@ -114,9 +114,18 @@
                     </page>
                     <page name="accounting" string="Contabilidad" groups="ttg_casino.group_casino_accountant">
                         <group name="accounting_g1">
-                            <group name="accounting_g1_g1">
+                            <group name="accounting_g1_g1" string="Cuadre Maquina">
+                                <field name="ingreso_maquina" string="Ingreso Efectivo"/>
+                                <field name="egreso_maquina" string="Pago en Caja"/>
+                                <field name="total_maquina" string="Ganancia/Perdida"/>
                             </group>
-                            <group name="accounting_g1_g2" string="Tarjeta de Crédito">
+                            <group name="accounting_g1_g2" string="Cuadre Mesas">
+                                <field name="total_dop_mesa" string="Ganancia/Perdida DOP"/>
+                                <field name="total_usd_mesa" string="Ganancia/Perdida USD"/>
+                            </group>
+                        </group>
+                        <group name="accounting_g2">
+                            <group name="accounting_g2_g1" string="Tarjeta de Crédito">
                                 <field name="cobro_tc_pagado_total" string="Monto a Reponer"/>
                                 <field name="itbis_retenido_tc" string="Monto ITBIS Retenido"/>
                                 <field name="gasto_comision_tc" string="Monto Gasto Comision"/>

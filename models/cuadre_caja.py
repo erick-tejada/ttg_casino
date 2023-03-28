@@ -57,6 +57,11 @@ class CuadreDeCaja(models.Model):
     otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Otros Pagos')
     otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos', store=True) # Egreso
 
+    # CUADRE
+    ingreso_maquina = fields.Monetary('Ingreso Efectivo - Maquina', compute='_compute_cuadre_maquina', store=True)
+    egreso_maquina = fields.Monetary('Pagos de Caja - Maquina', compute='_compute_cuadre_maquina', store=True)
+    total_maquina = fields.Monetary('Total - Maquina', compute='_compute_cuadre_maquina', store=True)
+
     # MESAS
     # ----------------------------------------------------------------------------------------------------------------
     apuestas_mesas = fields.Monetary('Apuestas en Mesas', states={'done': [('readonly', True)]}) # Ingresos
@@ -67,6 +72,10 @@ class CuadreDeCaja(models.Model):
     
     marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
     marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas', store=True) # Ingreso
+
+    # CUADRE
+    total_dop_mesa = fields.Monetary('Ganancia/Perdida DOP - Mesa', compute='_compute_cuadre_mesa', store=True)
+    total_usd_mesa = fields.Monetary('Ganancia/Perdida USD - Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
 
     # DIVISAS
     # ----------------------------------------------------------------------------------------------------------------
@@ -252,6 +261,27 @@ class CuadreDeCaja(models.Model):
         }
         action['context'] = context
         return action
+    
+    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total')
+    def _compute_cuadre_maquina(self):
+        for record in self:
+            total_ingreso = record.bill_drop_total + record.marca_maquina_total + record.recarga_tarjeta
+            total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total
+            record.write({
+                'ingreso_maquina': total_ingreso,
+                'egreso_maquina': total_pago,
+                'total_maquina': total_ingreso - total_pago,
+            })
+    
+    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total')
+    def _compute_cuadre_mesa(self):
+        for record in self:
+            total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas
+            total_usd = record.apuestas_mesas_usd - record.pago_apuestas_mesas_usd
+            record.write({
+                'total_dop_mesa': total_dop,
+                'total_usd_mesa': total_usd,
+            })
 
     @api.model
     def create(self, vals):
