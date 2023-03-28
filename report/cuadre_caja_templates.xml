@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_casino_cuadre_maquina_document">
+    <t t-call="web.internal_layout">
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h2 class="mt16 text-center">
+                <span>Cuadre de Maquinas</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h2>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">INGRESO DE EFECTIVO</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>BILL DROP</td>
+                        <td class="text-right"><span t-field="doc.bill_drop_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>MARCA</td>
+                        <td class="text-right"><span t-field="doc.marca_maquina_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>RECARGAS TARJETA</td>
+                        <td class="text-right"><span t-field="doc.recarga_tarjeta"/></td>
+                    </tr>
+                    <tr class="is-subtotal text-right">
+                        <td name="td_maquina_section_subtotal" colspan="99">
+                            <strong><span t-field="doc.ingreso_maquina"/></strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">PAGO DE CAJA</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>CASHOUT TARJETAS</td>
+                        <td class="text-right"><span t-field="doc.tarjetas_cashout"/></td>
+                    </tr>
+                    <tr>
+                        <td>DEVOLUCION CLIENTE / ERROR EGM</td>
+                        <td class="text-right"><span t-field="doc.devolucion_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>OTROS PAGOS</td>
+                        <td class="text-right"><span t-field="doc.otros_pagos_total"/></td>
+                    </tr>
+                    <tr class="is-subtotal text-right">
+                        <td name="td_maquina_section_subtotal" colspan="99">
+                            <strong><span t-field="doc.egreso_maquina"/></strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr class="active">
+                        <th colspan="2" class="text-center">CIERRE MAQUINAS</th>
+                    </tr>
+                    <tr>
+                        <th name="th_descripcion" class="text-left">Descripción</th>
+                        <th name="th_amount" class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>GANANCIA / PERDIDA</td>
+                        <td class="text-right"><span t-field="doc.total_maquina"/></td>
+                    </tr>
+                    <tr>
+                        <td>SOBRANTE DE TURNOS</td>
+                        <td class="text-right"><span t-field="doc.sobrante_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>FALTANTE DE TURNOS</td>
+                        <td class="text-right"><span t-field="doc.faltante_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>A DEPOSITAR AL BANCO</td>
+                        <td class="text-right"><strong><span t-field="doc.deposito_maquinas"/></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+
+            <div class="row text-center">
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    ENTREGADO POR
+                </div>
+                <div class="col-2"/>
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    RECIBIDO POR
+                </div>
+            </div>
+            
+        </div>
+    </t>
+</template>
+
+
+<template id="report_casino_cuadre_maquina">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_cuadre_maquina_document"/>
+        </t>
+    </t>
+</template>
+
+</odoo>

@@ -33,6 +33,8 @@
         'views/casino_views.xml',
         'report/comision_marca_templates.xml',
         'report/comision_marca_report.xml',
+        'report/cuadre_caja_templates.xml',
+        'report/cuadre_caja_report.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,

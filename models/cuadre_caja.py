@@ -61,6 +61,7 @@ class CuadreDeCaja(models.Model):
     ingreso_maquina = fields.Monetary('Ingreso Efectivo - Maquina', compute='_compute_cuadre_maquina', store=True)
     egreso_maquina = fields.Monetary('Pagos de Caja - Maquina', compute='_compute_cuadre_maquina', store=True)
     total_maquina = fields.Monetary('Total - Maquina', compute='_compute_cuadre_maquina', store=True)
+    deposito_maquinas = fields.Monetary('Deposito Maquinas', compute='_compute_cuadre_maquina', store=True)
 
     # MESAS
     # ----------------------------------------------------------------------------------------------------------------
@@ -99,7 +100,6 @@ class CuadreDeCaja(models.Model):
     faltante_total = fields.Monetary('Total Faltante', compute='_compute_faltante', store=True)
     sobrante_ids = fields.One2many('casino.sobrante', 'cuadre_id', 'Detalle Sobrantes')
     sobrante_total = fields.Monetary('Total Sobrante', compute='_compute_sobrante', store=True)
-    
 
     @api.depends('bill_drop_ids', 'bill_drop_ids.amount_total')
     def _compute_bill_drop(self):
@@ -262,7 +262,7 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
-    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total')
+    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total', 'faltante_total', 'sobrante_total')
     def _compute_cuadre_maquina(self):
         for record in self:
             total_ingreso = record.bill_drop_total + record.marca_maquina_total + record.recarga_tarjeta
@@ -271,6 +271,7 @@ class CuadreDeCaja(models.Model):
                 'ingreso_maquina': total_ingreso,
                 'egreso_maquina': total_pago,
                 'total_maquina': total_ingreso - total_pago,
+                'deposito_maquinas': total_ingreso - total_pago + record.sobrante_total - record.faltante_total,
             })
     
     @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total')

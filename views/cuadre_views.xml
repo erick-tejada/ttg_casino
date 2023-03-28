@@ -118,6 +118,9 @@
                                 <field name="ingreso_maquina" string="Ingreso Efectivo"/>
                                 <field name="egreso_maquina" string="Pago en Caja"/>
                                 <field name="total_maquina" string="Ganancia/Perdida"/>
+                                <field name="sobrante_total"/>
+                                <field name="faltante_total"/>
+                                <field name="deposito_maquinas"/>
                             </group>
                             <group name="accounting_g1_g2" string="Cuadre Mesas">
                                 <field name="total_dop_mesa" string="Ganancia/Perdida DOP"/>
