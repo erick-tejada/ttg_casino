@@ -104,7 +104,7 @@
                     </tr>
                     <tr>
                         <td>A DEPOSITAR AL BANCO</td>
-                        <td class="text-right"><strong><span t-field="doc.deposito_maquinas"/></strong></td>
+                        <td class="text-right"><strong><span t-field="doc.resultado_caja_maquina"/></strong></td>
                     </tr>
                 </tbody>
             </table>

@@ -126,6 +126,167 @@
                                 <field name="usd_boveda_account_id" groups="base.group_no_one"/>
                             </group>
                         </group>
+                        <h2 style="border-bottom: solid 1px #444b5a;">Operaciones en Pesos (DOP)</h2>
+                        <!--
+                        <group name="accounting_g1">
+                            <group string="Ingresos">
+                                <field name="total_dop_mesa" string="Ganancia/Perdida en Mesa"/>
+                                <field name="dop_cambio_dolares" string="Cambio de Dólares Mesa"/>
+                                <field name="cobro_tc_total" string="Efectivo Tarjeta de Crédito Mesa"/>
+                                <field name="cobro_tc_comision_total" string="Comisión Cobrada Tarjeta de Crédito Mesa"/>
+                                <field name="resultado_caja_maquina" string="Ganancia/Perdida en Máquina"/>
+                            </group>
+                            <group string="Reposiciones">
+                                <field name="reposicion_caja_mesa" string="Ganancia/Perdida en Mesa"/>
+                                <field name="total_maquina" string="Ganancia/Perdida en Máquina"/>
+                            </group>
+                            <group string="R">
+                                <field name="total_dop_mesa" string="Ganancia/Perdida en Mesa"/>
+                                <field name="total_maquina" string="Ganancia/Perdida en Máquina"/>
+                            </group>
+                        </group>
+                        -->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Mesas</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="total_dop_mesa" string="(+) Ganancia/Perdida en Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="total_dop_mesa" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cobro_tc_comision_total" string="(+) Comisión Cobrada Tarjeta de Crédito Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="cobro_tc_comision_total" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cobro_tc_total" string="(-) Efectivo Tarjeta de Crédito Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="cobro_tc_total" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="dop_cambio_dolares" string="(-) Cambio de Dólares Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="dop_cambio_dolares" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong><label for="resultado_caja_mesa" string="Resultado Caja Mesas"/></strong></td>
+                                        <td class="text-right">
+                                            <strong><field name="resultado_caja_mesa" readonly="1"/></strong>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Máquinas</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="total_maquina" string="(+) Ganancia/Perdida en Máquinas"/></td>
+                                        <td class="text-right">
+                                            <field name="total_maquina" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="sobrante_total" string="(+) Sobrante en Caja"/></td>
+                                        <td class="text-right">
+                                            <field name="sobrante_total" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="faltante_total" string="(-) Faltante en Caja"/></td>
+                                        <td class="text-right">
+                                            <field name="faltante_total" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr><td style="color: white;">(-)</td><td></td></tr>
+                                    <tr>
+                                        <td><strong><label for="resultado_caja_maquina" string="Resultado Caja Máquinas"/></strong></td>
+                                        <td class="text-right">
+                                            <strong><field name="resultado_caja_maquina" readonly="1"/></strong>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Reposiciones</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="reposicion_caja_mesa" string="Reposición a Caja de Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="reposicion_caja_mesa" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="reposicion_caja_maquina" string="Reposición a Caja de Máquina"/></td>
+                                        <td class="text-right">
+                                            <field name="reposicion_caja_maquina" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Depósitos a Bóveda</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="dop_boveda_deposito" string="Depósito a Fondo de Bóveda DOP"/></td>
+                                        <td class="text-right">
+                                            <field name="dop_boveda_deposito" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="dop_boveda_total_despues_cierre" string="Total en Fondo de Bóveda DOP"/></td>
+                                        <td class="text-right">
+                                            <field name="dop_boveda_total_despues_cierre" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="dop_boveda_a_depositar_banco" string="Depósito de Fondo de Bóveda DOP a Banco"/></td>
+                                        <td class="text-right">
+                                            <field name="dop_boveda_a_depositar_banco" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="dop_boveda_fondo_al_cierre" string="Fondo de Bóveda DOP Despues del Cuadre"/></td>
+                                        <td class="text-right">
+                                            <field name="dop_boveda_fondo_al_cierre" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                        <!--
+                        <h2 style="border-bottom: solid 1px #444b5a;">ANETRIOR - REMOVER</h2>
                         <group name="accounting_g1">
                             <group name="accounting_g1_g1" string="Cuadre Maquina">
                                 <field name="ingreso_maquina" string="Ingreso Efectivo"/>
@@ -133,7 +294,7 @@
                                 <field name="total_maquina" string="Ganancia/Perdida"/>
                                 <field name="sobrante_total"/>
                                 <field name="faltante_total"/>
-                                <field name="deposito_maquinas"/>
+                                <field name="resultado_caja_maquina"/>
                             </group>
                             <group name="accounting_g1_g2" string="Cuadre Mesas">
                                 <field name="total_dop_mesa" string="Ganancia/Perdida DOP"/>
@@ -147,6 +308,7 @@
                                 <field name="gasto_comision_tc" string="Monto Gasto Comision"/>
                             </group>
                         </group>
+                        -->
                     </page>
                 </notebook>
             </sheet>
