@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_casino_detalle_bill_drop_document">
+    <t t-call="web.internal_layout">
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h3 class="mt16 text-center">
+                <span>DETALLE DE BILLETES CONTADOS POR MÁQUINA (DOP)</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h3>
+            <br/>
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead >
+                    <tr>
+                        <th class="text-left">MÁQUINA</th>
+                        <th class="text-center">2000</th>
+                        <th class="text-center">1000</th>
+                        <th class="text-center">500</th>
+                        <th class="text-center">200</th>
+                        <th class="text-center">100</th>
+                        <th class="text-center">50</th>
+                        <th class="text-right">MONTO</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <t t-set="sqty_2000" t-value="0"/>
+                    <t t-set="sqty_1000" t-value="0"/>
+                    <t t-set="sqty_500" t-value="0"/>
+                    <t t-set="sqty_200" t-value="0"/>
+                    <t t-set="sqty_100" t-value="0"/>
+                    <t t-set="sqty_50" t-value="0"/>
+
+                    <t t-foreach="doc.bill_drop_ids" t-as="line">
+                        <t t-set="sqty_2000" t-value="sqty_2000 + line.qty_2000"/>
+                        <t t-set="sqty_1000" t-value="sqty_1000 + line.qty_1000"/>
+                        <t t-set="sqty_500" t-value="sqty_500 + line.qty_500"/>
+                        <t t-set="sqty_200" t-value="sqty_200 + line.qty_200"/>
+                        <t t-set="sqty_100" t-value="sqty_100 + line.qty_100"/>
+                        <t t-set="sqty_50" t-value="sqty_50 + line.qty_50"/>
+                        <tr>
+                            <td class="text-left"><span t-field="line.maquina_id.name"/></td>
+                            <td class="text-center"><span t-field="line.qty_2000"/></td>
+                            <td class="text-center"><span t-field="line.qty_1000"/></td>
+                            <td class="text-center"><span t-field="line.qty_500"/></td>
+                            <td class="text-center"><span t-field="line.qty_200"/></td>
+                            <td class="text-center"><span t-field="line.qty_100"/></td>
+                            <td class="text-center"><span t-field="line.qty_50"/></td>
+                            <td class="text-right"><span t-field="line.amount_total"/></td>
+                        </tr>
+                    </t>
+
+                    <tr style="font-weight: bold;">
+                            <td class="text-left"><span>TOTALES</span></td>
+                            <td class="text-center"><span t-esc="sqty_2000"/></td>
+                            <td class="text-center"><span t-esc="sqty_1000"/></td>
+                            <td class="text-center"><span t-esc="sqty_500"/></td>
+                            <td class="text-center"><span t-esc="sqty_200"/></td>
+                            <td class="text-center"><span t-esc="sqty_100"/></td>
+                            <td class="text-center"><span t-esc="sqty_50"/></td>
+                            <td class="text-right"><span t-field="doc.bill_drop_total"/></td>
+                        </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+        </div>
+    </t>
+</template>
+
+
+<template id="report_casino_detalle_bill_drop">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_detalle_bill_drop_document"/>
+        </t>
+    </t>
+</template>
+
+</odoo>

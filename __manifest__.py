@@ -35,6 +35,8 @@
         'report/comision_marca_report.xml',
         'report/cuadre_caja_templates.xml',
         'report/cuadre_caja_report.xml',
+        'report/detalle_bill_drop_templates.xml',
+        'report/detalle_bill_drop_report.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,
