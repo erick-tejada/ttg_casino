@@ -121,9 +121,7 @@
                             </group>
                             <group name="fondos_usd" string="Fondos Disponibles Antes del Cuadre">
                                 <field name="dop_boveda_fondo_diponible" string="Disponible DOP"/>
-                                <field name="dop_boveda_account_id" groups="base.group_no_one"/>
                                 <field name="usd_boveda_fondo_diponible" string="Disponible USD"/>
-                                <field name="usd_boveda_account_id" groups="base.group_no_one"/>
                             </group>
                         </group>
                         <h2 style="border-bottom: solid 1px #444b5a;">Operaciones en Pesos (DOP)</h2>
@@ -332,7 +330,7 @@
 
                                 </table>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <table class="table table-sm">
                                     <thead style="font-size:large;">
