@@ -80,6 +80,8 @@ class CuadreDeCaja(models.Model):
     total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
     resultado_caja_mesa = fields.Monetary('Resultado Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     reposicion_caja_mesa = fields.Monetary('Reposicion a Caja Mesa', compute='_compute_cuadre_mesa', store=True)
+    resultado_usd_caja_mesa = fields.Monetary('Resultado USD Caja Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
+    reposicion_usd_caja_mesa = fields.Monetary('Reposicion USD a Caja Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
 
     # DIVISAS
     # ----------------------------------------------------------------------------------------------------------------
@@ -117,24 +119,45 @@ class CuadreDeCaja(models.Model):
 
     # DEPOSITOS
     # ----------------------------------------------------------------------------------------------------------------
+    # DOP
     dop_boveda_deposito = fields.Monetary('Deposito a Fondo Boveda DOP', compute='_compute_depositos', store=True)
     dop_boveda_total_despues_cierre = fields.Monetary('Total en Fondo Boveda DOP', compute='_compute_depositos', store=True)
-    dop_boveda_a_depositar_banco = fields.Monetary('A Depositar al Banco', compute='_compute_depositos', store=True)
+    dop_boveda_a_depositar_banco = fields.Monetary('A Depositar al Banco DOP', compute='_compute_depositos', store=True)
     dop_boveda_fondo_al_cierre = fields.Monetary('Fondo en Boveda Despues del Cuadre DOP', compute='_compute_depositos', store=True)
-
-    @api.depends('resultado_caja_mesa', 'resultado_caja_maquina', 'dop_boveda_fondo_diponible', 'usd_boveda_fondo_diponible')
+    # USD
+    usd_boveda_deposito = fields.Monetary('Deposito a Fondo Boveda USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
+    usd_boveda_total_despues_cierre = fields.Monetary('Total en Fondo Boveda USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
+    usd_boveda_a_depositar_banco = fields.Monetary('A Depositar al Banco USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
+    usd_boveda_fondo_al_cierre = fields.Monetary('Fondo en Boveda Despues del Cuadre USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
+    
+    @api.depends('resultado_caja_mesa', 'resultado_caja_maquina', 'dop_boveda_fondo', 'dop_boveda_fondo_diponible', 'reposicion_caja_maquina', 'reposicion_caja_mesa', 
+                 'usd_boveda_fondo', 'usd_boveda_fondo_diponible', 'resultado_usd_caja_mesa', 'reposicion_usd_caja_mesa')
     def _compute_depositos(self):
         for record in self:
+            # DOP
             resultado_del_dia = record.resultado_caja_mesa + record.resultado_caja_maquina
             a_depositar_boveda = resultado_del_dia if resultado_del_dia > 0.0 else 0.0
-            nuevo_balance_boveda = record.dop_boveda_fondo_diponible + a_depositar_boveda
+            nuevo_balance_boveda = record.dop_boveda_fondo_diponible + a_depositar_boveda - record.reposicion_caja_maquina - record.reposicion_caja_mesa
             a_depositar_banco = nuevo_balance_boveda - record.dop_boveda_fondo if nuevo_balance_boveda > record.dop_boveda_fondo else 0.0
             dop_boveda_fondo_al_cierre = nuevo_balance_boveda - a_depositar_banco
+
+            # USD
+            a_depositar_boveda_usd = record.resultado_usd_caja_mesa if record.resultado_usd_caja_mesa > 0.0 else 0.0
+            nuevo_balance_boveda_usd = record.usd_boveda_fondo_diponible + a_depositar_boveda_usd - record.reposicion_usd_caja_mesa
+            a_depositar_banco_platino = nuevo_balance_boveda_usd - record.usd_boveda_fondo if nuevo_balance_boveda_usd > record.usd_boveda_fondo else 0.0
+            usd_boveda_fondo_al_cierre = nuevo_balance_boveda_usd - a_depositar_banco_platino
+
             record.write({
                 'dop_boveda_deposito': a_depositar_boveda,
                 'dop_boveda_total_despues_cierre': nuevo_balance_boveda,
                 'dop_boveda_a_depositar_banco': a_depositar_banco,
                 'dop_boveda_fondo_al_cierre': dop_boveda_fondo_al_cierre,
+
+                'usd_boveda_deposito': a_depositar_boveda_usd,
+                'usd_boveda_total_despues_cierre': nuevo_balance_boveda_usd,
+                'usd_boveda_a_depositar_banco': a_depositar_banco_platino,
+                'usd_boveda_fondo_al_cierre': usd_boveda_fondo_al_cierre,
+
             })
 
     def _compute_balance_at_date(self, account_id, date, is_foreign_currency=False):
@@ -363,19 +386,40 @@ class CuadreDeCaja(models.Model):
                 'reposicion_caja_maquina': resultado_caja_maquina * -1 if resultado_caja_maquina < 0.0 else 0.0,
             })
     
-    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total', 'cobro_tc_comision_total', 'cobro_tc_total', 'dop_cambio_dolares')
+    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total', 'cobro_tc_comision_total', 'cobro_tc_total', 'dop_cambio_dolares', 'cambio_dolares')
     def _compute_cuadre_mesa(self):
         for record in self:
             total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas
             total_usd = record.apuestas_mesas_usd - record.pago_apuestas_mesas_usd
             resultado_caja_mesa = total_dop + record.cobro_tc_comision_total - record.cobro_tc_total - record.dop_cambio_dolares
             reposicion_caja_mesa = resultado_caja_mesa * -1 if resultado_caja_mesa < 0.0 else 0.0
+
+            resultado_usd_caja_mesa = total_usd + record.cambio_dolares
+            reposicion_usd_caja_mesa = resultado_usd_caja_mesa * -1 if resultado_usd_caja_mesa < 0.0 else 0.0
             record.write({
                 'total_dop_mesa': total_dop,
                 'total_usd_mesa': total_usd,
                 'resultado_caja_mesa': resultado_caja_mesa,
                 'reposicion_caja_mesa': reposicion_caja_mesa,
+                'resultado_usd_caja_mesa': resultado_usd_caja_mesa,
+                'reposicion_usd_caja_mesa': reposicion_usd_caja_mesa,
             })
+    
+    def _compute_all(self):
+        for record in self:
+            record._compute_fondos()
+            record._compute_bill_drop()
+            record._compute_devoluciones()
+            record._compute_marcas_maquina()
+            record._compute_otros_pagos()
+            record._compute_marcas_mesas()
+            record._compute_dop_cambio_dolares()
+            record._compute_tc()
+            record._compute_faltante()
+            record._compute_sobrante()
+            record._compute_cuadre_maquina()
+            record._compute_cuadre_mesa()
+            record._compute_depositos()
 
     @api.model
     def create(self, vals):

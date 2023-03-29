@@ -214,7 +214,6 @@
                                             <field name="faltante_total" readonly="1"/>
                                         </td>
                                     </tr>
-                                    <tr><td style="color: white;">(-)</td><td></td></tr>
                                     <tr>
                                         <td><strong><label for="resultado_caja_maquina" string="Resultado Caja Máquinas"/></strong></td>
                                         <td class="text-right">
@@ -277,6 +276,92 @@
                                         <td><label for="dop_boveda_fondo_al_cierre" string="Fondo de Bóveda DOP Despues del Cuadre"/></td>
                                         <td class="text-right">
                                             <field name="dop_boveda_fondo_al_cierre" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <h2 style="border-bottom: solid 1px #444b5a;">Operaciones en Dólares (USD)</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Ingresos</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="total_usd_mesa" string="(+) Ganancia/Perdida en Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="total_usd_mesa" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cambio_dolares" string="(+) Cambio de Dólares"/></td>
+                                        <td class="text-right">
+                                            <field name="cambio_dolares" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="resultado_usd_caja_mesa" string="Resultado Caja Mesa"/></td>
+                                        <td class="text-right">
+                                            <field name="resultado_usd_caja_mesa" readonly="1"/>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Reposiciones</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="reposicion_usd_caja_mesa" string="Reposición a Caja de Mesa USD"/></td>
+                                        <td class="text-right">
+                                            <field name="reposicion_usd_caja_mesa" readonly="1"/>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <table class="table table-sm">
+                                    <thead style="font-size:large;">
+                                        <th colspan="2" class="text-center">
+                                            <h3>Depósitos a Bóveda</h3>
+                                        </th>
+                                    </thead>
+                                    <tr>
+                                        <td><label for="usd_boveda_deposito" string="Depósito a Fondo de Bóveda USD"/></td>
+                                        <td class="text-right">
+                                            <field name="usd_boveda_deposito" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="usd_boveda_total_despues_cierre" string="Total en Fondo de Bóveda USD"/></td>
+                                        <td class="text-right">
+                                            <field name="usd_boveda_total_despues_cierre" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="usd_boveda_a_depositar_banco" string="Depósito de Fondo de Bóveda USD a Banco Platino"/></td>
+                                        <td class="text-right">
+                                            <field name="usd_boveda_a_depositar_banco" readonly="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="usd_boveda_fondo_al_cierre" string="Fondo de Bóveda USD Despues del Cuadre"/></td>
+                                        <td class="text-right">
+                                            <field name="usd_boveda_fondo_al_cierre" readonly="1"/>
                                         </td>
                                     </tr>
                                 </table>
