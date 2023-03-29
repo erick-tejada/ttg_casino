@@ -14,7 +14,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">INGRESO DE EFECTIVO</th>
                     </tr>
@@ -47,7 +47,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">PAGO DE CAJA</th>
                     </tr>
@@ -80,7 +80,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">CIERRE MAQUINAS</th>
                     </tr>
@@ -142,7 +142,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">APUESTAS EN MESAS DOP</th>
                     </tr>
@@ -174,7 +174,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">APUESTAS EN MESAS USD</th>
                     </tr>
@@ -202,7 +202,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">OTROS INGRESOS</th>
                     </tr>
@@ -227,7 +227,7 @@
 
             <table class="table table-sm o_main_table">
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                <thead style="display: table-row-group">
+                <thead >
                     <tr class="active">
                         <th colspan="2" class="text-center">OTROS PAGOS</th>
                     </tr>
@@ -267,6 +267,454 @@
     </t>
 </template>
 
+<template id="report_casino_cuadre_dia_document">
+    <t t-call="web.internal_layout">
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h3 class="mt16 text-center">
+                <span>CUADRE DE INGRESOS</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h3>
+            <br/>
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">FONDOS</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center">FONDOS DE BÓVEDA</th>
+                        <th width="25px;"></th>
+                        <th colspan="2" class="text-center">FONDOS DISPONIBLES ANTES DEL CUADRE</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>Fondo Bóveda DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo"/></td>
+                        <td></td>
+                        <td>Disponible DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo_diponible"/></td>
+                    </tr>
+                    <tr>
+                        <td>Fondo Boveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo"/></td>
+                        <td></td>
+                        <td>Disponible USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo_diponible"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+            <table class="table table-sm o_main_table">
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">OPERACIONES EN PESOS (DOP)</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5" class="text-center">MESAS</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">(+) Ganancia/Perdida</td>
+                        <td class="text-right"><span t-field="doc.total_dop_mesa"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(+) Comisión Cobrada TC</td>
+                        <td class="text-right"><span t-field="doc.cobro_tc_comision_total"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(-) Efectivo Tarjeta de Crédito Mesa</td>
+                        <td class="text-right"><span t-field="doc.cobro_tc_total"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(-) Cambio de Dólares</td>
+                        <td class="text-right"><span t-field="doc.dop_cambio_dolares"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Resultado Caja Mesas</td>
+                        <td class="text-right"><span t-field="doc.resultado_caja_mesa"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">MÁQUINAS</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">(+) Ganancia/Perdida</td>
+                        <td class="text-right"><span t-field="doc.total_maquina"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(+) Sobrante en Caja</td>
+                        <td class="text-right"><span t-field="doc.sobrante_total"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(-) Faltante en Caja</td>
+                        <td class="text-right"><span t-field="doc.faltante_total"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Resultado Caja Máquinas</td>
+                        <td class="text-right"><span t-field="doc.resultado_caja_maquina"/></td>
+                    </tr>
+                </tbody>
+
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">REPOSICIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">Reposición a Caja de Mesa</td>
+                        <td class="text-right"><span t-field="doc.reposicion_caja_mesa"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Reposición a Caja de Máquina</td>
+                        <td class="text-right"><span t-field="doc.reposicion_caja_maquina"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">DEPÓSITOS A BÓVEDA</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">Depósito a Fondo de Bóveda DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_deposito"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Total en Fondo de Bóveda DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_total_despues_cierre"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Depósito de Fondo de Bóveda DOP a Banco</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_a_depositar_banco"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Fondo de Bóveda DOP Despues del Cuadre</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo_al_cierre"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-sm o_main_table" style="page-break-before: always;">
+                <thead>
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">OPERACIONES EN DÓLARES (USD)</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5" class="text-center">INGRESOS</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">(+) Ganancia/Perdida en Mesa</td>
+                        <td class="text-right"><span t-field="doc.total_usd_mesa"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(+) Cambio de Dólares</td>
+                        <td class="text-right"><span t-field="doc.cambio_dolares"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Resultado Caja Mesa</td>
+                        <td class="text-right"><span t-field="doc.resultado_usd_caja_mesa"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">REPOSICIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">Reposición a Caja de Mesa USD</td>
+                        <td class="text-right"><span t-field="doc.reposicion_usd_caja_mesa"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">DEPÓSITOS A BOVEDA</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">Depósito a Fondo de Bóveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_deposito"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Total en Fondo de Bóveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_total_despues_cierre"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Depósito de Fondo de Bóveda USD a Banco Platino</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_a_depositar_banco"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Fondo de Bóveda USD Despues del Cuadre</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo_al_cierre"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <br/>
+            <br/>
+            <br/>
+
+            <div class="row text-center">
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    ENTREGADO POR
+                    <br/>
+                    <span t-field="doc.create_uid"/>
+                </div>
+                <div class="col-2"/>
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    RECIBIDO POR
+                </div>
+            </div>
+            
+        </div>
+    </t>
+</template>
+
+<template id="report_casino_cuadre_dia_experimental_document">
+    <t t-call="web.internal_layout">
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h2 class="mt16 text-center">
+                <span>CUADRE DE INGRESOS</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h2>
+            <br/>
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">FONDOS</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center">FONDOS DE BÓVEDA</th>
+                        <th width="25px;"></th>
+                        <th colspan="2" class="text-center">FONDOS DISPONIBLES ANTES DEL CUADRE</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>Fondo Bóveda DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo"/></td>
+                        <td></td>
+                        <td>Disponible DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo_diponible"/></td>
+                    </tr>
+                    <tr>
+                        <td>Fondo Boveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo"/></td>
+                        <td></td>
+                        <td>Disponible USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo_diponible"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">OPERACIONES EN PESOS (DOP)</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center">MESAS</th>
+                        <th></th>
+                        <th colspan="2" class="text-center">MÁQUINAS</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>(+) Ganancia/Perdida</td>
+                        <td class="text-right"><span t-field="doc.total_dop_mesa"/></td>
+                        <td></td>
+                        <td>(+) Ganancia/Perdida</td>
+                        <td class="text-right"><span t-field="doc.total_maquina"/></td>
+                    </tr>
+                    <tr>
+                        <td>(+) Comisión Cobrada TC</td>
+                        <td class="text-right"><span t-field="doc.cobro_tc_comision_total"/></td>
+                        <td></td>
+                        <td>(+) Sobrante en Caja</td>
+                        <td class="text-right"><span t-field="doc.sobrante_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>(+) Comisión Cobrada TC</td>
+                        <td class="text-right"><span t-field="doc.cobro_tc_total"/></td>
+                        <td></td>
+                        <td>(-) Faltante en Caja</td>
+                        <td class="text-right"><span t-field="doc.faltante_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>(-) Cambio de Dólares</td>
+                        <td class="text-right"><span t-field="doc.dop_cambio_dolares"/></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Resultado Caja Mesas</td>
+                        <td class="text-right"><span t-field="doc.resultado_caja_mesa"/></td>
+                        <td></td>
+                        <td>Resultado Caja Máquinas</td>
+                        <td class="text-right"><span t-field="doc.resultado_caja_maquina"/></td>
+                    </tr>
+                </tbody>
+
+                <thead >
+                    <tr>
+                        <th colspan="2" class="text-center">REPOSICIONES</th>
+                        <th></th>
+                        <th colspan="2" class="text-center">DEPÓSITOS A BÓVEDA</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>Reposición a Caja de Mesa</td>
+                        <td class="text-right"><span t-field="doc.reposicion_caja_mesa"/></td>
+                        <td></td>
+                        <td>Depósito a Fondo de Bóveda DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_deposito"/></td>
+                    </tr>
+                    <tr>
+                        <td>Reposición a Caja de Máquina</td>
+                        <td class="text-right"><span t-field="doc.reposicion_caja_maquina"/></td>
+                        <td></td>
+                        <td>Total en Fondo de Bóveda DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_total_despues_cierre"/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Depósito de Fondo de Bóveda DOP a Banco</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_a_depositar_banco"/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Fondo de Bóveda DOP Despues del Cuadre</td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo_al_cierre"/></td>
+                    </tr>
+                </tbody>
+
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">OPERACIONES EN DÓLARES (USD)</th>
+                    </tr>
+                    <tr>
+                        <th colspan="5" class="text-center">INGRESOS</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">(+) Ganancia/Perdida en Mesa</td>
+                        <td class="text-right"><span t-field="doc.total_usd_mesa"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">(+) Cambio de Dólares</td>
+                        <td class="text-right"><span t-field="doc.cambio_dolares"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Resultado Caja Mesa</td>
+                        <td class="text-right"><span t-field="doc.resultado_usd_caja_mesa"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">REPOSICIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">Reposición a Caja de Mesa USD</td>
+                        <td class="text-right"><span t-field="doc.reposicion_usd_caja_mesa"/></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr>
+                        <th colspan="5" class="text-center">DEPÓSITOS A BOVEDA</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td colspan="4">Depósito a Fondo de Bóveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_deposito"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Total en Fondo de Bóveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_total_despues_cierre"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Depósito de Fondo de Bóveda USD a Banco Platino</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_a_depositar_banco"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Fondo de Bóveda USD Despues del Cuadre</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo_al_cierre"/></td>
+                    </tr>
+                </tbody>
+
+                <!--
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF;">
+                        <th colspan="5" class="text-center">XXXXXXXXXXXXXXXXX</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center">XXXXXXXXXXX</th>
+                        <th></th>
+                        <th colspan="2" class="text-center">XXXXXXXXXXX</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td>xxxxxxxxxxx</td>
+                        <td class="text-right"><span t-field="doc.xxxxxxxxxxx"/></td>
+                        <td></td>
+                        <td>xxxxxxxxxx</td>
+                        <td class="text-right"><span t-field="doc.xxxxxxxxxxxx"/></td>
+                    </tr>
+                    <tr>
+                        <td>xxxxxxxxxx</td>
+                        <td class="text-right"><span t-field="doc.xxxxxxxxxxxx"/></td>
+                        <td></td>
+                        <td>xxxxxxxxxxxx</td>
+                        <td class="text-right"><span t-field="doc.xxxxxxxxxxxx"/></td>
+                    </tr>
+                </tbody>
+                -->
+            </table>
+            
+            <br/>
+            <br/>
+            <br/>
+
+            <div class="row text-center">
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    ENTREGADO POR
+                    <br/>
+                    <span t-field="doc.create_uid"/>
+                </div>
+                <div class="col-2"/>
+                <div class="col-5" style="border-top: 1px solid #bbb;">
+                    RECIBIDO POR
+                </div>
+            </div>
+            
+        </div>
+    </t>
+</template>
+
 
 <template id="report_casino_cuadre_maquina">
     <t t-call="web.html_container">
@@ -280,6 +728,14 @@
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="doc">
             <t t-call="ttg_casino.report_casino_cuadre_mesa_document"/>
+        </t>
+    </t>
+</template>
+
+<template id="report_casino_cuadre_dia">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_cuadre_dia_document"/>
         </t>
     </t>
 </template>
