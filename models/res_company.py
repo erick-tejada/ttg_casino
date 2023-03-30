@@ -18,3 +18,37 @@ class ResComapany(models.Model):
     dop_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda DOP', help='Cuenta con valor en Bóveda de Pesos.')
     usd_boveda_fondo = fields.Float('Fondo Boveda USD', default=10000, help='Fondo en USD a mantener en la Bóveda de Dólares.')
     usd_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda USD', help='Cuenta con valor en Bóveda de Dólares.')
+
+    # Asiento Contable
+    cierre_journal_id = fields.Many2one('account.journal', 'Diario de Ingresos', help='Diario con el cual se asentarán los ingresos diarios.')
+    caja_maquina_account_id = fields.Many2one('account.account', 'Cuenta de Caja Máquinas DOP', help='Cuenta de Caja Máquinas DOP.')
+    caja_mesa_dop_account_id = fields.Many2one('account.account', 'Cuenta de Caja Mesa DOP', help='Cuenta de Caja Mesa DOP.')
+    caja_mesa_usd_account_id = fields.Many2one('account.account', 'Cuenta de Caja Mesa USD', help='Cuenta de Caja Mesa USD.')
+
+    # MAQUINAS
+    # ----------------------------------------------------------------------------------------------------------------
+    # Ingreso
+    maquina_ingreso_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Máquinas', help='Cuenta de Ingreso por Máquinas.')
+    maquina_ingreso_recarga_tarjetas_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Recarga de Tarjetas', help='Cuenta de Ingreso por Recarga de Tarjetas.')
+    maquina_ingreso_marcas_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Marcas', help='Cuenta de Ingreso por Marcas de Máquinas.')
+    maquina_ingreso_sobrante_account_id = fields.Many2one('account.account', 'Cuenta de Sobrante en Caja', help='Cuenta de Ingreso por Sobrante en Caja.')
+    # Pago
+    maquina_tarjeta_cashout_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Tarjeta Cashout', help='Cuenta de Pago por Tarjeta Cashout.')
+    maquina_devolucion_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Devoluciones', help='Cuenta de Pago por Devoluciones.')
+    maquina_otros_pagos_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Otros Pagos', help='Cuenta de Pago por Otros Pagos.')
+    maquina_gasto_faltante_account_id = fields.Many2one('account.account', 'Cuenta de Faltante en Caja', help='Cuenta de Gastp por Faltante en Caja.')
+
+    # MESAS
+    # ----------------------------------------------------------------------------------------------------------------
+    # DOP
+    # Ingreso
+    mesa_ingreso_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Apuestas Mesas DOP', help='Cuenta de Ingreso por Mesas.')
+    mesa_ingreso_comision_tc_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Comision de TC', help='Cuenta de Ingreso por Comision de TC.')
+    # Pago
+    mesa_pagos_account_id = fields.Many2one('account.account', 'Cuenta de Pagos por Apuestas Mesas DOP', help='Cuenta de Pagos por Apuestas Mesas.')
+    mesa_efectivo_tc_account_id = fields.Many2one('account.account', 'Cuenta de Efectivo de TC', help='Cuenta de Efectivo de TC.')
+    mesa_cambio_dolares_account_id = fields.Many2one('account.account', 'Cuenta de Cambio de Dolares', help='Cuenta de Cambio de Dolares.')
+
+    # USD
+    mesa_ingreso_usd_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Apuestas Mesas USD', help='Cuenta de Ingreso por Mesas USD.')
+    mesa_pagos_usd_account_id = fields.Many2one('account.account', 'Cuenta de Pagos por Apuestas Mesas USD', help='Cuenta de Pagos por Apuestas Mesas USD.')
