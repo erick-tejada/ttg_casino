@@ -390,7 +390,10 @@
                             <group>
                                 <field name="cajas_move_id" readonly="1"/>
                                 <field name="bovedas_move_id" readonly="1"/>
-                                <field name="depositos_move_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="deposito_dop_move_id" readonly="1"/>
+                                <field name="deposito_usd_move_id" readonly="1"/>
                             </group>
                         </group>
                     </page>
