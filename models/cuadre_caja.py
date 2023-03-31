@@ -748,6 +748,14 @@ class CuadreDeCaja(models.Model):
         }
         action['context'] = context
         return action
+    
+    def open_all_move_lines(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("account.action_account_moves_all")
+        action['domain'] = [('move_id', '=', [self.cajas_move_id.id, 
+                                              self.bovedas_move_id.id,
+                                              self.deposito_dop_move_id.id,
+                                              self.deposito_usd_move_id.id])]
+        return action
 
     @api.depends('casino_tasa_usd', 'cambio_dolares')
     def _compute_dop_cambio_dolares(self):
