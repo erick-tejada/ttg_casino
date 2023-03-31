@@ -97,8 +97,8 @@
                                     <field name="casino_tasa_usd" readonly="1" force_save="1"/>
                                     <button name="action_refresh_tasa_usd"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-refresh" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
                                 </div>
-                                <field name="cambio_dolares"/>
-                                <field name="dop_cambio_dolares"/>
+                                <field name="cambio_dolares" force_save="1"/>
+                                <field name="dop_cambio_dolares" force_save="1"/>
                             </group>
                             <group name="group3_group2" string="Tarjeta de Crédito">
                                 <label for="cobro_tc_total"/>
@@ -165,7 +165,7 @@
                                     <tr>
                                         <td><label for="dop_cambio_dolares" string="(-) Cambio de Dólares Mesa"/></td>
                                         <td class="text-right">
-                                            <field name="dop_cambio_dolares" readonly="1"/>
+                                            <field name="dop_cambio_dolares" readonly="1" force_save="1"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -289,7 +289,7 @@
                                     <tr>
                                         <td><label for="cambio_dolares" string="(+) Cambio de Dólares"/></td>
                                         <td class="text-right">
-                                            <field name="cambio_dolares" readonly="1"/>
+                                            <field name="cambio_dolares" readonly="1" force_save="1"/>
                                         </td>
                                     </tr>
                                     <tr>
