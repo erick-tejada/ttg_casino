@@ -160,6 +160,31 @@
                             </div>
                         </div>
                         
+
+                        <h2>Diarios de Banco</h2>
+                        <div class="row mt16 o_settings_container" name="tc_setting_container">
+                            <div class="col-lg-6 col-12 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="banco_dop_journal_id" class="col-lg-3 o_light_label"/>
+                                            <field name="banco_dop_journal_id" options="{'no_create': True}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="banco_usd_journal_id" class="col-lg-3 o_light_label"/>
+                                            <field name="banco_usd_journal_id" options="{'no_create': True}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <h2>Cuentas de Máquinas</h2>
                         <div class="row mt16 o_settings_container" name="tc_setting_container">
                             <div class="col-lg-6 col-12 o_setting_box">

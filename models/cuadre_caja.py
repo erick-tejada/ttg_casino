@@ -450,6 +450,20 @@ class CuadreDeCaja(models.Model):
 
         # ASIENTO 3: DEPOSITOS A BANCO
         # ----------------------------------------------------------------------------------------------------------------
+        list_of_aml_vals = []
+        # ******** DESPOSITO DESDE BOVEDA DOP A BANCO ********
+        if self.dop_boveda_a_depositar_banco:
+            amount = self.dop_boveda_a_depositar_banco
+            description = 'Depósito de Fondo de Bóveda DOP a Banco'
+        
+            self.create_aml_dict(
+                list_of_aml_vals,
+                self.company_id.dop_boveda_account_id,
+                self.company_id.dop_boveda_account_id,
+                amount,
+                False,
+                description,
+        )
     
     def _redirect_if_needed(self, next_state):
         ''''Redirects the user to the list view if the user

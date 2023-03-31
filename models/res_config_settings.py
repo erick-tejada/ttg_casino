@@ -25,6 +25,10 @@ class ResConfigSettings(models.TransientModel):
     caja_mesa_dop_account_id = fields.Many2one(related='company_id.caja_mesa_dop_account_id', readonly=False, help='Cuenta de Caja Mesa DOP.')
     caja_mesa_usd_account_id = fields.Many2one(related='company_id.caja_mesa_usd_account_id', readonly=False, help='Cuenta de Caja Mesa USD.')
 
+    # Bancos (Depositos)
+    banco_dop_journal_id = fields.Many2one(related='company_id.banco_dop_journal_id', help='Diario de Banco DOP.')
+    banco_usd_journal_id = fields.Many2one(related='company_id.banco_usd_journal_id', help='Diario de Banco USD.')
+
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------
     # Ingreso

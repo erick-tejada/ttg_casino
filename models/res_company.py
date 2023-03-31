@@ -25,6 +25,10 @@ class ResComapany(models.Model):
     caja_mesa_dop_account_id = fields.Many2one('account.account', 'Cuenta de Caja Mesa DOP', help='Cuenta de Caja Mesa DOP.')
     caja_mesa_usd_account_id = fields.Many2one('account.account', 'Cuenta de Caja Mesa USD', help='Cuenta de Caja Mesa USD.')
 
+    # Bancos (Depositos)
+    banco_dop_journal_id = fields.Many2one('account.journal', 'Diario de Banco DOP', help='Diario de Banco DOP.')
+    banco_usd_journal_id = fields.Many2one('account.journal', 'Diario de Banco USD', help='Diario de Banco USD.')
+
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------
     # Ingreso
