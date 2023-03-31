@@ -144,12 +144,12 @@ class CuadreDeCaja(models.Model):
     def action_audit(self):
         next_state = 'audit'
         self.state = next_state
-        self._redirect_if_needed(next_state)
+        return self._redirect_if_needed(next_state)
 
     def action_accounting(self):
         next_state = 'accounting'
         self.state = next_state
-        self._redirect_if_needed(next_state)
+        return self._redirect_if_needed(next_state)
 
     def action_done(self):
         # Clear Moves
@@ -158,31 +158,39 @@ class CuadreDeCaja(models.Model):
         # Create Moves
         self._create_moves()
         # TODO REMOVE COMMENT TO CHANGE STATE PROPERLY
-        #self.state = 'done'
+        self.state = 'done'
 
     def _delete_moves(self):
         if self.deposito_dop_move_id:
             self.deposito_dop_move_id.button_cancel()
             try:
                 self.deposito_dop_move_id.unlink()
+            except:
+                pass
             finally:
                 self.deposito_dop_move_id = False
         if self.deposito_usd_move_id:
             self.deposito_usd_move_id.button_cancel()
             try:
                 self.deposito_usd_move_id.unlink()
+            except:
+                pass
             finally:
                 self.deposito_usd_move_id = False
         if self.bovedas_move_id:
             self.bovedas_move_id.button_cancel()
             try:
                 self.bovedas_move_id.unlink()
+            except:
+                pass
             finally:
                 self.bovedas_move_id = False
         if self.cajas_move_id:
             self.cajas_move_id.button_cancel()
             try:
                 self.cajas_move_id.unlink()
+            except:
+                pass
             finally:
                 self.cajas_move_id = False
 
@@ -223,7 +231,7 @@ class CuadreDeCaja(models.Model):
                 }
                 list_of_aml_vals.append(credit_aml)
     
-    def create_move(self, aml_list, name=''):
+    def create_move(self, aml_list, name='', journal=False):
 
         if aml_list:
             # Move name
@@ -243,7 +251,7 @@ class CuadreDeCaja(models.Model):
             move_id = self.env['account.move'].create({
                 'ref': ref,
                 'date': self.date,
-                'journal_id': self.company_id.cierre_journal_id.id,
+                'journal_id': self.company_id.cierre_journal_id.id if not journal else journal.id,
                 'line_ids': tuple_list
             })
             move_id.action_post()
@@ -491,11 +499,40 @@ class CuadreDeCaja(models.Model):
         # MANEJAR TARJETA DE CREDITO Y SU COMISION
         if self.cobro_tc_total:
             cobro_tc_total = self.cobro_tc_total
+            
+            # Montos a mover
             itbis_retenido_tc = self.currency_id.round(cobro_tc_total * self.company_id.tc_itbis_percent)
             comision_proveedor_tc = self.currency_id.round(cobro_tc_total * self.company_id.tc_comision_percent)
             cobro_tc_a_depositar = cobro_tc_total - itbis_retenido_tc - comision_proveedor_tc
 
-        self.deposito_dop_move_id = self.create_move(list_of_aml_vals, name='DEPÓSITO A BANCO DOP')
+            self.create_aml_dict(
+                list_of_aml_vals,
+                self.company_id.tc_itbis_account_id,
+                self.company_id.mesa_efectivo_tc_account_id,
+                itbis_retenido_tc,
+                False,
+                'ITBIS Retenido por Cobros con Tarjeta de Crédito',
+            )
+            self.create_aml_dict(
+                list_of_aml_vals,
+                self.company_id.tc_comision_account_id,
+                self.company_id.mesa_efectivo_tc_account_id,
+                comision_proveedor_tc,
+                False,
+                'Comisiones Bancarias por Cobros con Tarjeta de Crédito',
+            )
+            self.create_aml_dict(
+                list_of_aml_vals,
+                bank_account_id,
+                self.company_id.mesa_efectivo_tc_account_id,
+                cobro_tc_a_depositar,
+                False,
+                'Cobros con Tarjeta de Crédito',
+            )
+
+        self.deposito_dop_move_id = self.create_move(list_of_aml_vals, 
+                                                     name='DEPÓSITO A BANCO DOP', 
+                                                     journal=self.company_id.banco_dop_journal_id)
             
         # ******** DESPOSITO DESDE BOVEDA USD A BANCO ********
         list_of_aml_vals = []
@@ -520,7 +557,9 @@ class CuadreDeCaja(models.Model):
                 amount,
                 self.currency_usd_id
         )
-        self.deposito_usd_move_id = self.create_move(list_of_aml_vals, name='DEPÓSITO A BANCO USD')
+        self.deposito_usd_move_id = self.create_move(list_of_aml_vals, 
+                                                     name='DEPÓSITO A BANCO USD', 
+                                                     journal=self.company_id.banco_usd_journal_id)
     
     def _redirect_if_needed(self, next_state):
         ''''Redirects the user to the list view if the user
