@@ -30,7 +30,7 @@ class ResComapany(models.Model):
     # Ingreso
     maquina_ingreso_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Máquinas', help='Cuenta de Ingreso por Máquinas.')
     maquina_ingreso_recarga_tarjetas_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Recarga de Tarjetas', help='Cuenta de Ingreso por Recarga de Tarjetas.')
-    maquina_ingreso_marcas_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Marcas', help='Cuenta de Ingreso por Marcas de Máquinas.')
+    maquina_ingreso_marcas_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Marcas Maquina', help='Cuenta de Ingreso por Marcas de Máquinas.')
     maquina_ingreso_sobrante_account_id = fields.Many2one('account.account', 'Cuenta de Sobrante en Caja', help='Cuenta de Ingreso por Sobrante en Caja.')
     # Pago
     maquina_tarjeta_cashout_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Tarjeta Cashout', help='Cuenta de Pago por Tarjeta Cashout.')
@@ -43,11 +43,11 @@ class ResComapany(models.Model):
     # DOP
     # Ingreso
     mesa_ingreso_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Apuestas Mesas DOP', help='Cuenta de Ingreso por Mesas.')
+    mesa_ingreso_marcas_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Marcas Mesa', help='Cuenta de Ingreso por Marcas de Mesas.')
     mesa_ingreso_comision_tc_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Comision de TC', help='Cuenta de Ingreso por Comision de TC.')
     # Pago
     mesa_pagos_account_id = fields.Many2one('account.account', 'Cuenta de Pagos por Apuestas Mesas DOP', help='Cuenta de Pagos por Apuestas Mesas.')
     mesa_efectivo_tc_account_id = fields.Many2one('account.account', 'Cuenta de Efectivo de TC', help='Cuenta de Efectivo de TC.')
-    mesa_cambio_dolares_account_id = fields.Many2one('account.account', 'Cuenta de Cambio de Dolares', help='Cuenta de Cambio de Dolares.')
 
     # USD
     mesa_ingreso_usd_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Apuestas Mesas USD', help='Cuenta de Ingreso por Mesas USD.')

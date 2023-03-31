@@ -156,24 +156,25 @@ class CuadreDeCaja(models.Model):
 
         # Create Moves
         self._create_moves()
-
-        self.state = 'done'
+        # TODO REMOVE COMMENT TO CHANGE STATE PROPERLY
+        #self.state = 'done'
 
     def _delete_moves(self):
-        
         if self.cajas_move_id:
             self.cajas_move_id.button_cancel()
+            self.cajas_move_id.unlink()
             self.cajas_move_id = False
         if self.bovedas_move_id:
             self.bovedas_move_id.button_cancel()
+            self.bovedas_move_id.unlink()
             self.bovedas_move_id = False
         if self.depositos_move_id:
             self.depositos_move_id.button_cancel()
+            self.depositos_move_id.unlink()
             self.depositos_move_id = False
 
-    def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False):
+    def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description=''):
             '''
-            list_of_aml_vals: list of all the previously created aml
             account_debit: account used for debit (if not inverted)
             account_credit: account used for credit (if not inverted)
             amount_dbcr: amount for debit/credit
@@ -182,38 +183,211 @@ class CuadreDeCaja(models.Model):
             amount_currency: amount in foreign currency (if needed)
             foreign_currency: foreign currency (if needed)
             '''
-            db_account_id = account_debit if not invert_dbcr else account_credit
-            cr_account_id = account_credit if not invert_dbcr else account_debit
-            foreign_currency = self.env.company.currency_id if not foreign_currency else foreign_currency
+            if amount_dbcr:
+                db_account_id = account_debit if not invert_dbcr else account_credit
+                cr_account_id = account_credit if not invert_dbcr else account_debit
+                foreign_currency = self.env.company.currency_id if not foreign_currency else foreign_currency
 
-            # Debit
-            debit_aml = {
-                'account_id': db_account_id.id,
-                'name': description,
-                'debit': amount_dbcr,
-                'crebit': 0,
-                'amount_currency': amount_currency,
-                'currency_id': foreign_currency.id,
-            }
-            list_of_aml_vals.append(debit_aml)
+                # Debit
+                debit_aml = {
+                    'account_id': db_account_id.id,
+                    'name': description,
+                    'debit': amount_dbcr,
+                    'credit': 0,
+                    'amount_currency': amount_currency,
+                    'currency_id': foreign_currency.id,
+                }
+                list_of_aml_vals.append(debit_aml)
 
-            # Credit
-            credit_aml = {
-                'account_id': cr_account_id.id,
-                'name': description,
-                'debit': 0,
-                'crebit': amount_dbcr,
-                'amount_currency': -1 * amount_currency,
-                'currency_id': foreign_currency.id,
-            }
-            list_of_aml_vals.append(credit_aml)
-            return list_of_aml_vals
+                # Credit
+                credit_aml = {
+                    'account_id': cr_account_id.id,
+                    'name': credit_currency_description if amount_currency and credit_currency_description else description,
+                    'debit': 0,
+                    'credit': amount_dbcr,
+                    'amount_currency': -1 * amount_currency if amount_currency else 0.0,
+                    'currency_id': foreign_currency.id,
+                }
+                list_of_aml_vals.append(credit_aml)
     
+    def create_move(self, aml_list, name=''):
+        # Move name
+        ref = 'INGRESOS %s%02d%02d' % (self.date.year, self.date.month, self.date.day)
+        if name:
+            ref = ref + ' - ' + name
+
+        # Create Move Lines
+        tuple_list = []
+        #aml_object = self.env['account.move.line']
+        for aml_vals in aml_list:
+            tuple_list.append(
+                (0, 0, aml_vals)
+            )
+
+        # Create Move
+        move_id = self.env['account.move'].create({
+            'ref': ref,
+            'date': self.date,
+            'journal_id': self.company_id.cierre_journal_id.id,
+            'line_ids': tuple_list
+        })
+
+        return move_id
+
     def _create_moves(self):
         
         # ASIENTO 1: OPERACIONES
         # ----------------------------------------------------------------------------------------------------------------
         list_of_aml_vals = []
+        # ******** INGRESOS MAQUINAS ********
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_maquina_account_id,
+            self.company_id.maquina_ingreso_account_id,
+            self.bill_drop_total,
+            False,
+            'MAQUINAS: Ingreso por Bill Drop',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_maquina_account_id,
+            self.company_id.maquina_ingreso_recarga_tarjetas_account_id,
+            self.recarga_tarjeta,
+            False,
+            'MAQUINAS: Ingreso por Recarga de Tarjeta',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_maquina_account_id,
+            self.company_id.maquina_ingreso_marcas_account_id,
+            self.marca_maquina_total,
+            False,
+            'MAQUINAS: Ingreso por Marcas',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_maquina_account_id,
+            self.company_id.maquina_ingreso_sobrante_account_id,
+            self.sobrante_total,
+            False,
+            'MAQUINAS: Ingreso por Sobrante en Caja',
+        )
+        # ******** PAGOS MAQUINAS ********
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.maquina_tarjeta_cashout_account_id,
+            self.company_id.caja_maquina_account_id,
+            self.tarjetas_cashout,
+            False,
+            'MAQUINAS: Pagos por Tarjeta Cashout',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.maquina_devolucion_account_id,
+            self.company_id.caja_maquina_account_id,
+            self.devolucion_total,
+            False,
+            'MAQUINAS: Pagos por Devolución',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.maquina_otros_pagos_account_id,
+            self.company_id.caja_maquina_account_id,
+            self.otros_pagos_total,
+            False,
+            'MAQUINAS: Pagos por Otros Pagos',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.maquina_gasto_faltante_account_id,
+            self.company_id.caja_maquina_account_id,
+            self.faltante_total,
+            False,
+            'MAQUINAS: Pagos por Faltante en Caja',
+        )
+        # ******** INGRESOS MESAS DOP ********
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_mesa_dop_account_id,
+            self.company_id.mesa_ingreso_account_id,
+            self.apuestas_mesas,
+            False,
+            'MESAS DOP: Ingreso por Apuestas en Mesa',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_mesa_dop_account_id,
+            self.company_id.mesa_ingreso_marcas_account_id,
+            self.marca_mesa_total,
+            False,
+            'MESAS DOP: Ingreso por Marcas en Mesa',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_mesa_dop_account_id,
+            self.company_id.mesa_ingreso_comision_tc_account_id,
+            self.cobro_tc_comision_total,
+            False,
+            'MESAS DOP: Ingreso por Comision de TC',
+        )
+        # ******** PAGOS MESAS DOP ********
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.mesa_pagos_account_id,
+            self.company_id.caja_mesa_dop_account_id,
+            self.pago_apuestas_mesas,
+            False,
+            'MESAS DOP: Pagos por Apuestas de Mesas',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.mesa_efectivo_tc_account_id,
+            self.company_id.caja_mesa_dop_account_id,
+            self.cobro_tc_total,
+            False,
+            'MESAS DOP: Pagos por Efectivo TC',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_mesa_usd_account_id,
+            self.company_id.caja_mesa_dop_account_id,
+            self.dop_cambio_dolares,
+            False,
+            'MESAS USD: Ingreso por Cambio de Dólares',
+            self.cambio_dolares,
+            self.currency_usd_id,
+            'MESAS DOP: Pago por Cambio de Dólares',
+        )
+
+        
+        # ******** INGRESOS MESAS USD ********
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.caja_mesa_usd_account_id,
+            self.company_id.mesa_ingreso_usd_account_id,
+            self.currency_usd_id.round(self.apuestas_mesas_usd * self.casino_tasa_usd),
+            False,
+            'MESAS USD: Ingreso por Apuestas en Mesa',
+            self.apuestas_mesas_usd,
+            self.currency_usd_id
+        )
+        # ******** PAGOS MESAS USD ********
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.mesa_pagos_usd_account_id,
+            self.company_id.caja_mesa_usd_account_id,
+            self.currency_usd_id.round(self.pago_apuestas_mesas_usd * self.casino_tasa_usd),
+            False,
+            'MESAS USD: Pagos por Apuestas en Mesa',
+            self.pago_apuestas_mesas_usd,
+            self.currency_usd_id
+        )
+        _logger.warning('------------------------------------')
+        for l in list_of_aml_vals:
+            _logger.warning(l)
+        _logger.warning('------------------------------------')
+        self.cajas_move_id = self.create_move(list_of_aml_vals, name='OPERACIONES DE CAJAS')
+        self.cajas_move_id.action_post()
 
         # ASIENTO 2: TRANSFERENCIA A / REPOSICION DE BOVEDA
         # ----------------------------------------------------------------------------------------------------------------

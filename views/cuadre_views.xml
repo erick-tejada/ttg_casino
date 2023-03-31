@@ -385,6 +385,15 @@
                         </group>
                         -->
                     </page>
+                    <page name="moves" string="Asientos Contables" groups="ttg_casino.group_casino_accountant">
+                        <group name="group_fondos">
+                            <group>
+                                <field name="cajas_move_id" readonly="1"/>
+                                <field name="bovedas_move_id" readonly="1"/>
+                                <field name="depositos_move_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
                 </notebook>
             </sheet>
             <div class="oe_chatter">
