@@ -6,6 +6,17 @@
         <field name="arch" type="xml">
           <form string="Cuadre" create="false">
             <header>
+                <button string="Devolver a Borrador" name="action_draft" type="object" groups="ttg_casino.group_casino_accountant"
+                                attrs="{'invisible': [('state', '!=', 'done')]}"/>
+
+                <button string="Presentar a Auditor" name="action_audit" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+
+                <button string="Presentar a Contabilidad" name="action_accounting" groups="ttg_casino.group_casino_audit"
+                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'audit')]}"/>
+
+                <button string="Cerrar y Contabilizar" name="action_done" groups="ttg_casino.group_casino_accountant"
+                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'accounting')]}"/>
                 <field name="state" widget="statusbar" statusbar_visible="draft,audit,accounting,done"/>
             </header>
             <sheet>
@@ -125,25 +136,6 @@
                             </group>
                         </group>
                         <h2 style="border-bottom: solid 1px #444b5a;">Operaciones en Pesos (DOP)</h2>
-                        <!--
-                        <group name="accounting_g1">
-                            <group string="Ingresos">
-                                <field name="total_dop_mesa" string="Ganancia/Perdida en Mesa"/>
-                                <field name="dop_cambio_dolares" string="Cambio de Dólares Mesa"/>
-                                <field name="cobro_tc_total" string="Efectivo Tarjeta de Crédito Mesa"/>
-                                <field name="cobro_tc_comision_total" string="Comisión Cobrada Tarjeta de Crédito Mesa"/>
-                                <field name="resultado_caja_maquina" string="Ganancia/Perdida en Máquina"/>
-                            </group>
-                            <group string="Reposiciones">
-                                <field name="reposicion_caja_mesa" string="Ganancia/Perdida en Mesa"/>
-                                <field name="total_maquina" string="Ganancia/Perdida en Máquina"/>
-                            </group>
-                            <group string="R">
-                                <field name="total_dop_mesa" string="Ganancia/Perdida en Mesa"/>
-                                <field name="total_maquina" string="Ganancia/Perdida en Máquina"/>
-                            </group>
-                        </group>
-                        -->
 
                         <div class="row">
                             <div class="col-md-6">

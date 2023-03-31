@@ -129,6 +129,104 @@ class CuadreDeCaja(models.Model):
     usd_boveda_total_despues_cierre = fields.Monetary('Total en Fondo Boveda USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
     usd_boveda_a_depositar_banco = fields.Monetary('A Depositar al Banco USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
     usd_boveda_fondo_al_cierre = fields.Monetary('Fondo en Boveda Despues del Cuadre USD', currency_field='currency_usd_id', compute='_compute_depositos', store=True)
+
+    # ASIENTOS
+    # ----------------------------------------------------------------------------------------------------------------
+    cajas_move_id = fields.Many2one('account.move', 'Asiento de Operaciones de Caja')
+    bovedas_move_id = fields.Many2one('account.move', 'Asiento de Transferencias/Reposicion Bovedas')
+    depositos_move_id = fields.Many2one('account.move', 'Asiento de Depositos a Bancos')
+
+    def action_draft(self):
+        self._delete_moves()
+        self.state = 'draft'
+
+    def action_audit(self):
+        next_state = 'audit'
+        self.state = next_state
+        self._redirect_if_needed(next_state)
+
+    def action_accounting(self):
+        next_state = 'accounting'
+        self.state = next_state
+        self._redirect_if_needed(next_state)
+
+    def action_done(self):
+        # Clear Moves
+        self._delete_moves()
+
+        # Create Moves
+        self._create_moves()
+
+        self.state = 'done'
+
+    def _delete_moves(self):
+        
+        if self.cajas_move_id:
+            self.cajas_move_id.button_cancel()
+            self.cajas_move_id = False
+        if self.bovedas_move_id:
+            self.bovedas_move_id.button_cancel()
+            self.bovedas_move_id = False
+        if self.depositos_move_id:
+            self.depositos_move_id.button_cancel()
+            self.depositos_move_id = False
+
+    def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False):
+            '''
+            list_of_aml_vals: list of all the previously created aml
+            account_debit: account used for debit (if not inverted)
+            account_credit: account used for credit (if not inverted)
+            amount_dbcr: amount for debit/credit
+            invert_dbcr: invert debit/credit accounts
+            description: name/description of the move line
+            amount_currency: amount in foreign currency (if needed)
+            foreign_currency: foreign currency (if needed)
+            '''
+            db_account_id = account_debit if not invert_dbcr else account_credit
+            cr_account_id = account_credit if not invert_dbcr else account_debit
+            foreign_currency = self.env.company.currency_id if not foreign_currency else foreign_currency
+
+            # Debit
+            debit_aml = {
+                'account_id': db_account_id.id,
+                'name': description,
+                'debit': amount_dbcr,
+                'crebit': 0,
+                'amount_currency': amount_currency,
+                'currency_id': foreign_currency.id,
+            }
+            list_of_aml_vals.append(debit_aml)
+
+            # Credit
+            credit_aml = {
+                'account_id': cr_account_id.id,
+                'name': description,
+                'debit': 0,
+                'crebit': amount_dbcr,
+                'amount_currency': -1 * amount_currency,
+                'currency_id': foreign_currency.id,
+            }
+            list_of_aml_vals.append(credit_aml)
+            return list_of_aml_vals
+    
+    def _create_moves(self):
+        
+        # ASIENTO 1: OPERACIONES
+        # ----------------------------------------------------------------------------------------------------------------
+        list_of_aml_vals = []
+
+        # ASIENTO 2: TRANSFERENCIA A / REPOSICION DE BOVEDA
+        # ----------------------------------------------------------------------------------------------------------------
+        # ASIENTO 3: DEPOSITOS A BANCO
+        # ----------------------------------------------------------------------------------------------------------------
+    
+    def _redirect_if_needed(self, next_state):
+        ''''Redirects the user to the list view if the user
+            does not have the role for the next state.'''
+        
+        if ((next_state == 'audit' and not self.env.user.has_group('ttg_casino.group_casino_audit')) or
+            (next_state == 'accounting' and not self.env.user.has_group('ttg_casino.group_casino_accountant'))):
+            return self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_cuadre")
     
     @api.depends('resultado_caja_mesa', 'resultado_caja_maquina', 'dop_boveda_fondo', 'dop_boveda_fondo_diponible', 'reposicion_caja_maquina', 'reposicion_caja_mesa', 
                  'usd_boveda_fondo', 'usd_boveda_fondo_diponible', 'resultado_usd_caja_mesa', 'reposicion_usd_caja_mesa')
