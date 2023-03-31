@@ -160,18 +160,18 @@ class CuadreDeCaja(models.Model):
         #self.state = 'done'
 
     def _delete_moves(self):
-        if self.cajas_move_id:
-            self.cajas_move_id.button_cancel()
-            self.cajas_move_id.unlink()
-            self.cajas_move_id = False
-        if self.bovedas_move_id:
-            self.bovedas_move_id.button_cancel()
-            self.bovedas_move_id.unlink()
-            self.bovedas_move_id = False
         if self.depositos_move_id:
             self.depositos_move_id.button_cancel()
             self.depositos_move_id.unlink()
             self.depositos_move_id = False
+        if self.bovedas_move_id:
+            self.bovedas_move_id.button_cancel()
+            self.bovedas_move_id.unlink()
+            self.bovedas_move_id = False
+        if self.cajas_move_id:
+            self.cajas_move_id.button_cancel()
+            self.cajas_move_id.unlink()
+            self.cajas_move_id = False
 
     def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description=''):
             '''
@@ -382,15 +382,72 @@ class CuadreDeCaja(models.Model):
             self.pago_apuestas_mesas_usd,
             self.currency_usd_id
         )
-        _logger.warning('------------------------------------')
-        for l in list_of_aml_vals:
-            _logger.warning(l)
-        _logger.warning('------------------------------------')
         self.cajas_move_id = self.create_move(list_of_aml_vals, name='OPERACIONES DE CAJAS')
         self.cajas_move_id.action_post()
 
         # ASIENTO 2: TRANSFERENCIA A / REPOSICION DE BOVEDA
         # ----------------------------------------------------------------------------------------------------------------
+        list_of_aml_vals = []
+        # ******** DESPOSITO/REPOSICIONES DE CAJA MAQUINA A BOVEDA ********
+        if self.reposicion_caja_maquina:
+            amount = self.reposicion_caja_maquina
+            invert = True
+            description = 'MAQUINAS: Reposición a Caja Máquinas'
+        else:
+            amount = self.resultado_caja_maquina
+            invert = False
+            description = 'MAQUINAS: Depósito a Bóveda de Caja Máquinas'
+        
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.dop_boveda_account_id,
+            self.company_id.caja_maquina_account_id,
+            amount,
+            invert,
+            description,
+        )
+        # ******** DESPOSITO/REPOSICIONES DE CAJA MESA DOP A BOVEDA ********
+        if self.reposicion_caja_mesa:
+            amount = self.reposicion_caja_mesa
+            invert = True
+            description = 'MESAS DOP: Reposición a Caja Mesa'
+        else:
+            amount = self.resultado_caja_mesa
+            invert = False
+            description = 'MESAS DOP: Depósito a Bóveda de Caja Mesa'
+        
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.dop_boveda_account_id,
+            self.company_id.caja_mesa_dop_account_id,
+            amount,
+            invert,
+            description,
+        )
+        # ******** DESPOSITO/REPOSICIONES DE CAJA MESA USD A BOVEDA ********
+        if self.reposicion_usd_caja_mesa:
+            amount = self.reposicion_usd_caja_mesa
+            invert = True
+            description = 'MESAS USD: Reposición a Caja Mesa'
+        else:
+            amount = self.resultado_usd_caja_mesa
+            invert = False
+            description = 'MESAS USD: Depósito a Bóveda de Caja Mesa'
+        
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.usd_boveda_account_id,
+            self.company_id.caja_mesa_usd_account_id,
+            self.currency_usd_id.round(amount * self.casino_tasa_usd),
+            invert,
+            description,
+            amount,
+            self.currency_usd_id
+        )
+        self.bovedas_move_id = self.create_move(list_of_aml_vals, name='TRANSFERENCIAS A BOVEDA')
+        self.bovedas_move_id.action_post()
+
+
         # ASIENTO 3: DEPOSITOS A BANCO
         # ----------------------------------------------------------------------------------------------------------------
     
