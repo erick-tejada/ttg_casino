@@ -658,7 +658,6 @@ class CuadreDeCaja(models.Model):
             record.bill_drop_total = total
     
     def open_bill_drop(self):
-        bill_drop_ids = self.mapped('bill_drop_ids')
         if self.state != 'done':
             action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_bill_drop")
         else:
@@ -679,7 +678,10 @@ class CuadreDeCaja(models.Model):
             record.devolucion_total = total
     
     def open_devoluciones(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_devolucion")
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_devolucion")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_devolucion_readonly")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,
@@ -696,7 +698,10 @@ class CuadreDeCaja(models.Model):
             record.marca_maquina_total = total
     
     def open_marca_maquinas(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_maquina")
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_maquina")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_maquina_readonly")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,
@@ -713,7 +718,10 @@ class CuadreDeCaja(models.Model):
             record.otros_pagos_total = total
     
     def open_otros_pagos(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_otros_pagos")
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_otros_pagos")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_otros_pagos_readonly")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,
@@ -730,7 +738,10 @@ class CuadreDeCaja(models.Model):
             record.marca_mesa_total = total
     
     def open_marca_mesas(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_mesa")
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_mesa")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_marca_mesa_readonly")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,
