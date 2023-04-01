@@ -863,6 +863,7 @@ class CuadreDeCaja(models.Model):
                 'reposicion_usd_caja_mesa': reposicion_usd_caja_mesa,
             })
     
+    @api.depends('date')
     def _compute_all(self):
         for record in self:
             record._compute_fondos()
