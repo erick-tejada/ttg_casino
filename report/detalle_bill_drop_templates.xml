@@ -2,7 +2,7 @@
 <odoo>
 <template id="report_casino_detalle_bill_drop_document">
     <t t-call="web.internal_layout">
-        <div class="page">
+        <div class="page" style="font-size: small;">
             <div class="oe_structure"/>
 
             <h3 class="mt16 text-center">
