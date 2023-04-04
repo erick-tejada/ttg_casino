@@ -1,0 +1,97 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_apuesta_mesa_tree" model="ir.ui.view">
+        <field name="name">casino.apuesta.mesa</field>
+        <field name="model">casino.apuesta.mesa</field>
+        <field name="arch" type="xml">
+            <tree string="Drop Mesa" create="0" editable="top">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                
+                <field name="mesa_id" options="{'no_create': True, 'no_open': True}" readonly="1" force_save="1" optional="show"/>
+                
+                <field name="qty_2000" sum="Total" optional="show"/>
+                <field name="qty_1000" sum="Total" optional="show"/>
+                <field name="qty_500" sum="Total" optional="show"/>
+                <field name="qty_200" sum="Total" optional="show"/>
+                <field name="qty_100" sum="Total" optional="show"/>
+                <field name="qty_50" sum="Total" optional="show"/>
+
+                <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
+                <field name="note" optional="show"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_apuesta_mesa_tree_readonly" model="ir.ui.view">
+        <field name="name">casino.apuesta.mesa</field>
+        <field name="model">casino.apuesta.mesa</field>
+        <field name="arch" type="xml">
+            <tree string="Drop Mesa" create="0" edit="0" delete="0">
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                
+                <field name="mesa_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
+                
+                <field name="qty_2000" sum="Total" optional="show"/>
+                <field name="qty_1000" sum="Total" optional="show"/>
+                <field name="qty_500" sum="Total" optional="show"/>
+                <field name="qty_200" sum="Total" optional="show"/>
+                <field name="qty_100" sum="Total" optional="show"/>
+                <field name="qty_50" sum="Total" optional="show"/>
+
+                <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
+                <field name="note" optional="show"/>
+                <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="apuesta_mesa_search" model="ir.ui.view">
+        <field name="name">casino.apuesta.mesa.search</field>
+        <field name="model">casino.apuesta.mesa</field>
+        <field name="arch" type="xml">
+            <search string="Search Drop Mesa">
+                <!-- Search fields -->
+                <field name="mesa_id"/>
+
+                <!-- Groups -->
+                <group expand="0" string="Group By">
+                    <filter string="Mesa" name="mesa_id"
+                            domain="[]"
+                            context="{'group_by':'mesa_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_apuesta_mesa" model="ir.actions.act_window">
+        <field name="name">Drop en Mesa</field>
+        <field name="res_model">casino.apuesta.mesa</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_apuesta_mesa_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Drop en Mesa.
+            </p>
+        </field>
+    </record>
+    
+    <record id="action_apuesta_mesa_readonly" model="ir.actions.act_window">
+        <field name="name">Drop en Mesa</field>
+        <field name="res_model">casino.apuesta.mesa</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_apuesta_mesa_tree_readonly"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Detalles de Drop en Mesa.
+            </p>
+        </field>
+    </record>
+</odoo>

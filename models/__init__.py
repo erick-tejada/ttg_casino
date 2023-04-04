@@ -12,3 +12,5 @@ from . import sobrante_faltante
 from . import comision_marca
 from . import lender_deposit
 from . import encargado_caja
+from . import mesa
+from . import apuesta_mesa

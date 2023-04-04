@@ -20,3 +20,7 @@ access_comision_marca_linea,access_comision_marca_linea,model_casino_comision_ma
 access_lender_deposit,access_lender_deposit,model_casino_lender_deposit,ttg_casino.group_casino_user,1,1,1,0
 access_encargado_caja,access_encargado_caja,model_casino_encargado_caja,ttg_casino.group_casino_user,1,0,0,0
 access_encargado_caja_audit,access_encargado_caja_audit,model_casino_encargado_caja,ttg_casino.group_casino_audit,1,1,1,0
+access_mesa,access_mesa,model_casino_mesa,ttg_casino.group_casino_user,1,0,0,0
+access_mesa_audit,access_mesa_audit,model_casino_mesa,ttg_casino.group_casino_audit,1,1,1,0
+access_apuesta_mesa,access_apuesta_mesa,model_casino_apuesta_mesa,ttg_casino.group_casino_user,1,1,1,0
+access_apuesta_mesa_usd,access_apuesta_mesa_usd,model_casino_apuesta_mesa_usd,ttg_casino.group_casino_user,1,1,1,0

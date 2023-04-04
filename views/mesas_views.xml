@@ -1,0 +1,26 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_mesa_tree" model="ir.ui.view">
+        <field name="name">casino.mesa</field>
+        <field name="model">casino.mesa</field>
+        <field name="arch" type="xml">
+            <tree string="Mesas" editable="bottom">                
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_mesas" model="ir.actions.act_window">
+        <field name="name">Mesas</field>
+        <field name="res_model">casino.mesa</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_mesa_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Mesas disponibles.
+            </p>
+        </field>
+    </record>
+</odoo>

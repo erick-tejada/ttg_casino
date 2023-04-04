@@ -44,7 +44,7 @@
     <!-- MQUINAS -->
     <menuitem id="menu_casino_maquinas_root"
         name="Maquinas"
-        groups="ttg_casino.group_casino_manager"
+        groups="ttg_casino.group_casino_audit"
         parent="ttg_casino.menu_casino_root"
         sequence="60"/>
     
@@ -59,6 +59,14 @@
         parent="ttg_casino.menu_casino_maquinas_root"
         action="ttg_casino.action_maquinas_marcas"
         sequence="20"/>
+    
+    <!-- MESAS -->
+    <menuitem id="menu_casino_mesas_root"
+        name="Mesas"
+        groups="ttg_casino.group_casino_audit"
+        parent="ttg_casino.menu_casino_root"
+        action="ttg_casino.action_mesas"
+        sequence="70"/>
 
     <!-- AUDITORIA -->
     <menuitem id="menu_casino_auditoria_root"

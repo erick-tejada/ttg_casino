@@ -67,10 +67,12 @@ class CuadreDeCaja(models.Model):
 
     # MESAS
     # ----------------------------------------------------------------------------------------------------------------
-    apuestas_mesas = fields.Monetary('Apuestas en Mesas', states={'done': [('readonly', True)]}) # Ingresos
+    apuesta_mesa_ids = fields.One2many('casino.apuesta.mesa', 'cuadre_id', 'Detalle de Drop en Mesas')
+    apuestas_mesas = fields.Monetary('Total de Drop en Mesas', compute='_compute_apuestas_mesa', store=True) # Ingresos
     pago_apuestas_mesas = fields.Monetary('Pago Apuestas', states={'done': [('readonly', True)]}) # Egreso
 
-    apuestas_mesas_usd = fields.Monetary('Apuestas en Mesas USD', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Ingresos
+    apuesta_mesa_usd_ids = fields.One2many('casino.apuesta.mesa.usd', 'cuadre_id', 'Detalle de Drop en Mesas USD')
+    apuestas_mesas_usd = fields.Monetary('Apuestas en Mesas USD', currency_field='currency_usd_id', compute='_compute_apuestas_mesa_usd', store=True) # Ingresos
     pago_apuestas_mesas_usd = fields.Monetary('Pago Apuestas USD', currency_field='currency_usd_id', states={'done': [('readonly', True)]}) # Egreso
     
     marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
@@ -670,6 +672,46 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
+    @api.depends('apuesta_mesa_ids', 'apuesta_mesa_ids.amount_total')
+    def _compute_apuestas_mesa(self):
+        for record in self:
+            total = 0
+            for line in record.apuesta_mesa_ids:
+                total += line.amount_total
+            record.apuestas_mesas = total
+    
+    def open_apuesta_mesa(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_apuesta_mesa")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_apuesta_mesa_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('apuesta_mesa_usd_ids', 'apuesta_mesa_usd_ids.amount_total')
+    def _compute_apuestas_mesa_usd(self):
+        for record in self:
+            total = 0
+            for line in record.apuesta_mesa_usd_ids:
+                total += line.amount_total
+            record.apuestas_mesas_usd = total
+    
+    def open_apuesta_mesa_usd(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_apuesta_mesa_usd")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_apuesta_mesa_usd_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
     @api.depends('devolucion_ids', 'devolucion_ids.amount')
     def _compute_devoluciones(self):
         for record in self:
@@ -890,6 +932,22 @@ class CuadreDeCaja(models.Model):
                 self.env['casino.bill.drop'].create({
                     'cuadre_id': cuadre.id,
                     'maquina_id': maquina.id,
+                })
+        
+        if not cuadre.apuesta_mesa_ids:
+            mesa_ids = self.env['casino.mesa'].search([('company_id','=',cuadre.company_id.id)])
+            for mesa in mesa_ids:
+                self.env['casino.apuesta.mesa'].create({
+                    'cuadre_id': cuadre.id,
+                    'mesa_id': mesa.id,
+                })
+        
+        if not cuadre.apuesta_mesa_usd_ids:
+            mesa_ids = self.env['casino.mesa'].search([('company_id','=',cuadre.company_id.id)])
+            for mesa in mesa_ids:
+                self.env['casino.apuesta.mesa.usd'].create({
+                    'cuadre_id': cuadre.id,
+                    'mesa_id': mesa.id,
                 })
         return cuadre
 

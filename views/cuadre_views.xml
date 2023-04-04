@@ -52,7 +52,7 @@
                                 <div class="o_row">
                                     <field name="bill_drop_total"/>
                                     <button name="open_bill_drop" class="btn fa fa-money" type="object" aria-label="Modificar los billetes por Máquina" title="Modificar los billetes por Máquina" role="img"/>
-                                </div>                        
+                                </div>
                                 <label for="marca_maquina_total"/>
                                 <div class="o_row">
                                     <field name="marca_maquina_total"/>
@@ -78,11 +78,19 @@
                         <h2 style="border-bottom: solid 1px #444b5a;">Mesas</h2>
                         <group name="group_mesa">
                             <group name="group_mesa_1" string="Pesos DOP">
-                                <field name="apuestas_mesas" string="Apuestas"/>
+                                <label for="bill_drop_total" string="Bill Drop Mesas"/>
+                                <div class="o_row">
+                                    <field name="apuestas_mesas" string="Drop Mesas"/>
+                                    <button name="open_apuesta_mesa" class="btn fa fa-money" type="object" aria-label="Modificar las Apuestas en Mesa" title="Modificar las Apuestas en Mesa" role="img"/>
+                                </div>
                                 <field name="pago_apuestas_mesas" string="Pagos"/>
                             </group>
                             <group name="group_mesa_2" string="Dólares USD">
-                                <field name="apuestas_mesas_usd" string="Apuestas"/>
+                                <label for="apuestas_mesas_usd" string="Bill Drop Mesas USD"/>
+                                <div class="o_row">
+                                    <field name="apuestas_mesas_usd" string="Drop Mesas USD"/>
+                                    <button name="open_apuesta_mesa_usd" class="btn fa fa-money" type="object" aria-label="Modificar las Apuestas en Mesa USD" title="Modificar las Apuestas en Mesa USD" role="img"/>
+                                </div>
                                 <field name="pago_apuestas_mesas_usd" string="Pagos"/>
                             </group>
                             <group name="group_mesa_3" string="Marcas">
