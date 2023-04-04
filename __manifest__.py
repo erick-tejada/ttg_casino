@@ -30,6 +30,7 @@
         'views/res_config_settings_views.xml',
         'views/comision_marca_views.xml',
         'views/lender_deposit_views.xml',
+        'views/encargado_caja_views.xml',
         'views/casino_views.xml',
         'report/comision_marca_templates.xml',
         'report/comision_marca_report.xml',

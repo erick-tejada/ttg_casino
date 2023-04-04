@@ -80,6 +80,10 @@
         sequence="20"/>
 
     <!-- CONFIGURACIONES -->
-    <menuitem id="menu_casino_config" name="Configuraciones" parent="menu_casino_root"
-        sequence="100" action="action_casino_config" groups="ttg_casino.group_casino_accountant"/>
+    <menuitem id="menu_casino_config_root" name="Configuraciones" parent="menu_casino_root"
+        sequence="100" groups="ttg_casino.group_casino_accountant"/>
+    <menuitem id="menu_casino_config" name="Configuraciones" parent="menu_casino_config_root"
+        sequence="10" action="action_casino_config"/>
+    <menuitem id="menu_casino_encargados" name="Encargados de Caja" parent="menu_casino_config_root"
+        sequence="20" action="action_casino_encargado_caja"/>
 </odoo>

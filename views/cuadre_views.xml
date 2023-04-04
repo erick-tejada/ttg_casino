@@ -35,6 +35,11 @@
                         <field name="date"/>
                     </h1>
                 </div>
+                <group>
+                    <group>
+                        <field name="encargado_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    </group>
+                </group>
 
                 <notebook>
                     <page name="detalles" string="Detalles Cierre">

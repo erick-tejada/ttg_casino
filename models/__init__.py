@@ -11,3 +11,4 @@ from . import cobro_tc
 from . import sobrante_faltante
 from . import comision_marca
 from . import lender_deposit
+from . import encargado_caja

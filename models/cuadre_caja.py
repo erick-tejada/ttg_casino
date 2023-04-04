@@ -38,6 +38,7 @@ class CuadreDeCaja(models.Model):
         ('accounting', 'Contabilidad'),
         ('done', 'Cerrado'),
         ], string='Estado', readonly=True, copy=False, index=True, tracking=3, default='draft')
+    encargado_id = fields.Many2one('casino.encargado.caja', string='Encargado de Caja', required=True)
 
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------
