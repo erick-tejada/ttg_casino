@@ -25,37 +25,40 @@ class ResPartner(models.Model):
     def _compute_x_amount_available(self):
         for record in self:
 
-            # Total de Depositos
-            sql_query = '''
-                        SELECT SUM(d.amount)
-                        FROM casino_lender_deposit d
-                        WHERE d.partner_id = %s
-                    '''
-            self.env.cr.execute(sql_query, (record.id,))
-            total_depositos = self.env.cr.dictfetchall()[0].get('sum', 0.0)
-            total_depositos = total_depositos if total_depositos else 0.0
+            if record.id:
+                # Total de Depositos
+                sql_query = '''
+                            SELECT SUM(d.amount)
+                            FROM casino_lender_deposit d
+                            WHERE d.partner_id = %s
+                        '''
+                self.env.cr.execute(sql_query, (record.id,))
+                total_depositos = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+                total_depositos = total_depositos if total_depositos else 0.0
 
-            # Total de Marcas Maquinas
-            sql_query = '''
-                        SELECT SUM(m.amount)
-                        FROM casino_marca_maquina m
-                        WHERE m.lender_partner_id = %s
-                    '''
-            self.env.cr.execute(sql_query, (record.id,))
-            total_marcas_maquina = self.env.cr.dictfetchall()[0].get('sum', 0.0)
-            total_marcas_maquina = total_marcas_maquina if total_marcas_maquina else 0.0
+                # Total de Marcas Maquinas
+                sql_query = '''
+                            SELECT SUM(m.amount)
+                            FROM casino_marca_maquina m
+                            WHERE m.lender_partner_id = %s
+                        '''
+                self.env.cr.execute(sql_query, (record.id,))
+                total_marcas_maquina = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+                total_marcas_maquina = total_marcas_maquina if total_marcas_maquina else 0.0
 
-            # Total de Marcas Mesas
-            sql_query = '''
-                        SELECT SUM(m.amount)
-                        FROM casino_marca_mesa m
-                        WHERE m.lender_partner_id = %s
-                    '''
-            self.env.cr.execute(sql_query, (record.id,))
-            total_marcas_mesa = self.env.cr.dictfetchall()[0].get('sum', 0.0)
-            total_marcas_mesa = total_marcas_mesa if total_marcas_mesa else 0.0
+                # Total de Marcas Mesas
+                sql_query = '''
+                            SELECT SUM(m.amount)
+                            FROM casino_marca_mesa m
+                            WHERE m.lender_partner_id = %s
+                        '''
+                self.env.cr.execute(sql_query, (record.id,))
+                total_marcas_mesa = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+                total_marcas_mesa = total_marcas_mesa if total_marcas_mesa else 0.0
 
-            record.x_amount_available = total_depositos - total_marcas_maquina - total_marcas_mesa
+                record.x_amount_available = total_depositos - total_marcas_maquina - total_marcas_mesa
+            else:
+                record.x_amount_available = 0
     
     def open_lender_deposits(self):
         action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_lender_deposit")
