@@ -2,13 +2,13 @@
 <odoo>
     <data noupdate="1">
         <record id="mesa_bj1" model="casino.mesa">
-            <field name="name">BACK JACK 1</field>
+            <field name="name">BLACK JACK 1</field>
         </record>
         <record id="mesa_bj2" model="casino.mesa">
-            <field name="name">BACK JACK 2</field>
+            <field name="name">BLACK JACK 2</field>
         </record>
         <record id="mesa_bj3" model="casino.mesa">
-            <field name="name">BACK JACK 3</field>
+            <field name="name">BLACK JACK 3</field>
         </record>
         <record id="mesa_ruleta1" model="casino.mesa">
             <field name="name">RULETA 1</field>
