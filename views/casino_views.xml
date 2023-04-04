@@ -60,30 +60,31 @@
         action="ttg_casino.action_maquinas_marcas"
         sequence="20"/>
 
-    <!-- CONTABILIDAD -->
-    <menuitem id="menu_casino_contabilidad_root"
+    <!-- AUDITORIA -->
+    <menuitem id="menu_casino_auditoria_root"
         parent="ttg_casino.menu_casino_root"
-        groups="ttg_casino.group_casino_accountant"
-        name="Contabilidad"
+        groups="ttg_casino.group_casino_audit"
+        name="Auditoría"
         sequence="80"/>
     
     <menuitem id="menu_casino_comisiones"
         name="Comisiones"
-        parent="ttg_casino.menu_casino_contabilidad_root"
+        parent="ttg_casino.menu_casino_auditoria_root"
         action="ttg_casino.action_comision_marca"
         sequence="10"/>
     
     <menuitem id="menu_casino_prestamistas"
         name="Prestamistas"
-        parent="ttg_casino.menu_casino_contabilidad_root"
+        parent="ttg_casino.menu_casino_auditoria_root"
         action="ttg_casino.action_casino_partner_prestamista"
         sequence="20"/>
+
+    <menuitem id="menu_casino_encargados" name="Encargados de Caja" parent="menu_casino_auditoria_root"
+        sequence="30" action="action_casino_encargado_caja"/>
 
     <!-- CONFIGURACIONES -->
     <menuitem id="menu_casino_config_root" name="Configuraciones" parent="menu_casino_root"
         sequence="100" groups="ttg_casino.group_casino_accountant"/>
     <menuitem id="menu_casino_config" name="Configuraciones" parent="menu_casino_config_root"
         sequence="10" action="action_casino_config"/>
-    <menuitem id="menu_casino_encargados" name="Encargados de Caja" parent="menu_casino_config_root"
-        sequence="20" action="action_casino_encargado_caja"/>
 </odoo>
