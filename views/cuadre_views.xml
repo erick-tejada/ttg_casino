@@ -201,7 +201,7 @@
                                     <tr>
                                         <td><label for="total_maquina" string="(+) Ganancia/Perdida en Máquinas"/></td>
                                         <td class="text-right">
-                                            <field name="total_maquina" readonly="1"/>
+                                            <field name="total_maquina" decoration-danger="total_maquina &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -219,7 +219,7 @@
                                     <tr>
                                         <td><strong><label for="resultado_caja_maquina" string="Resultado Caja Máquinas"/></strong></td>
                                         <td class="text-right">
-                                            <strong><field name="resultado_caja_maquina" readonly="1"/></strong>
+                                            <strong><field name="resultado_caja_maquina" decoration-danger="resultado_caja_maquina &lt; 0.0" readonly="1"/></strong>
                                         </td>
                                     </tr>
 
@@ -265,7 +265,7 @@
                                     <tr>
                                         <td><label for="dop_boveda_total_despues_cierre" string="Total en Fondo de Bóveda DOP"/></td>
                                         <td class="text-right">
-                                            <field name="dop_boveda_total_despues_cierre" readonly="1"/>
+                                            <field name="dop_boveda_total_despues_cierre" decoration-danger="dop_boveda_total_despues_cierre &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -277,7 +277,7 @@
                                     <tr>
                                         <td><label for="dop_boveda_fondo_al_cierre" string="Fondo de Bóveda DOP Despues del Cuadre"/></td>
                                         <td class="text-right">
-                                            <field name="dop_boveda_fondo_al_cierre" readonly="1"/>
+                                            <field name="dop_boveda_fondo_al_cierre" decoration-danger="dop_boveda_fondo_al_cierre &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -296,7 +296,7 @@
                                     <tr>
                                         <td><label for="total_usd_mesa" string="(+) Ganancia/Perdida en Mesa"/></td>
                                         <td class="text-right">
-                                            <field name="total_usd_mesa" readonly="1"/>
+                                            <field name="total_usd_mesa" decoration-danger="total_usd_mesa &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -308,7 +308,7 @@
                                     <tr>
                                         <td><label for="resultado_usd_caja_mesa" string="Resultado Caja Mesa"/></td>
                                         <td class="text-right">
-                                            <field name="resultado_usd_caja_mesa" readonly="1"/>
+                                            <field name="resultado_usd_caja_mesa" decoration-danger="resultado_usd_caja_mesa &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
 
@@ -351,7 +351,7 @@
                                     <tr>
                                         <td><label for="usd_boveda_total_despues_cierre" string="Total en Fondo de Bóveda USD"/></td>
                                         <td class="text-right">
-                                            <field name="usd_boveda_total_despues_cierre" readonly="1"/>
+                                            <field name="usd_boveda_total_despues_cierre" decoration-danger="usd_boveda_total_despues_cierre &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -363,7 +363,7 @@
                                     <tr>
                                         <td><label for="usd_boveda_fondo_al_cierre" string="Fondo de Bóveda USD Despues del Cuadre"/></td>
                                         <td class="text-right">
-                                            <field name="usd_boveda_fondo_al_cierre" readonly="1"/>
+                                            <field name="usd_boveda_fondo_al_cierre" decoration-danger="usd_boveda_fondo_al_cierre &lt; 0.0" readonly="1"/>
                                         </td>
                                     </tr>
                                 </table>

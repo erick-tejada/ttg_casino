@@ -46,5 +46,10 @@
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,
     'application': True,
+    'assets': {
+        'web.report_assets_common': [
+            'ttg_casino/static/src/scss/casino.scss',
+        ],
+    },
     'license': 'LGPL-3',
 }

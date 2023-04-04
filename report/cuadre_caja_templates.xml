@@ -92,7 +92,7 @@
                 <tbody class="sale_tbody">
                     <tr>
                         <td>GANANCIA / PERDIDA</td>
-                        <td class="text-right"><span t-field="doc.total_maquina"/></td>
+                        <td class="text-right"><span t-field="doc.total_maquina" t-attf-class="{{ 'negative' if doc.total_maquina &lt; 0.0 else '' }}"/></td>
                     </tr>
                     <tr>
                         <td>SOBRANTE DE TURNOS</td>
@@ -104,7 +104,7 @@
                     </tr>
                     <tr>
                         <td>A DEPOSITAR AL BANCO</td>
-                        <td class="text-right"><strong><span t-field="doc.resultado_caja_maquina"/></strong></td>
+                        <td class="text-right"><strong><span t-field="doc.dop_boveda_a_depositar_banco"/></strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -166,7 +166,7 @@
                     </tr>
                     <tr>
                         <td><strong>GANANCIA / PÉRDIDA DOP</strong></td>
-                        <td class="text-right"><strong><span t-field="doc.total_dop_mesa"/></strong></td>
+                        <td class="text-right"><strong><span t-field="doc.total_dop_mesa" t-attf-class="{{ 'negative' if doc.total_dop_mesa &lt; 0.0 else '' }}"/></strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -194,7 +194,7 @@
                     </tr>
                     <tr>
                         <td><strong>GANANCIA / PÉRDIDA USD</strong></td>
-                        <td class="text-right"><strong><span t-field="doc.total_usd_mesa"/></strong></td>
+                        <td class="text-right"><strong><span t-field="doc.total_usd_mesa" t-attf-class="{{ 'negative' if doc.total_usd_mesa &lt; 0.0 else '' }}"/></strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -322,7 +322,7 @@
                         <tbody class="sale_tbody">
                             <tr>
                                 <td colspan="4">(+) Ganancia/Perdida</td>
-                                <td class="text-right"><span t-field="doc.total_dop_mesa"/></td>
+                                <td class="text-right"><span t-field="doc.total_dop_mesa" t-attf-class="{{ 'negative' if doc.total_dop_mesa &lt; 0.0 else '' }}"/></td>
                             </tr>
                             <tr>
                                 <td colspan="4">(+) Comisión Cobrada TC</td>
@@ -338,7 +338,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Resultado Caja Mesas</td>
-                                <td class="text-right"><span t-field="doc.resultado_caja_mesa"/></td>
+                                <td class="text-right"><span t-field="doc.resultado_caja_mesa" t-attf-class="{{ 'negative' if doc.resultado_caja_mesa &lt; 0.0 else '' }}"/></td>
                             </tr>
                         </tbody>
                         <thead >
@@ -349,7 +349,7 @@
                         <tbody class="sale_tbody">
                             <tr>
                                 <td colspan="4">(+) Ganancia/Perdida</td>
-                                <td class="text-right"><span t-field="doc.total_maquina"/></td>
+                                <td class="text-right"><span t-field="doc.total_maquina" t-attf-class="{{ 'negative' if doc.total_maquina &lt; 0.0 else '' }}"/></td>
                             </tr>
                             <tr>
                                 <td colspan="4">(+) Sobrante en Caja</td>
@@ -361,7 +361,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Resultado Caja Máquinas</td>
-                                <td class="text-right"><span t-field="doc.resultado_caja_maquina"/></td>
+                                <td class="text-right"><span t-field="doc.resultado_caja_maquina" t-attf-class="{{ 'negative' if doc.resultado_caja_maquina &lt; 0.0 else '' }}"/></td>
                             </tr>
                         </tbody>
 
@@ -392,7 +392,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Total en Fondo de Bóveda DOP</td>
-                                <td class="text-right"><span t-field="doc.dop_boveda_total_despues_cierre"/></td>
+                                <td class="text-right"><span t-field="doc.dop_boveda_total_despues_cierre" t-attf-class="{{ 'negative' if doc.dop_boveda_total_despues_cierre &lt; 0.0 else '' }}"/></td>
                             </tr>
                             <tr>
                                 <td colspan="4">Depósito de Fondo de Bóveda DOP a Banco</td>
@@ -400,7 +400,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Fondo de Bóveda DOP Despues del Cuadre</td>
-                                <td class="text-right"><span t-field="doc.dop_boveda_fondo_al_cierre"/></td>
+                                <td class="text-right"><span t-field="doc.dop_boveda_fondo_al_cierre" t-attf-class="{{ 'negative' if doc.dop_boveda_fondo_al_cierre &lt; 0.0 else '' }}"/></td>
                             </tr>
                         </tbody>
                     </table>
@@ -418,7 +418,7 @@
                         <tbody class="sale_tbody">
                             <tr>
                                 <td colspan="4">(+) Ganancia/Perdida en Mesa</td>
-                                <td class="text-right"><span t-field="doc.total_usd_mesa"/></td>
+                                <td class="text-right"><span t-field="doc.total_usd_mesa" t-attf-class="{{ 'negative' if doc.total_usd_mesa &lt; 0.0 else '' }}"/></td>
                             </tr>
                             <tr>
                                 <td colspan="4">(+) Cambio de Dólares</td>
@@ -426,7 +426,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Resultado Caja Mesa</td>
-                                <td class="text-right"><span t-field="doc.resultado_usd_caja_mesa"/></td>
+                                <td class="text-right"><span t-field="doc.resultado_usd_caja_mesa" t-attf-class="{{ 'negative' if doc.resultado_usd_caja_mesa &lt; 0.0 else '' }}"/></td>
                             </tr>
                         </tbody>
                         <thead >
@@ -452,7 +452,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Total en Fondo de Bóveda USD</td>
-                                <td class="text-right"><span t-field="doc.usd_boveda_total_despues_cierre"/></td>
+                                <td class="text-right"><span t-field="doc.usd_boveda_total_despues_cierre" t-attf-class="{{ 'negative' if doc.usd_boveda_total_despues_cierre &lt; 0.0 else '' }}"/></td>
                             </tr>
                             <tr>
                                 <td colspan="4">Depósito de Fondo de Bóveda USD a Banco Platino</td>
@@ -460,7 +460,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Fondo de Bóveda USD Despues del Cuadre</td>
-                                <td class="text-right"><span t-field="doc.usd_boveda_fondo_al_cierre"/></td>
+                                <td class="text-right"><span t-field="doc.usd_boveda_fondo_al_cierre" t-attf-class="{{ 'negative' if doc.usd_boveda_fondo_al_cierre &lt; 0.0 else '' }}"/></td>
                             </tr>
                         </tbody>
                     </table>
@@ -538,10 +538,10 @@
                 <tbody class="sale_tbody">
                     <tr>
                         <td>(+) Ganancia/Perdida</td>
-                        <td class="text-right"><span t-field="doc.total_dop_mesa"/></td>
+                        <td class="text-right"><span t-field="doc.total_dop_mesa" t-attf-class="{{ 'negative' if doc.total_dop_mesa &lt; 0.0 else '' }}"/></td>
                         <td></td>
                         <td>(+) Ganancia/Perdida</td>
-                        <td class="text-right"><span t-field="doc.total_maquina"/></td>
+                        <td class="text-right"><span t-field="doc.total_maquina" t-attf-class="{{ 'negative' if doc.total_maquina &lt; 0.0 else '' }}"/></td>
                     </tr>
                     <tr>
                         <td>(+) Comisión Cobrada TC</td>
@@ -566,10 +566,10 @@
                     </tr>
                     <tr>
                         <td>Resultado Caja Mesas</td>
-                        <td class="text-right"><span t-field="doc.resultado_caja_mesa"/></td>
+                        <td class="text-right"><span t-field="doc.resultado_caja_mesa" t-attf-class="{{ 'negative' if doc.resultado_caja_mesa &lt; 0.0 else '' }}"/></td>
                         <td></td>
                         <td>Resultado Caja Máquinas</td>
-                        <td class="text-right"><span t-field="doc.resultado_caja_maquina"/></td>
+                        <td class="text-right"><span t-field="doc.resultado_caja_maquina" t-attf-class="{{ 'negative' if doc.resultado_caja_maquina &lt; 0.0 else '' }}"/></td>
                     </tr>
                 </tbody>
 
@@ -622,7 +622,7 @@
                 <tbody class="sale_tbody">
                     <tr>
                         <td colspan="4">(+) Ganancia/Perdida en Mesa</td>
-                        <td class="text-right"><span t-field="doc.total_usd_mesa"/></td>
+                        <td class="text-right"><span t-field="doc.total_usd_mesa" t-attf-class="{{ 'negative' if doc.total_usd_mesa &lt; 0.0 else '' }}"/></td>
                     </tr>
                     <tr>
                         <td colspan="4">(+) Cambio de Dólares</td>
@@ -630,7 +630,7 @@
                     </tr>
                     <tr>
                         <td colspan="4">Resultado Caja Mesa</td>
-                        <td class="text-right"><span t-field="doc.resultado_usd_caja_mesa"/></td>
+                        <td class="text-right"><span t-field="doc.resultado_usd_caja_mesa" t-attf-class="{{ 'negative' if doc.resultado_usd_caja_mesa &lt; 0.0 else '' }}"/></td>
                     </tr>
                 </tbody>
                 <thead >
@@ -656,7 +656,7 @@
                     </tr>
                     <tr>
                         <td colspan="4">Total en Fondo de Bóveda USD</td>
-                        <td class="text-right"><span t-field="doc.usd_boveda_total_despues_cierre"/></td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_total_despues_cierre" t-attf-class="{{ 'negative' if doc.usd_boveda_total_despues_cierre &lt; 0.0 else '' }}"/></td>
                     </tr>
                     <tr>
                         <td colspan="4">Depósito de Fondo de Bóveda USD a Banco Platino</td>
@@ -664,7 +664,7 @@
                     </tr>
                     <tr>
                         <td colspan="4">Fondo de Bóveda USD Despues del Cuadre</td>
-                        <td class="text-right"><span t-field="doc.usd_boveda_fondo_al_cierre"/></td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo_al_cierre" t-attf-class="{{ 'negative' if doc.usd_boveda_fondo_al_cierre &lt; 0.0 else '' }}"/></td>
                     </tr>
                 </tbody>
 
