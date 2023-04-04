@@ -143,8 +143,8 @@
                                 <field name="usd_boveda_fondo"/>
                             </group>
                             <group name="fondos_usd" string="Fondos Disponibles Antes del Cuadre">
-                                <field name="dop_boveda_fondo_diponible" string="Disponible DOP"/>
-                                <field name="usd_boveda_fondo_diponible" string="Disponible USD"/>
+                                <field name="dop_boveda_fondo_diponible" string="Disponible DOP" decoration-danger="dop_boveda_fondo_diponible &lt; 0.0"/>
+                                <field name="usd_boveda_fondo_diponible" string="Disponible USD" decoration-danger="usd_boveda_fondo_diponible &lt; 0.0"/>
                             </group>
                         </group>
                         <h2 style="border-bottom: solid 1px #444b5a;">Operaciones en Pesos (DOP)</h2>
@@ -430,6 +430,7 @@
                 <field name="date" optional="show"/>
                 
                 <field name="bill_drop_total" optional="show"/>
+                <field name="encargado_id" optional="show"/>
                 <field name="activity_ids" widget="list_activity" optional="show"/>
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
