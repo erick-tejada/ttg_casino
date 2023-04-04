@@ -25,7 +25,7 @@ class ResPartner(models.Model):
     def _compute_x_amount_available(self):
         for record in self:
 
-            if record.id:
+            if record.id and record.x_is_lender:
                 # Total de Depositos
                 sql_query = '''
                             SELECT SUM(d.amount)
