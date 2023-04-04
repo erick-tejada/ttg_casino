@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <tree string="encargado_cajas" editable="bottom">
                 <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
                 <field name="create_uid" optional="show"/>
                 <field name="create_date" optional="show"/>
             </tree>
