@@ -102,10 +102,6 @@
                         <td>FALTANTE DE TURNOS</td>
                         <td class="text-right"><span t-field="doc.faltante_total"/></td>
                     </tr>
-                    <tr>
-                        <td>A DEPOSITAR AL BANCO</td>
-                        <td class="text-right"><strong><span t-field="doc.dop_boveda_a_depositar_banco"/></strong></td>
-                    </tr>
                 </tbody>
             </table>
             <br/>
