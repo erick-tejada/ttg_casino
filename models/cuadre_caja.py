@@ -607,13 +607,13 @@ class CuadreDeCaja(models.Model):
             sql_query = '''
                     SELECT SUM(aml.amount_currency)
                     FROM account_move_line aml
-                    WHERE aml.account_id = %s AND aml.date < %s
+                    WHERE aml.account_id = %s AND aml.date < %s AND parent_state = 'posted'
                     '''
         else:
             sql_query = '''
                         SELECT SUM(aml.balance)
                         FROM account_move_line aml
-                        WHERE aml.account_id = %s AND aml.date < %s
+                        WHERE aml.account_id = %s AND aml.date < %s AND parent_state = 'posted'
                         '''
         self.env.cr.execute(sql_query, (account_id.id, date))
         balance = self.env.cr.dictfetchall()[0].get('sum', 0.0)
