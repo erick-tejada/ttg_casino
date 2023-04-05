@@ -160,7 +160,7 @@
                                     <tr>
                                         <td><label for="total_dop_mesa" string="(+) Ganancia/Perdida en Mesa"/></td>
                                         <td class="text-right">
-                                            <field name="total_dop_mesa" readonly="1"/>
+                                            <field name="total_dop_mesa" readonly="1" decoration-danger="total_dop_mesa &lt; 0.0"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -184,7 +184,7 @@
                                     <tr>
                                         <td><strong><label for="resultado_caja_mesa" string="Resultado Caja Mesas"/></strong></td>
                                         <td class="text-right">
-                                            <strong><field name="resultado_caja_mesa" readonly="1"/></strong>
+                                            <strong><field name="resultado_caja_mesa" readonly="1" decoration-danger="resultado_caja_mesa &lt; 0.0"/></strong>
                                         </td>
                                     </tr>
 

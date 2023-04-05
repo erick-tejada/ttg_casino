@@ -41,7 +41,7 @@
     </record>
     
     <record id="action_cobro_tc" model="ir.actions.act_window">
-        <field name="name">cobro.tc</field>
+        <field name="name">Cobros Tarjeta de Crédito</field>
         <field name="res_model">casino.cobro.tc</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_cobro_tc_tree"/>

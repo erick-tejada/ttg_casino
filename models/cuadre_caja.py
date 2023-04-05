@@ -579,13 +579,13 @@ class CuadreDeCaja(models.Model):
             # DOP
             resultado_del_dia = record.resultado_caja_mesa + record.resultado_caja_maquina
             a_depositar_boveda = resultado_del_dia if resultado_del_dia > 0.0 else 0.0
-            nuevo_balance_boveda = record.dop_boveda_fondo_diponible + a_depositar_boveda - record.reposicion_caja_maquina - record.reposicion_caja_mesa
+            nuevo_balance_boveda = record.dop_boveda_fondo_diponible + resultado_del_dia
             a_depositar_banco = nuevo_balance_boveda - record.dop_boveda_fondo if nuevo_balance_boveda > record.dop_boveda_fondo else 0.0
             dop_boveda_fondo_al_cierre = nuevo_balance_boveda - a_depositar_banco
 
             # USD
             a_depositar_boveda_usd = record.resultado_usd_caja_mesa if record.resultado_usd_caja_mesa > 0.0 else 0.0
-            nuevo_balance_boveda_usd = record.usd_boveda_fondo_diponible + a_depositar_boveda_usd - record.reposicion_usd_caja_mesa
+            nuevo_balance_boveda_usd = record.usd_boveda_fondo_diponible + record.resultado_usd_caja_mesa
             a_depositar_banco_platino = nuevo_balance_boveda_usd - record.usd_boveda_fondo if nuevo_balance_boveda_usd > record.usd_boveda_fondo else 0.0
             usd_boveda_fondo_al_cierre = nuevo_balance_boveda_usd - a_depositar_banco_platino
 

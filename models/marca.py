@@ -45,9 +45,10 @@ class MarcaMaquina(models.Model):
         return marca
 
     def write(self, vals):
-        marca = super(MarcaMaquina, self).write(vals)
-        marca._verify_state()
-        return marca
+        res = super(MarcaMaquina, self).write(vals)
+        for marca in self:
+            marca._verify_state()
+        return res
 
 
 class MarcaMesa(models.Model):
@@ -81,7 +82,7 @@ class MarcaMesa(models.Model):
     def unlink(self):
         if any(record.state == 'done' for record in self):
             raise ValidationError('CUADRE CERRADO: No puede borrar una Marca si el Cuadre está cerrado.')
-        res = super(MarcaMaquina, self).unlink()
+        res = super(MarcaMesa, self).unlink()
         return res
     
     @api.model
@@ -92,6 +93,7 @@ class MarcaMesa(models.Model):
         return marca
 
     def write(self, vals):
-        marca = super(MarcaMesa, self).write(vals)
-        marca._verify_state()
-        return marca
+        res = super(MarcaMesa, self).write(vals)
+        for marca in self:
+            marca._verify_state()
+        return res

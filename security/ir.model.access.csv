@@ -9,12 +9,12 @@ access_cuadre_user,access_cuadre_user,model_casino_cuadre,ttg_casino.group_casin
 access_cuadre_manager,access_cuadre_manager,model_casino_cuadre,ttg_casino.group_casino_accountant,1,1,1,1
 access_bill_drop_user,access_bill_drop_user,model_casino_bill_drop,ttg_casino.group_casino_user,1,1,1,0
 access_devolucion_user,access_devolucion_user,model_casino_devolucion,ttg_casino.group_casino_user,1,1,1,0
-access_marca_maquina,access_marca_maquina,model_casino_marca_maquina,ttg_casino.group_casino_user,1,1,1,0
+access_marca_maquina,access_marca_maquina,model_casino_marca_maquina,ttg_casino.group_casino_user,1,1,1,1
 access_otros_pagos_maquina,access_otros_pagos_maquina,model_casino_otros_pagos,ttg_casino.group_casino_user,1,1,1,0
-access_marca_mesa,access_marca_mesa,model_casino_marca_mesa,ttg_casino.group_casino_user,1,1,1,0
-access_cobro_tc,access_cobro_tc,model_casino_cobro_tc,ttg_casino.group_casino_user,1,1,1,0
-access_sobrante,access_sobrante,model_casino_sobrante,ttg_casino.group_casino_user,1,1,1,0
-access_faltante,access_faltante,model_casino_faltante,ttg_casino.group_casino_user,1,1,1,0
+access_marca_mesa,access_marca_mesa,model_casino_marca_mesa,ttg_casino.group_casino_user,1,1,1,1
+access_cobro_tc,access_cobro_tc,model_casino_cobro_tc,ttg_casino.group_casino_user,1,1,1,1
+access_sobrante,access_sobrante,model_casino_sobrante,ttg_casino.group_casino_user,1,1,1,1
+access_faltante,access_faltante,model_casino_faltante,ttg_casino.group_casino_user,1,1,1,1
 access_comision_marca,access_comision_marca,model_casino_comision_marca,ttg_casino.group_casino_audit,1,1,1,1
 access_comision_marca_linea,access_comision_marca_linea,model_casino_comision_marca_linea,ttg_casino.group_casino_audit,1,1,1,1
 access_lender_deposit,access_lender_deposit,model_casino_lender_deposit,ttg_casino.group_casino_user,1,1,1,0
@@ -22,5 +22,5 @@ access_encargado_caja,access_encargado_caja,model_casino_encargado_caja,ttg_casi
 access_encargado_caja_audit,access_encargado_caja_audit,model_casino_encargado_caja,ttg_casino.group_casino_audit,1,1,1,0
 access_mesa,access_mesa,model_casino_mesa,ttg_casino.group_casino_user,1,0,0,0
 access_mesa_audit,access_mesa_audit,model_casino_mesa,ttg_casino.group_casino_audit,1,1,1,0
-access_apuesta_mesa,access_apuesta_mesa,model_casino_apuesta_mesa,ttg_casino.group_casino_user,1,1,1,0
-access_apuesta_mesa_usd,access_apuesta_mesa_usd,model_casino_apuesta_mesa_usd,ttg_casino.group_casino_user,1,1,1,0
+access_apuesta_mesa,access_apuesta_mesa,model_casino_apuesta_mesa,ttg_casino.group_casino_user,1,1,1,1
+access_apuesta_mesa_usd,access_apuesta_mesa_usd,model_casino_apuesta_mesa_usd,ttg_casino.group_casino_user,1,1,1,1
