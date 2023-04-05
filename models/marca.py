@@ -28,8 +28,8 @@ class MarcaMaquina(models.Model):
             raise ValidationError('CUADRE CERRADO: No puede crear/modificar una marca si el Cuadre al que pertenece esta Cerrado.')
     
     def _verify_amount(self):
-        if self.amount > self.lender_partner_id.x_amount_available:
-            raise ValidationError('MONTO MAYOR AL DISPONIBLE: %s actualmente solo dispone de %.2f.' % (self.lender_partner_id.name, self.lender_partner_id.x_amount_available))
+        if self.lender_partner_id.x_amount_available < 0:
+            raise ValidationError('MONTO MAYOR AL DISPONIBLE: %s actualmente solo dispone de %.2f.' % (self.lender_partner_id.name, self.lender_partner_id.x_amount_available + self.amount))
     
     def unlink(self):
         if any(record.state == 'done' for record in self):
@@ -76,8 +76,8 @@ class MarcaMesa(models.Model):
                 raise ValidationError('CUADRE CERRADO: No puede crear/modificar una marca si el Cuadre al que pertenece esta Cerrado.')
     
     def _verify_amount(self):
-        if self.amount > self.lender_partner_id.x_amount_available:
-            raise ValidationError('MONTO MAYOR AL DISPONIBLE: %s actualmente solo dispone de %.2f.' % (self.lender_partner_id.name, self.lender_partner_id.x_amount_available))
+        if self.lender_partner_id.x_amount_available < 0:
+            raise ValidationError('MONTO MAYOR AL DISPONIBLE: %s actualmente solo dispone de %.2f.' % (self.lender_partner_id.name, self.lender_partner_id.x_amount_available + self.amount))
 
     def unlink(self):
         if any(record.state == 'done' for record in self):
