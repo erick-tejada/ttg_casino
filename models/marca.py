@@ -63,6 +63,7 @@ class MarcaMesa(models.Model):
     state = fields.Selection(related='cuadre_id.state', string='Estado', store=True)
 
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
+    mesa_id = fields.Many2one('casino.mesa', string="Mesa", required=True)
     ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
     amount = fields.Monetary('Monto', required=True)
     lender_partner_id = fields.Many2one('res.partner', string="Prestamista", required=True, domain="[('x_is_lender', '=', True)]")

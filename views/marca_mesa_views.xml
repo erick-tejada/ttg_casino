@@ -12,6 +12,7 @@
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
                 
                 <field name="lender_partner_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
+                <field name="mesa_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="hide"/>
                 <field name="amount" sum="Total" optional="show"/>
