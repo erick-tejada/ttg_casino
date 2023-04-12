@@ -17,7 +17,7 @@ class Sobrante(models.Model):
     date = fields.Date('Fecha', related='cuadre_id.date', store=True)
     state = fields.Selection(related='cuadre_id.state', string='Estado')
 
-    employee_id = fields.Many2one('hr.employee', string="Cajero", required=True)
+    employee_id = fields.Many2one('hr.employee', string="Cajero", domain="[('job_title', 'in', ['CAJERO', 'CAJERA'])]", required=True)
     amount = fields.Monetary('Monto', required=True)
     note = fields.Char('Nota')
 
@@ -40,7 +40,7 @@ class Faltante(models.Model):
     date = fields.Date('Fecha', related='cuadre_id.date', store=True)
     state = fields.Selection(related='cuadre_id.state', string='Estado')
 
-    employee_id = fields.Many2one('hr.employee', string="Cajero", required=True)
+    employee_id = fields.Many2one('hr.employee', string="Cajero", domain="[('job_title', 'in', ['CAJERO', 'CAJERA', 'Cajera', 'Cajero'])]", required=True)
     amount = fields.Monetary('Monto', required=True)
     note = fields.Char('Nota')
 
