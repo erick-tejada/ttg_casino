@@ -23,6 +23,7 @@
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <search string="Search Prestamista">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('vat','ilike',self)]" string="Nombre"/>
                     <filter name="x_is_lender_filter" string="Prestamista" domain="[('x_is_lender', '=', True)]"/>
                 </search>
             </field>
@@ -146,6 +147,7 @@
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <search string="Search Cliente Casino">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('vat','ilike',self)]" string="Nombre"/>
                     <filter name="x_is_casino_client" string="Cliente Casino" domain="[('x_is_casino_client', '=', True)]"/>
                 </search>
             </field>
