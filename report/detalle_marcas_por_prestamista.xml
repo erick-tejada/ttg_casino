@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- ************** DOP ************** -->
+<template id="report_casino_detalle_marcas_document">
+    <t t-call="web.internal_layout">
+        <t t-set="prestamistas" t-value="json.loads(doc.detalle_marcas_por_prestamista)['prestamistas']"/>
+        
+        <t t-foreach="prestamistas" t-as="prestamista_vals">
+            <div class="page" style="font-size: small; page-break-before:always;">
+                <h3 class="mt16 text-center">
+                    <span t-esc="prestamista_vals['nombre']"/>
+                    <br/>
+                    <span>BALANCE DEL DIA </span>
+                    <span t-esc="prestamista_vals['fecha']"/>
+                    <br/>
+                </h3>
+                <br/>
+
+                <table class="table table-sm o_main_table">
+                    <thead>
+                        <tr style="background-color: lightgrey;">
+                            <th colspan="4" class="text-right">Balance</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="text-right">Balance al Día Anterior</th>
+                            <th></th>
+                            <th class="text-right">
+                                <span t-esc="prestamista_vals['balance_al_dia_anterior']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="text-right">Depósitos del Día</th>
+                            <th class="text-right">
+                                <span t-esc="prestamista_vals['depositos_del_dia']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                            <th class="text-right">
+                                <span t-esc="prestamista_vals['balance_al_dia_anterior'] + prestamista_vals['depositos_del_dia']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                        </tr>
+                        <tr style="background-color: lightgrey;">
+                            <th class="text-center">Tipo</th>
+                            <th class="text-left">Cliente</th>
+                            <th class="text-right">Monto Marca</th>
+                            <th class="text-right">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-foreach="prestamista_vals['marcas']" t-as="marca">
+
+                            <tr>
+                                <td class="text-center"><span t-esc="marca['tipo']"/></td>
+                                <td class="text-left"><span t-esc="marca['description']"/></td>
+                                <td class="text-right"><span t-esc="marca['amount']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                <td class="text-right"><span t-esc="marca['balance']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                            </tr>
+                        </t>
+
+                        <tr t-if="not prestamista_vals['marcas']">
+                            <th colspan="2" class="text-right">- SIN MARCAS -</th>
+                            <th class="text-right">
+                                <span t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                            <th class="text-right">
+                                <span t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                        </tr>
+
+                        <tr style="font-weight: bold;">
+                            <th colspan="3" class="text-right">Balance al Terminar el Día</th>
+                            <th class="text-right" style="background-color: lightgrey;">
+                                <span t-esc="prestamista_vals['balance_al_final_del_dia']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>
+
+
+<template id="report_casino_detalle_marcas">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_detalle_marcas_document"/>
+        </t>
+    </t>
+</template>
+
+
+    <data>
+        <record id="action_report_detalle_marcas" model="ir.actions.report">
+            <field name="name">Prestamistas - Cuadre de Marcas</field>
+            <field name="model">casino.cuadre</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ttg_casino.report_casino_detalle_marcas</field>
+            <field name="report_file">ttg_casino.report_casino_detalle_marcas</field>
+            <field name="print_report_name">'Detalle de Marcas %s' % object.date</field>
+            <field name="binding_model_id" ref="model_casino_cuadre"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+
+</odoo>

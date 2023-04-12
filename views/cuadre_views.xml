@@ -409,6 +409,11 @@
                             </group>
                         </group>
                     </page>
+                    <page name="debug" string="Debug" groups="base.group_no_one">
+                        <group>
+                            <field name="detalle_marcas_por_prestamista"/>
+                        </group>
+                    </page>
                 </notebook>
             </sheet>
             <div class="oe_chatter">

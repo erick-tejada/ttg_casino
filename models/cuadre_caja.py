@@ -3,6 +3,7 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare
 from dateutil.relativedelta import relativedelta
 import logging
+import json
 _logger = logging.getLogger(__name__)
 
 
@@ -27,6 +28,58 @@ class CuadreDeCaja(models.Model):
             cant_cuadres = self.env['casino.cuadre'].search_count([('company_id','=',record.company_id.id), ('date','=',record.date)])
             if cant_cuadres > 1:
                 raise ValidationError('FECHA REPETIDA: Existe otro cuadre para la misma fecha!')
+            
+    def _compute_detalle_marcas_por_prestamista(self):
+        # Obtener prestamistas
+        # Por prestamista:
+            # Calcular balance inicial
+            # Listar marca (descripcion, monto, balance)
+            # Resultado al final del dia
+        _logger.warning('*********** compute detalle ***********')
+        result = {'prestamistas': []}
+        prestamistas = self.env['res.partner'].search([('x_is_lender','=',True)])
+        for record in self:
+            day_before = record.date - relativedelta(days=1)
+            for prestamista in prestamistas:
+                # Balance al dia anterior
+                total_depositos, total_marcas_maquina, total_marcas_mesa = prestamista.compute_balance_upto_date(date=day_before)
+                balance_al_dia_anterior = total_depositos - total_marcas_maquina - total_marcas_mesa
+
+                # Depositos del dia
+                depositos_del_dia, marcas_maquina_del_dia, marcas_mesa_del_dia = prestamista.compute_balance_upto_date(date=record.date, day_only=True)
+                
+                # Marcas del dia
+                balance_al_final_del_dia = balance_al_dia_anterior + depositos_del_dia
+
+                marcas = []
+                for marca in record.marca_maquina_ids.filtered(lambda m : m.lender_partner_id.id == prestamista.id):
+                    balance_al_final_del_dia = balance_al_final_del_dia - marca.amount
+                    marcas.append({
+                        'description': '%s (%s)' % (marca.partner_id.name, marca.note) if marca.note else marca.partner_id.name,
+                        'tipo': 'Máquinas',
+                        'amount': marca.amount,
+                        'balance': balance_al_final_del_dia, 
+                    })
+                
+                for marca in record.marca_mesa_ids.filtered(lambda m : m.lender_partner_id.id == prestamista.id):
+                    balance_al_final_del_dia = balance_al_final_del_dia - marca.amount
+                    marcas.append({
+                        'description': '%s (%s)' % (marca.partner_id.name, marca.note) if marca.note else marca.partner_id.name,
+                        'tipo': 'Mesas',
+                        'amount': marca.amount,
+                        'balance': balance_al_final_del_dia, 
+                    })
+                result['prestamistas'].append({
+                    'nombre': prestamista.name,
+                    'fecha': '%2d/%2d/%d' % (record.date.day, record.date.month, record.date.year),
+                    'balance_al_dia_anterior': balance_al_dia_anterior,
+                    'depositos_del_dia': depositos_del_dia,
+                    'marcas': marcas,
+                    'balance_al_final_del_dia': balance_al_final_del_dia
+                })
+            _logger.warning(result)
+            record.detalle_marcas_por_prestamista = json.dumps(result)
+
 
     date = fields.Date('Fecha', required=True, default=lambda self: fields.Date.context_today(self) - relativedelta(days=1), states={'done': [('readonly', True)]}, copy=False, index=True, tracking=3)
     company_id = fields.Many2one('res.company', string='Compañía', required=True, default=lambda self: self.env.company)
@@ -39,6 +92,7 @@ class CuadreDeCaja(models.Model):
         ('done', 'Cerrado'),
         ], string='Estado', readonly=True, copy=False, index=True, tracking=3, default='draft')
     encargado_id = fields.Many2one('casino.encargado.caja', string='Encargado de Caja', required=True)
+    detalle_marcas_por_prestamista = fields.Text('Marcas por Prestamista', compute=_compute_detalle_marcas_por_prestamista, help='Campo Tecnico para reporte de Marcas.')
 
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare
+from dateutil.relativedelta import relativedelta
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -21,40 +22,74 @@ class ResPartner(models.Model):
     x_marca_maquina_ids = fields.One2many('casino.marca.maquina', 'lender_partner_id', string='Marcas Maquinas')
     x_marca_mesa_ids = fields.One2many('casino.marca.mesa', 'lender_partner_id', string='Marcas Mesas')
 
+    def compute_balance_upto_date(self, date=False, day_only=False):
+        '''
+            Balance a de depositos y marcas a la fecha.
+        '''
+        # Total de Depositos
+        sql_query = '''
+                    SELECT SUM(d.amount)
+                    FROM casino_lender_deposit d
+                    WHERE d.partner_id = %s
+                '''
+        if date and not day_only:
+            sql_query = sql_query + " AND d.date <= %s"
+        elif date and day_only:
+            sql_query = sql_query + " AND d.date = %s"
+
+        if date:
+            self.env.cr.execute(sql_query, (self.id, fields.Date.to_string(date).replace('-', '')))
+        else:
+            self.env.cr.execute(sql_query, (self.id,))
+        total_depositos = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+        total_depositos = total_depositos if total_depositos else 0.0
+
+        # Total de Marcas Maquinas
+        sql_query = '''
+                    SELECT SUM(m.amount)
+                    FROM casino_marca_maquina m
+                    WHERE m.lender_partner_id = %s
+                '''
+        if date and not day_only:
+            sql_query = sql_query + " AND m.date <= %s"
+        elif date and day_only:
+            sql_query = sql_query + " AND m.date = %s"
+
+        if date:
+            self.env.cr.execute(sql_query, (self.id, fields.Date.to_string(date).replace('-', '')))
+        else:
+            self.env.cr.execute(sql_query, (self.id,))
+        total_marcas_maquina = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+        total_marcas_maquina = total_marcas_maquina if total_marcas_maquina else 0.0
+
+        # Total de Marcas Mesas
+        sql_query = '''
+                    SELECT SUM(m.amount)
+                    FROM casino_marca_mesa m
+                    WHERE m.lender_partner_id = %s
+                '''
+        if date and not day_only:
+            sql_query = sql_query + " AND m.date <= %s"
+        elif date and day_only:
+            sql_query = sql_query + " AND m.date = %s"
+
+        if date:
+            self.env.cr.execute(sql_query, (self.id, fields.Date.to_string(date).replace('-', '')))
+        else:
+            self.env.cr.execute(sql_query, (self.id,))
+        total_marcas_mesa = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+        total_marcas_mesa = total_marcas_mesa if total_marcas_mesa else 0.0
+
+        return total_depositos, total_marcas_maquina, total_marcas_mesa
+
+
     @api.depends('x_deposit_ids', 'x_deposit_ids.amount', 'x_marca_maquina_ids', 'x_marca_maquina_ids.amount', 'x_marca_mesa_ids', 'x_marca_mesa_ids.amount')
     def _compute_x_amount_available(self):
         for record in self:
 
             if record.id and record.x_is_lender:
-                # Total de Depositos
-                sql_query = '''
-                            SELECT SUM(d.amount)
-                            FROM casino_lender_deposit d
-                            WHERE d.partner_id = %s
-                        '''
-                self.env.cr.execute(sql_query, (record.id,))
-                total_depositos = self.env.cr.dictfetchall()[0].get('sum', 0.0)
-                total_depositos = total_depositos if total_depositos else 0.0
 
-                # Total de Marcas Maquinas
-                sql_query = '''
-                            SELECT SUM(m.amount)
-                            FROM casino_marca_maquina m
-                            WHERE m.lender_partner_id = %s
-                        '''
-                self.env.cr.execute(sql_query, (record.id,))
-                total_marcas_maquina = self.env.cr.dictfetchall()[0].get('sum', 0.0)
-                total_marcas_maquina = total_marcas_maquina if total_marcas_maquina else 0.0
-
-                # Total de Marcas Mesas
-                sql_query = '''
-                            SELECT SUM(m.amount)
-                            FROM casino_marca_mesa m
-                            WHERE m.lender_partner_id = %s
-                        '''
-                self.env.cr.execute(sql_query, (record.id,))
-                total_marcas_mesa = self.env.cr.dictfetchall()[0].get('sum', 0.0)
-                total_marcas_mesa = total_marcas_mesa if total_marcas_mesa else 0.0
+                total_depositos, total_marcas_maquina, total_marcas_mesa = record.compute_balance_upto_date()
 
                 record.x_amount_available = total_depositos - total_marcas_maquina - total_marcas_mesa
             else:
