@@ -7,16 +7,16 @@
           <form string="Cuadre" create="false">
             <header>
                 <button string="Devolver a Borrador" name="action_draft" type="object" groups="ttg_casino.group_casino_accountant"
-                                attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                                attrs="{'invisible': [('state', '!=', 'done')]}" confirm="Está seguro que desea Devolver a Borrador? Esto Reversará los asientos contables anteriores."/>
 
                 <button string="Presentar a Auditor" name="action_audit" type="object" class="oe_highlight"
-                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                                attrs="{'invisible': [('state', '!=', 'draft')]}" confirm="Está seguro que desea Presentar este cuadre al Auditor?"/>
 
                 <button string="Presentar a Contabilidad" name="action_accounting" groups="ttg_casino.group_casino_audit"
-                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'audit')]}"/>
+                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'audit')]}" confirm="Está seguro que desea Presentar este cuadre a Contabilidad?"/>
 
                 <button string="Cerrar y Contabilizar" name="action_done" groups="ttg_casino.group_casino_accountant"
-                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'accounting')]}"/>
+                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'accounting')]}" confirm="Está seguro que desea Cerrar y Contabilizar este cuadre?"/>
                 <field name="state" widget="statusbar" statusbar_visible="draft,audit,accounting,done"/>
             </header>
             <sheet>
