@@ -165,4 +165,4 @@ class ComisionMarcaLinea(models.Model):
     date = fields.Date('Fecha')
     amount_marcas = fields.Monetary('Monto Marcas')
     amount_fee = fields.Monetary('Monto Comision')
-    amount_percent = fields.Float('Perciento de Comision')
+    amount_percent = fields.Float('Porciento de Comision')
