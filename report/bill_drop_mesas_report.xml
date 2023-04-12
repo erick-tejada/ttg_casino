@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- ************** DOP ************** -->
+<template id="report_casino_bill_drop_mesa_dop_document">
+    <t t-call="web.internal_layout">
+        <div class="page" style="font-size: small;">
+            <div class="oe_structure"/>
+
+            <h3 class="mt16 text-center">
+                <span>DETALLE DE BILLETES CONTADOS POR MESA (DOP)</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h3>
+            <br/>
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead >
+                    <tr>
+                        <th class="text-left">MESA</th>
+                        <th class="text-center">2000</th>
+                        <th class="text-center">1000</th>
+                        <th class="text-center">500</th>
+                        <th class="text-center">200</th>
+                        <th class="text-center">100</th>
+                        <th class="text-center">50</th>
+                        <th class="text-right">MONTO</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <t t-set="sqty_2000" t-value="0"/>
+                    <t t-set="sqty_1000" t-value="0"/>
+                    <t t-set="sqty_500" t-value="0"/>
+                    <t t-set="sqty_200" t-value="0"/>
+                    <t t-set="sqty_100" t-value="0"/>
+                    <t t-set="sqty_50" t-value="0"/>
+
+                    <t t-foreach="doc.apuesta_mesa_ids" t-as="line">
+                        <t t-set="sqty_2000" t-value="sqty_2000 + line.qty_2000"/>
+                        <t t-set="sqty_1000" t-value="sqty_1000 + line.qty_1000"/>
+                        <t t-set="sqty_500" t-value="sqty_500 + line.qty_500"/>
+                        <t t-set="sqty_200" t-value="sqty_200 + line.qty_200"/>
+                        <t t-set="sqty_100" t-value="sqty_100 + line.qty_100"/>
+                        <t t-set="sqty_50" t-value="sqty_50 + line.qty_50"/>
+                        <tr>
+                            <td class="text-left"><span t-field="line.mesa_id.name"/></td>
+                            <td class="text-center"><span t-field="line.qty_2000"/></td>
+                            <td class="text-center"><span t-field="line.qty_1000"/></td>
+                            <td class="text-center"><span t-field="line.qty_500"/></td>
+                            <td class="text-center"><span t-field="line.qty_200"/></td>
+                            <td class="text-center"><span t-field="line.qty_100"/></td>
+                            <td class="text-center"><span t-field="line.qty_50"/></td>
+                            <td class="text-right"><span t-field="line.amount_total"/></td>
+                        </tr>
+                    </t>
+
+                    <tr style="font-weight: bold;">
+                            <td class="text-left"><span>TOTALES</span></td>
+                            <td class="text-center"><span t-esc="sqty_2000"/></td>
+                            <td class="text-center"><span t-esc="sqty_1000"/></td>
+                            <td class="text-center"><span t-esc="sqty_500"/></td>
+                            <td class="text-center"><span t-esc="sqty_200"/></td>
+                            <td class="text-center"><span t-esc="sqty_100"/></td>
+                            <td class="text-center"><span t-esc="sqty_50"/></td>
+                            <td class="text-right"><span t-field="doc.apuestas_mesas"/></td>
+                        </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+        </div>
+    </t>
+</template>
+
+
+<template id="report_casino_bill_drop_mesa_dop">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_bill_drop_mesa_dop_document"/>
+        </t>
+    </t>
+</template>
+
+<!-- ************** USD ************** -->
+<template id="report_casino_bill_drop_mesa_usd_document">
+    <t t-call="web.internal_layout">
+        <div class="page" style="font-size: small;">
+            <div class="oe_structure"/>
+
+            <h3 class="mt16 text-center">
+                <span>DETALLE DE BILLETES CONTADOS POR MESA (USD)</span>
+                <br/>
+                <span t-field="doc.date"/>
+            </h3>
+            <br/>
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead >
+                    <tr>
+                        <th class="text-left">MESA</th>
+                        <th class="text-center">100</th>
+                        <th class="text-center">50</th>
+                        <th class="text-center">20</th>
+                        <th class="text-center">10</th>
+                        <th class="text-center">5</th>
+                        <th class="text-center">1</th>
+                        <th class="text-right">MONTO</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <t t-set="sqty_100" t-value="0"/>
+                    <t t-set="sqty_50" t-value="0"/>
+                    <t t-set="sqty_20" t-value="0"/>
+                    <t t-set="sqty_10" t-value="0"/>
+                    <t t-set="sqty_5" t-value="0"/>
+                    <t t-set="sqty_1" t-value="0"/>
+
+                    <t t-foreach="doc.apuesta_mesa_usd_ids" t-as="line">
+                        <t t-set="sqty_100" t-value="sqty_100 + line.qty_100"/>
+                        <t t-set="sqty_50" t-value="sqty_50 + line.qty_50"/>
+                        <t t-set="sqty_20" t-value="sqty_20 + line.qty_20"/>
+                        <t t-set="sqty_10" t-value="sqty_10 + line.qty_10"/>
+                        <t t-set="sqty_5" t-value="sqty_5 + line.qty_5"/>
+                        <t t-set="sqty_1" t-value="sqty_1 + line.qty_1"/>
+                        <tr>
+                            <td class="text-left"><span t-field="line.mesa_id.name"/></td>
+                            <td class="text-center"><span t-field="line.qty_100"/></td>
+                            <td class="text-center"><span t-field="line.qty_50"/></td>
+                            <td class="text-center"><span t-field="line.qty_20"/></td>
+                            <td class="text-center"><span t-field="line.qty_10"/></td>
+                            <td class="text-center"><span t-field="line.qty_5"/></td>
+                            <td class="text-center"><span t-field="line.qty_1"/></td>
+                            <td class="text-right"><span t-field="line.amount_total"/></td>
+                        </tr>
+                    </t>
+
+                    <tr style="font-weight: bold;">
+                            <td class="text-left"><span>TOTALES</span></td>
+                            <td class="text-center"><span t-esc="sqty_100"/></td>
+                            <td class="text-center"><span t-esc="sqty_50"/></td>
+                            <td class="text-center"><span t-esc="sqty_20"/></td>
+                            <td class="text-center"><span t-esc="sqty_10"/></td>
+                            <td class="text-center"><span t-esc="sqty_5"/></td>
+                            <td class="text-center"><span t-esc="sqty_1"/></td>
+                            <td class="text-right"><span t-field="doc.apuestas_mesas_usd"/></td>
+                        </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+        </div>
+    </t>
+</template>
+
+
+<template id="report_casino_bill_drop_mesa_usd">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="ttg_casino.report_casino_bill_drop_mesa_usd_document"/>
+        </t>
+    </t>
+</template>
+
+
+    <data>
+        <record id="action_report_bill_drop_dop" model="ir.actions.report">
+            <field name="name">Mesas DOP: Bill Drop</field>
+            <field name="model">casino.cuadre</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ttg_casino.report_casino_bill_drop_mesa_dop</field>
+            <field name="report_file">ttg_casino.report_casino_bill_drop_mesa_dop</field>
+            <field name="print_report_name">'Mesas DOP Bill Drop %s' % object.date</field>
+            <field name="binding_model_id" ref="model_casino_cuadre"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_bill_drop_usd" model="ir.actions.report">
+            <field name="name">Mesas USD: Bill Drop</field>
+            <field name="model">casino.cuadre</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ttg_casino.report_casino_bill_drop_mesa_usd</field>
+            <field name="report_file">ttg_casino.report_casino_bill_drop_mesa_usd</field>
+            <field name="print_report_name">'Mesas USD Bill Drop %s' % object.date</field>
+            <field name="binding_model_id" ref="model_casino_cuadre"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+
+</odoo>
