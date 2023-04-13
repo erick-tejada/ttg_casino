@@ -1,0 +1,39 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_tipo_error_pago_tree" model="ir.ui.view">
+        <field name="name">casino.tipo.error.pago</field>
+        <field name="model">casino.tipo.error.pago</field>
+        <field name="arch" type="xml">
+            <tree string="tipo_error_pagos" editable="bottom">
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="create_uid" optional="show"/>
+                <field name="create_date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tipo_error_pago_search" model="ir.ui.view">
+        <field name="name">casino.tipo.error.pago.search</field>
+        <field name="model">casino.tipo.error.pago</field>
+        <field name="arch" type="xml">
+            <search string="Search Tipo de Errores en Pagos/Devoluciones">
+                <!-- Search fields -->
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_casino_tipo_error_pago" model="ir.actions.act_window">
+        <field name="name">Tipo de Errores en Pagos/Devoluciones</field>
+        <field name="res_model">casino.tipo.error.pago</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_tipo_error_pago_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Tipo de Errores en Pagos/Devoluciones.
+            </p>
+        </field>
+    </record>
+</odoo>

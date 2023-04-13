@@ -24,3 +24,5 @@ access_mesa,access_mesa,model_casino_mesa,ttg_casino.group_casino_user,1,0,0,0
 access_mesa_audit,access_mesa_audit,model_casino_mesa,ttg_casino.group_casino_audit,1,1,1,0
 access_apuesta_mesa,access_apuesta_mesa,model_casino_apuesta_mesa,ttg_casino.group_casino_user,1,1,1,1
 access_apuesta_mesa_usd,access_apuesta_mesa_usd,model_casino_apuesta_mesa_usd,ttg_casino.group_casino_user,1,1,1,1
+access_tipo_error,access_tipo_error,model_casino_tipo_error_pago,ttg_casino.group_casino_user,1,0,0,0
+access_tipo_error_audit,access_tipo_error_audit,model_casino_tipo_error_pago,ttg_casino.group_casino_audit,1,1,1,0

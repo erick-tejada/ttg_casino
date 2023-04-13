@@ -86,6 +86,12 @@
         parent="ttg_casino.menu_casino_auditoria_root"
         action="ttg_casino.action_casino_partner_prestamista"
         sequence="20"/>
+    
+    <menuitem id="menu_casino_tipo_error"
+        name="Tipo de Errores"
+        parent="ttg_casino.menu_casino_auditoria_root"
+        action="ttg_casino.action_casino_tipo_error_pago"
+        sequence="30"/>
 
     <menuitem id="menu_casino_encargados" name="Encargados de Caja" parent="menu_casino_auditoria_root"
         sequence="30" action="action_casino_encargado_caja"/>

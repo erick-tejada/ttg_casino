@@ -26,6 +26,7 @@ class Devolucion(models.Model):
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
     ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
     amount = fields.Monetary('Monto', required=True)
+    error_id = fields.Many2one('casino.tipo.error.pago', string="Tipo de Error", required=True, ondelete='restrict')
     note = fields.Char('Nota')
 
     def unlink(self):

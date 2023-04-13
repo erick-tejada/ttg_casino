@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="error_1" model="casino.tipo.error.pago">
+            <field name="name">No contabilizó el billete</field>
+        </record>
+        <record id="error_2" model="casino.tipo.error.pago">
+            <field name="name">No acreditó el jackpot</field>
+        </record>
+        <record id="error_3" model="casino.tipo.error.pago">
+            <field name="name">No acreditó los créditos</field>
+        </record>
+        <record id="error_4" model="casino.tipo.error.pago">
+            <field name="name">Problema de Botones</field>
+        </record>
+        <record id="error_5" model="casino.tipo.error.pago">
+            <field name="name">Display Averiado</field>
+        </record>
+        <record id="error_6" model="casino.tipo.error.pago">
+            <field name="name">Error de Pago</field>
+        </record>
+        <record id="error_7" model="casino.tipo.error.pago">
+            <field name="name">Máquina se Reinicia/No Entra al Juego</field>
+        </record>
+        <record id="error_8" model="casino.tipo.error.pago">
+            <field name="name">Tarjeta con SIM Dañado</field>
+        </record>
+        <record id="error_9" model="casino.tipo.error.pago">
+            <field name="name">Otros</field>
+        </record>
+    </data>
+</odoo>

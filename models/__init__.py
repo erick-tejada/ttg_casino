@@ -14,3 +14,4 @@ from . import lender_deposit
 from . import encargado_caja
 from . import mesa
 from . import apuesta_mesa
+from . import tipo_error_pago
