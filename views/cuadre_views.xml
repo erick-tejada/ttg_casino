@@ -486,7 +486,7 @@
                 <field name="devolucion_total" type="measure" string="Devoluciones"/>
                 <field name="otros_pagos_total" type="measure" string="Otros Pagos"/>
                 <field name="egreso_maquina" type="measure" string="Total Egreso"/>
-                <field name="total_maquina" type="measure" string="Ganancia/Pérdida"/>
+                <field name="total_maquina" type="measure" string="Ganancia/Pérdida Máquinas"/>
             </pivot>
         </field>
     </record>
@@ -499,6 +499,40 @@
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Reporte de Cuadres de Máquina.
+            </p>
+        </field>
+    </record>
+
+    
+    <record id="view_cuadre_mesa_pivot" model="ir.ui.view">
+        <field name="name">casino.cuadre.mesa.pivot</field>
+        <field name="model">casino.cuadre</field>
+        <field name="arch" type="xml">
+            <pivot string="Reporte de Cuadres de Mesas" display_quantity="0" sample="1">
+                <field name="date" interval="day" type="row" string="Fecha"/>
+                <field name="apuestas_mesas" type="measure" string="Jugadas DOP"/>
+                <field name="marca_mesa_total" type="measure" string="Marcas DOP"/>
+                <field name="pago_apuestas_mesas" type="measure" string="Pagos DOP"/>
+                <field name="total_dop_mesa" type="measure" string="Ganancia/Pérdida DOP"/>
+
+                <field name="apuestas_mesas_usd" type="measure" string="Jugadas USD"/>
+                <field name="pago_apuestas_mesas_usd" type="measure" string="Pagos USD"/>
+                <field name="total_usd_mesa" type="measure" string="Ganancia/Pérdida USD"/>
+                <field name="eqiv_dop_total_usd_mesa" type="measure" string="Total USD en DOP"/>
+                
+                <field name="total_general_op_mesa" type="measure" string="Ganancia/Pérdida Mesas"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_report_cuadres_mesas" model="ir.actions.act_window">
+        <field name="name">Reporte de Cuadres de Mesas</field>
+        <field name="res_model">casino.cuadre</field>
+        <field name="view_mode">pivot,tree</field>
+        <field name="view_id" ref="view_cuadre_mesa_pivot"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Reporte de Cuadres de Mesas.
             </p>
         </field>
     </record>

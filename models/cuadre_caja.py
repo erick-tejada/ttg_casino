@@ -134,6 +134,8 @@ class CuadreDeCaja(models.Model):
     # CUADRE
     total_dop_mesa = fields.Monetary('Ganancia/Perdida DOP de Mesa', compute='_compute_cuadre_mesa', store=True)
     total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
+    eqiv_dop_total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa (DOP)', compute='_compute_cuadre_mesa', store=True)
+    total_general_op_mesa = fields.Monetary('Ganancia/Perdida Total de Mesa (DOP)', compute='_compute_cuadre_mesa', store=True, help='Suma de las Ganancias/Perdidas en DOP + Equivalente en DOP de las Ganancias/Perdidas en USD.')
     resultado_caja_mesa = fields.Monetary('Resultado Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     reposicion_caja_mesa = fields.Monetary('Reposicion a Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     resultado_usd_caja_mesa = fields.Monetary('Resultado USD Caja Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
@@ -945,6 +947,8 @@ class CuadreDeCaja(models.Model):
         for record in self:
             total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas
             total_usd = record.apuestas_mesas_usd - record.pago_apuestas_mesas_usd
+            eqiv_dop_total_usd_mesa = total_usd * record.casino_tasa_usd
+            total_general_op_mesa = total_dop + eqiv_dop_total_usd_mesa
             resultado_caja_mesa = total_dop + record.cobro_tc_comision_total - record.cobro_tc_total - record.dop_cambio_dolares
             reposicion_caja_mesa = resultado_caja_mesa * -1 if resultado_caja_mesa < 0.0 else 0.0
 
@@ -953,6 +957,8 @@ class CuadreDeCaja(models.Model):
             record.write({
                 'total_dop_mesa': total_dop,
                 'total_usd_mesa': total_usd,
+                'eqiv_dop_total_usd_mesa': eqiv_dop_total_usd_mesa,
+                'total_general_op_mesa': total_general_op_mesa,
                 'resultado_caja_mesa': resultado_caja_mesa,
                 'reposicion_caja_mesa': reposicion_caja_mesa,
                 'resultado_usd_caja_mesa': resultado_usd_caja_mesa,

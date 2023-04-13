@@ -86,6 +86,12 @@
         action="ttg_casino.action_report_cuadres_maquinas"
         sequence="10"/>
         
+    <menuitem id="menu_casino_report_cuadres_mesas"
+        name="Reporte de Cuadres de Mesas"
+        parent="ttg_casino.menu_casino_informes"
+        action="ttg_casino.action_report_cuadres_mesas"
+        sequence="20"/>
+        
     <menuitem id="menu_casino_prestamos_comisiones"
         name="Préstamos"
         parent="ttg_casino.menu_casino_auditoria_root"
