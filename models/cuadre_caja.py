@@ -35,7 +35,6 @@ class CuadreDeCaja(models.Model):
             # Calcular balance inicial
             # Listar marca (descripcion, monto, balance)
             # Resultado al final del dia
-        _logger.warning('*********** compute detalle ***********')
         result = {'prestamistas': []}
         prestamistas = self.env['res.partner'].search([('x_is_lender','=',True)])
         for record in self:

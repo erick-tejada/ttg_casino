@@ -444,6 +444,19 @@
             </tree>
         </field>
     </record>
+
+    <record id="view_cuadre_search" model="ir.ui.view">
+        <field name="name">casino.cuadre.search</field>
+        <field name="model">casino.cuadre</field>
+        <field name="arch" type="xml">
+            <search string="Search Cuadre">
+                <!-- Search fields -->
+                <field name="date"/>
+                <field name="encargado_id"/>
+                <filter name="date" string="Fecha" date="date"/>
+            </search>
+        </field>
+    </record>
     
     <record id="action_cuadre" model="ir.actions.act_window">
         <field name="name">Cuadre de Caja</field>
@@ -453,6 +466,39 @@
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Cuadres de Caja.
+            </p>
+        </field>
+    </record>
+
+    <!-- ************ INFORMES ************ -->
+    <record id="view_cuadre_maquina_pivot" model="ir.ui.view">
+        <field name="name">casino.cuadre.maquina.pivot</field>
+        <field name="model">casino.cuadre</field>
+        <field name="arch" type="xml">
+            <pivot string="Reporte de Cuadres de Máquina" display_quantity="0" sample="1">
+                <field name="date" interval="day" type="row" string="Fecha"/>
+                <field name="bill_drop_total" type="measure" string="Bill Drop"/>
+                <field name="marca_maquina_total" type="measure" string="Marcas"/>
+                <field name="recarga_tarjeta" type="measure" string="Recarga"/>
+                <field name="ingreso_maquina" type="measure" string="Total Ingreso"/>
+                
+                <field name="tarjetas_cashout" type="measure" string="Retiros"/>
+                <field name="devolucion_total" type="measure" string="Devoluciones"/>
+                <field name="otros_pagos_total" type="measure" string="Otros Pagos"/>
+                <field name="egreso_maquina" type="measure" string="Total Egreso"/>
+                <field name="total_maquina" type="measure" string="Ganancia/Pérdida"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_report_cuadres_maquinas" model="ir.actions.act_window">
+        <field name="name">Reporte de Cuadres de Máquinas</field>
+        <field name="res_model">casino.cuadre</field>
+        <field name="view_mode">pivot,tree</field>
+        <field name="view_id" ref="view_cuadre_maquina_pivot"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Reporte de Cuadres de Máquina.
             </p>
         </field>
     </record>
