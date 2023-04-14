@@ -492,13 +492,13 @@
     </record>
 
     <record id="action_report_cuadres_maquinas" model="ir.actions.act_window">
-        <field name="name">Reporte de Cuadres de Máquinas</field>
+        <field name="name">Reporte de Operaciones de Máquinas</field>
         <field name="res_model">casino.cuadre</field>
         <field name="view_mode">pivot,tree</field>
         <field name="view_id" ref="view_cuadre_maquina_pivot"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-            Reporte de Cuadres de Máquina.
+            Reporte de Operaciones de Máquina.
             </p>
         </field>
     </record>
@@ -526,13 +526,13 @@
     </record>
 
     <record id="action_report_cuadres_mesas" model="ir.actions.act_window">
-        <field name="name">Reporte de Cuadres de Mesas</field>
+        <field name="name">Reporte de Operaciones de Mesas</field>
         <field name="res_model">casino.cuadre</field>
         <field name="view_mode">pivot,tree</field>
         <field name="view_id" ref="view_cuadre_mesa_pivot"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-            Reporte de Cuadres de Mesas.
+            Reporte de Operaciones de Mesas.
             </p>
         </field>
     </record>

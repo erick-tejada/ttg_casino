@@ -81,13 +81,13 @@
         sequence="10"/>
         
     <menuitem id="menu_casino_report_cuadres_maquinas"
-        name="Reporte de Cuadres de Máquinas"
+        name="Reporte de Operaciones de Máquinas"
         parent="ttg_casino.menu_casino_informes"
         action="ttg_casino.action_report_cuadres_maquinas"
         sequence="10"/>
         
     <menuitem id="menu_casino_report_cuadres_mesas"
-        name="Reporte de Cuadres de Mesas"
+        name="Reporte de Operaciones de Mesas"
         parent="ttg_casino.menu_casino_informes"
         action="ttg_casino.action_report_cuadres_mesas"
         sequence="20"/>
