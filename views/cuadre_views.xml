@@ -487,6 +487,7 @@
                 <field name="otros_pagos_total" type="measure" string="Otros Pagos"/>
                 <field name="egreso_maquina" type="measure" string="Total Egreso"/>
                 <field name="total_maquina" type="measure" string="Ganancia/Pérdida Máquinas"/>
+                <field name="retencion_maquina" type="measure" string="% Retención"/>
             </pivot>
         </field>
     </record>
@@ -514,13 +515,16 @@
                 <field name="marca_mesa_total" type="measure" string="Marcas DOP"/>
                 <field name="pago_apuestas_mesas" type="measure" string="Pagos DOP"/>
                 <field name="total_dop_mesa" type="measure" string="Ganancia/Pérdida DOP"/>
+                <field name="retencion_dop_mesa" type="measure" string="% Retención DOP"/>
 
                 <field name="apuestas_mesas_usd" type="measure" string="Jugadas USD"/>
                 <field name="pago_apuestas_mesas_usd" type="measure" string="Pagos USD"/>
                 <field name="total_usd_mesa" type="measure" string="Ganancia/Pérdida USD"/>
                 <field name="eqiv_dop_total_usd_mesa" type="measure" string="Total USD en DOP"/>
+                <field name="retencion_usd_mesa" type="measure" string="% Retención USD"/>
                 
                 <field name="total_general_op_mesa" type="measure" string="Ganancia/Pérdida Mesas"/>
+                <field name="retencion_gral_mesa" type="measure" string="% Retención"/>
             </pivot>
         </field>
     </record>

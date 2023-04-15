@@ -115,6 +115,7 @@ class CuadreDeCaja(models.Model):
     ingreso_maquina = fields.Monetary('Ingreso Efectivo de Maquina', compute='_compute_cuadre_maquina', store=True)
     egreso_maquina = fields.Monetary('Pagos de Maquina', compute='_compute_cuadre_maquina', store=True)
     total_maquina = fields.Monetary('Ganancia/Perdida Maquina', compute='_compute_cuadre_maquina', store=True)
+    retencion_maquina = fields.Monetary('Retención Maquina', compute='_compute_cuadre_maquina', group_operator="avg", store=True)
     resultado_caja_maquina = fields.Monetary('Resultado Caja Maquina', compute='_compute_cuadre_maquina', store=True)
     reposicion_caja_maquina = fields.Monetary('Reposicion a Caja Maquinas', compute='_compute_cuadre_maquina', store=True)
 
@@ -133,9 +134,12 @@ class CuadreDeCaja(models.Model):
 
     # CUADRE
     total_dop_mesa = fields.Monetary('Ganancia/Perdida DOP de Mesa', compute='_compute_cuadre_mesa', store=True)
+    retencion_dop_mesa = fields.Monetary('Retención Mesa DOP', compute='_compute_cuadre_mesa', group_operator="avg", store=True)
     total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
+    retencion_usd_mesa = fields.Monetary('Retención Mesa UDS', compute='_compute_cuadre_mesa', group_operator="avg", store=True)
     eqiv_dop_total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa (DOP)', compute='_compute_cuadre_mesa', store=True)
     total_general_op_mesa = fields.Monetary('Ganancia/Perdida Total de Mesa (DOP)', compute='_compute_cuadre_mesa', store=True, help='Suma de las Ganancias/Perdidas en DOP + Equivalente en DOP de las Ganancias/Perdidas en USD.')
+    retencion_gral_mesa = fields.Monetary('Retención General', compute='_compute_cuadre_mesa', group_operator="avg", store=True)
     resultado_caja_mesa = fields.Monetary('Resultado Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     reposicion_caja_mesa = fields.Monetary('Reposicion a Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     resultado_usd_caja_mesa = fields.Monetary('Resultado USD Caja Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
@@ -933,11 +937,13 @@ class CuadreDeCaja(models.Model):
             total_ingreso = record.bill_drop_total + record.marca_maquina_total + record.recarga_tarjeta
             total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total
             total_maquina = total_ingreso - total_pago
+            retencion_maquina = round((total_maquina / total_ingreso) * 100) if total_ingreso else 0
             resultado_caja_maquina = total_maquina + record.sobrante_total - record.faltante_total
             record.write({
                 'ingreso_maquina': total_ingreso,
                 'egreso_maquina': total_pago,
                 'total_maquina': total_maquina,
+                'retencion_maquina': retencion_maquina,
                 'resultado_caja_maquina': resultado_caja_maquina,
                 'reposicion_caja_maquina': resultado_caja_maquina * -1 if resultado_caja_maquina < 0.0 else 0.0,
             })
@@ -946,9 +952,16 @@ class CuadreDeCaja(models.Model):
     def _compute_cuadre_mesa(self):
         for record in self:
             total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas
+            retencion_dop_mesa = (total_dop / (record.apuestas_mesas + record.marca_mesa_total)) * 100 if (record.apuestas_mesas + record.marca_mesa_total) else 0
             total_usd = record.apuestas_mesas_usd - record.pago_apuestas_mesas_usd
+            retencion_usd_mesa = (total_usd / record.apuestas_mesas_usd) * 100 if record.apuestas_mesas_usd else 0
             eqiv_dop_total_usd_mesa = total_usd * record.casino_tasa_usd
             total_general_op_mesa = total_dop + eqiv_dop_total_usd_mesa
+            
+            equiv_dop_ingreso_mesa_usd = record.apuestas_mesas_usd * record.casino_tasa_usd
+            ingreso_total_en_dop = record.apuestas_mesas + record.marca_mesa_total + equiv_dop_ingreso_mesa_usd
+            retencion_gral_mesa = ((total_dop + eqiv_dop_total_usd_mesa) / ingreso_total_en_dop) * 100 if ingreso_total_en_dop else 0
+            
             resultado_caja_mesa = total_dop + record.cobro_tc_comision_total - record.cobro_tc_total - record.dop_cambio_dolares
             reposicion_caja_mesa = resultado_caja_mesa * -1 if resultado_caja_mesa < 0.0 else 0.0
 
@@ -956,9 +969,12 @@ class CuadreDeCaja(models.Model):
             reposicion_usd_caja_mesa = resultado_usd_caja_mesa * -1 if resultado_usd_caja_mesa < 0.0 else 0.0
             record.write({
                 'total_dop_mesa': total_dop,
+                'retencion_dop_mesa': retencion_dop_mesa,
                 'total_usd_mesa': total_usd,
+                'retencion_usd_mesa': retencion_usd_mesa,
                 'eqiv_dop_total_usd_mesa': eqiv_dop_total_usd_mesa,
                 'total_general_op_mesa': total_general_op_mesa,
+                'retencion_gral_mesa': retencion_gral_mesa,
                 'resultado_caja_mesa': resultado_caja_mesa,
                 'reposicion_caja_mesa': reposicion_caja_mesa,
                 'resultado_usd_caja_mesa': resultado_usd_caja_mesa,
