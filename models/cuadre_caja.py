@@ -937,7 +937,7 @@ class CuadreDeCaja(models.Model):
             total_ingreso = record.bill_drop_total + record.marca_maquina_total + record.recarga_tarjeta
             total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total
             total_maquina = total_ingreso - total_pago
-            retencion_maquina = round((total_maquina / total_ingreso) * 100) if total_ingreso else 0
+            retencion_maquina = ((total_maquina / total_ingreso) * 100) if total_ingreso else 0
             resultado_caja_maquina = total_maquina + record.sobrante_total - record.faltante_total
             record.write({
                 'ingreso_maquina': total_ingreso,
