@@ -30,7 +30,7 @@ class ResPartner(models.Model):
         sql_query = '''
                     SELECT SUM(d.amount)
                     FROM casino_lender_deposit d
-                    WHERE d.partner_id = %s
+                    WHERE d.partner_id = %s AND d.amount >= 0
                 '''
         if date and not day_only:
             sql_query = sql_query + " AND d.date <= %s"
@@ -43,6 +43,24 @@ class ResPartner(models.Model):
             self.env.cr.execute(sql_query, (self.id,))
         total_depositos = self.env.cr.dictfetchall()[0].get('sum', 0.0)
         total_depositos = total_depositos if total_depositos else 0.0
+        
+        # Total de Retiros
+        sql_query = '''
+                    SELECT SUM(d.amount)
+                    FROM casino_lender_deposit d
+                    WHERE d.partner_id = %s AND d.amount < 0
+                '''
+        if date and not day_only:
+            sql_query = sql_query + " AND d.date <= %s"
+        elif date and day_only:
+            sql_query = sql_query + " AND d.date = %s"
+
+        if date:
+            self.env.cr.execute(sql_query, (self.id, fields.Date.to_string(date).replace('-', '')))
+        else:
+            self.env.cr.execute(sql_query, (self.id,))
+        total_retiros = self.env.cr.dictfetchall()[0].get('sum', 0.0)
+        total_retiros = total_retiros if total_retiros else 0.0
 
         # Total de Marcas Maquinas
         sql_query = '''
@@ -80,7 +98,7 @@ class ResPartner(models.Model):
         total_marcas_mesa = self.env.cr.dictfetchall()[0].get('sum', 0.0)
         total_marcas_mesa = total_marcas_mesa if total_marcas_mesa else 0.0
 
-        return total_depositos, total_marcas_maquina, total_marcas_mesa
+        return total_depositos, total_retiros, total_marcas_maquina, total_marcas_mesa
 
 
     @api.depends('x_deposit_ids', 'x_deposit_ids.amount', 'x_marca_maquina_ids', 'x_marca_maquina_ids.amount', 'x_marca_mesa_ids', 'x_marca_mesa_ids.amount')
@@ -89,9 +107,9 @@ class ResPartner(models.Model):
 
             if record.id and record.x_is_lender:
 
-                total_depositos, total_marcas_maquina, total_marcas_mesa = record.compute_balance_upto_date()
+                total_depositos, total_retiros, total_marcas_maquina, total_marcas_mesa = record.compute_balance_upto_date()
 
-                record.x_amount_available = total_depositos - total_marcas_maquina - total_marcas_mesa
+                record.x_amount_available = total_depositos - total_retiros - total_marcas_maquina - total_marcas_mesa
             else:
                 record.x_amount_available = 0
     

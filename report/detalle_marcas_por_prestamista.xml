@@ -37,6 +37,15 @@
                                 <span t-esc="prestamista_vals['balance_al_dia_anterior'] + prestamista_vals['depositos_del_dia']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
                             </th>
                         </tr>
+                        <tr>
+                            <th colspan="2" class="text-right">Retiros del Día</th>
+                            <th class="text-right">
+                                <span t-esc="prestamista_vals['retiros_del_dia']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                            <th class="text-right">
+                                <span t-esc="prestamista_vals['balance_al_dia_anterior'] + prestamista_vals['depositos_del_dia'] + prestamista_vals['retiros_del_dia']" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                            </th>
+                        </tr>
                         <tr style="background-color: lightgrey;">
                             <th class="text-center">Tipo</th>
                             <th class="text-left">Cliente</th>
