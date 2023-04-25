@@ -47,13 +47,18 @@
                 <notebook>
                     <page name="page1" string="Detalles">
                         <field name="line_ids">
-                            <tree create="0" edit="0" delete="0">
+                            <tree create="0" edit="0" delete="0" readonly="1">
                                 <field name="comision_id" invisible="1"/>
                                 <field name="currency_id" invisible="1"/>
                                 <field name="date"/>
                                 <field name="amount_marcas"/>
                                 <field name="amount_percent" widget="percentage"/>
                                 <field name="amount_fee"/>
+                                
+                                <field name="amount_marcas_maquinas"/>
+                                <field name="retencion_maquina" widget="percentage"/>
+                                <field name="amount_percent_maquinas" widget="percentage"/>
+                                <field name="amount_fee_maquinas"/>
                             </tree>
                         </field>
                     </page>

@@ -3,7 +3,7 @@
 <template id="report_comision_marca_document">
     <t t-call="web.internal_layout">
         <t t-set="doc" t-value="doc.with_context(lang=doc.lender_partner_id.lang)" />
-        <div class="page">
+        <div class="page" style="font-size: small;">
             <div class="oe_structure"/>
 
             <h2 class="mt16">
@@ -39,10 +39,23 @@
                 <!-- In case we want to repeat the header, remove "display: table-row-group" -->
                 <thead style="display: table-row-group">
                     <tr>
-                        <th name="th_date" class="text-left">Fecha</th>
-                        <th name="th_amount_marcas" class="text-right">Total Prestado</th>
-                        <th name="th_amount_percent" class="text-right">Porciento Comisión</th>
-                        <th name="th_amount_fee" class="text-right">Monto Comisión</th>
+                        <th class="text-left" style="border-left: 1px solid #dee1e6;"></th>
+                        <th name="th_header_mesas" style="border-left: 1px solid #dee1e6;" colspan="3" class="text-center">Mesas</th>
+                        <th name="th_header_maquinas" style="border-left: 1px solid #dee1e6;" colspan="4" class="text-center">Máquinas</th>
+                        <th class="text-left" style="border-left: 1px solid #dee1e6; border-right: 1px solid #dee1e6;"></th>
+                    </tr>
+                    <tr>
+                        <th name="th_date" style="border-left: 1px solid #dee1e6;" class="text-center">Fecha</th>
+                        <th name="th_amount_marcas" style="border-left: 1px solid #dee1e6;" class="text-center">Marcas</th>
+                        <th name="th_amount_percent" class="text-center">% Comisión</th>
+                        <th name="th_amount_fee" class="text-center">Monto Comisión</th>
+                        
+                        <th name="th_amount_marcas" style="border-left: 1px solid #dee1e6;" class="text-center">Marcas</th>
+                        <th name="th_amount_percent" class="text-center">% Retención</th>
+                        <th name="th_amount_percent" class="text-center">% Comisión</th>
+                        <th name="th_amount_fee" class="text-center">Monto Comisión</th>
+
+                        <th name="th_total" style="border-left: 1px solid #dee1e6; border-right: 1px solid #dee1e6;" class="text-center">Total</th>
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
@@ -51,12 +64,12 @@
 
                     <t t-foreach="doc.line_ids" t-as="line">
 
-                        <t t-set="current_subtotal" t-value="current_subtotal + line.amount_fee"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.amount_fee + line.amount_fee_maquinas"/>
 
                         <tr>
                             <t>
-                                <td name="td_date"><span t-field="line.date"/></td>
-                                <td name="td_amount_marcas" class="text-right">
+                                <td name="td_date" style="border-left: 1px solid #dee1e6;"><span t-field="line.date"/></td>
+                                <td name="td_amount_marcas" style="border-left: 1px solid #dee1e6;" class="text-right">
                                     <span t-field="line.amount_marcas"/>
                                 </td>
                                 <td name="td_amount_percent" class="text-right">
@@ -64,6 +77,22 @@
                                 </td>
                                 <td name="td_amount_fee" class="text-right">
                                     <span t-field="line.amount_fee"/>
+                                </td>
+                                
+                                <td name="td_amount_maquinas" style="border-left: 1px solid #dee1e6;" class="text-right">
+                                    <span t-field="line.amount_marcas_maquinas"/>
+                                </td>
+                                <td name="td_amount_maquina_percent" class="text-right">
+                                    <span t-esc="line.retencion_maquina * 100"/>%
+                                </td>
+                                <td name="td_amount_percent_maquinas" class="text-right">
+                                    <span t-esc="line.amount_percent_maquinas * 100"/>%
+                                </td>
+                                <td name="td_amount_fee_maquinas" class="text-right">
+                                    <span t-field="line.amount_fee_maquinas"/>
+                                </td>
+                                <td name="td_subtotal" style="border-left: 1px solid #dee1e6; border-right: 1px solid #dee1e6;" class="text-right">
+                                    <span t-esc="line.amount_fee + line.amount_fee_maquinas" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
                                 </td>
                             </t>
                         </tr>
