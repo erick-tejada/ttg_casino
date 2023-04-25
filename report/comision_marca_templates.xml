@@ -73,7 +73,7 @@
                                     <span t-field="line.amount_marcas"/>
                                 </td>
                                 <td name="td_amount_percent" class="text-right">
-                                    <span t-esc="line.amount_percent * 100"/>%
+                                    <span t-esc="line.amount_percent * 100" t-options='{"widget": "float", "precision": 2}'/>%
                                 </td>
                                 <td name="td_amount_fee" class="text-right">
                                     <span t-field="line.amount_fee"/>
@@ -83,10 +83,10 @@
                                     <span t-field="line.amount_marcas_maquinas"/>
                                 </td>
                                 <td name="td_amount_maquina_percent" class="text-right">
-                                    <span t-esc="line.retencion_maquina * 100"/>%
+                                    <span t-esc="line.retencion_maquina * 100" t-options='{"widget": "float", "precision": 2}'/>%
                                 </td>
                                 <td name="td_amount_percent_maquinas" class="text-right">
-                                    <span t-esc="line.amount_percent_maquinas * 100"/>%
+                                    <span t-esc="line.amount_percent_maquinas * 100" t-options='{"widget": "float", "precision": 2}'/>%
                                 </td>
                                 <td name="td_amount_fee_maquinas" class="text-right">
                                     <span t-field="line.amount_fee_maquinas"/>
