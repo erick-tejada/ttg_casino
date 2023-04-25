@@ -109,7 +109,7 @@ class ResPartner(models.Model):
 
                 total_depositos, total_retiros, total_marcas_maquina, total_marcas_mesa = record.compute_balance_upto_date()
 
-                record.x_amount_available = total_depositos - total_retiros - total_marcas_maquina - total_marcas_mesa
+                record.x_amount_available = total_depositos + total_retiros - total_marcas_maquina - total_marcas_mesa
             else:
                 record.x_amount_available = 0
     
