@@ -42,7 +42,7 @@ class CuadreDeCaja(models.Model):
             for prestamista in prestamistas:
                 # Balance al dia anterior
                 total_depositos, total_retiros, total_marcas_maquina, total_marcas_mesa = prestamista.compute_balance_upto_date(date=day_before)
-                balance_al_dia_anterior = total_depositos - total_retiros - total_marcas_maquina - total_marcas_mesa
+                balance_al_dia_anterior = total_depositos + total_retiros - total_marcas_maquina - total_marcas_mesa
 
                 # Depositos del dia
                 depositos_del_dia, retiros_del_dia, marcas_maquina_del_dia, marcas_mesa_del_dia = prestamista.compute_balance_upto_date(date=record.date, day_only=True)
