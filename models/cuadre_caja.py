@@ -48,7 +48,7 @@ class CuadreDeCaja(models.Model):
                 depositos_del_dia, retiros_del_dia, marcas_maquina_del_dia, marcas_mesa_del_dia = prestamista.compute_balance_upto_date(date=record.date, day_only=True)
                 
                 # Marcas del dia
-                balance_al_final_del_dia = balance_al_dia_anterior + depositos_del_dia - retiros_del_dia
+                balance_al_final_del_dia = balance_al_dia_anterior + depositos_del_dia + retiros_del_dia # Nota: los retiros son negativos, por eso se suman
 
                 marcas = []
                 for marca in record.marca_maquina_ids.filtered(lambda m : m.lender_partner_id.id == prestamista.id):
