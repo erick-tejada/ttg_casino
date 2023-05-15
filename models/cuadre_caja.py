@@ -202,19 +202,19 @@ class CuadreDeCaja(models.Model):
 
     def action_draft(self):
         self._delete_moves()
-        self.state = 'draft'
         self._compute_all()
+        self.state = 'draft'
 
     def action_audit(self):
         next_state = 'audit'
-        self.state = next_state
         self._compute_all()
+        self.state = next_state
         return self._redirect_if_needed(next_state)
 
     def action_accounting(self):
         next_state = 'accounting'
-        self.state = next_state
         self._compute_all()
+        self.state = next_state
         return self._redirect_if_needed(next_state)
 
     def action_done(self):
