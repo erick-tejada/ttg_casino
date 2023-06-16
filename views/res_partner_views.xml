@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <field name="function" position="before">
                     <field name="x_is_casino_client"/>
+                    <field name="casino_categ" attrs="{'invisible': [('x_is_casino_client','=',False)]}"/>
                 </field>
                 <field name="category_id" position="after">
                     <field name="x_is_lender" groups="ttg_casino.group_casino_accountant"/>

@@ -10,6 +10,9 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     x_is_casino_client = fields.Boolean('Es Cliente Casino', help='Indica que es un cliente del Casino')
+    casino_categ = fields.Selection(
+        [('Bronce', 'Bronce'), ('Plata', 'Plata'), ('Oro', 'Oro')],
+        'Categoría Cliente Casino', copy=False, default='Bronce')
 
     x_is_lender = fields.Boolean('Es Prestamista')
     x_tier2_amount = fields.Float('Meta Monto Prestado para Nivel 2', help='Es el monto mínimo prestado para cambiar el porciento pagado de comisión al Porciento Comisión Nivel 2.')
