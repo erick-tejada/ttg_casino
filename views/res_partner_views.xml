@@ -4,17 +4,17 @@
             <field name="name">res.partner.casino.form.inherit</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="groups_id" eval="[(4, ref('ttg_casino.group_casino_accountant'))]"/>
+            <field name="groups_id" eval="[(4, ref('ttg_casino.group_casino_audit'))]"/>
             <field name="arch" type="xml">
                 <field name="function" position="before">
                     <field name="x_is_casino_client"/>
                     <field name="casino_categ" attrs="{'invisible': [('x_is_casino_client','=',False)]}"/>
                 </field>
                 <field name="category_id" position="after">
-                    <field name="x_is_lender" groups="ttg_casino.group_casino_accountant"/>
-                    <field name="x_tier2_amount" groups="ttg_casino.group_casino_accountant" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
-                    <field name="x_tier1_percent" groups="ttg_casino.group_casino_accountant" widget="percentage" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
-                    <field name="x_tier2_percent" groups="ttg_casino.group_casino_accountant" widget="percentage" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
+                    <field name="x_is_lender" groups="ttg_casino.group_casino_audit"/>
+                    <field name="x_tier2_amount" groups="ttg_casino.group_casino_audit" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
+                    <field name="x_tier1_percent" groups="ttg_casino.group_casino_audit" widget="percentage" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
+                    <field name="x_tier2_percent" groups="ttg_casino.group_casino_audit" widget="percentage" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
                 </field>
             </field>
         </record>
