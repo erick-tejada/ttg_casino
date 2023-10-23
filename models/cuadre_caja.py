@@ -200,6 +200,10 @@ class CuadreDeCaja(models.Model):
     deposito_dop_move_id = fields.Many2one('account.move', 'Asiento de Depositos a Banco DOP')
     deposito_usd_move_id = fields.Many2one('account.move', 'Asiento de Depositos a Banco USD')
 
+    # MISC
+    # ----------------------------------------------------------------------------------------------------------------
+    cash_received = fields.Boolean('Efectivo Recibido?', help='Indica que el efectivo (especialmente en dólares) de este cuadre fue recibido.')
+
     def action_draft(self):
         self._delete_moves()
         self._compute_all()

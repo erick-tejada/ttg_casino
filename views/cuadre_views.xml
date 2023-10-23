@@ -441,6 +441,7 @@
                 <field name="resultado_usd_caja_mesa" optional="show" decoration-danger="resultado_usd_caja_mesa &lt; 0.0"/>
                 <field name="activity_ids" widget="list_activity" optional="show"/>
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
+                <field name="cash_received" groups="ttg_casino.group_casino_accountant" widget="boolean_toggle"/>
             </tree>
         </field>
     </record>
