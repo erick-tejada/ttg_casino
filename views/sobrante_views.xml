@@ -12,7 +12,7 @@
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
                 
                 <field name="employee_id"  options="{'no_create': True, 'no_open': True}" optional="show"/>
-                <field name="amount" sum="Total" optional="show"/>
+                <field name="amount" sum="Total" optional="show" attrs="{'readonly': [('state', '=', 'done')]}"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>

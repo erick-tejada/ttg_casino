@@ -117,7 +117,7 @@
                                 <label for="cobro_tc_total"/>
                                 <div class="o_row">
                                     <field name="cobro_tc_total"/>
-                                    <button name="open_cobros_tc"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                    <button name="open_cobros_tc"  class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
                                 </div>
                                 <field name="cobro_tc_comision_total"/>
                             </group>
@@ -125,12 +125,12 @@
                                 <label for="sobrante_total"/>
                                 <div class="o_row">
                                     <field name="sobrante_total"/>
-                                    <button name="open_sobrante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                    <button name="open_sobrante" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
                                 </div>
                                 <label for="faltante_total"/>
                                 <div class="o_row">
                                     <field name="faltante_total"/>
-                                    <button name="open_faltante"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                    <button name="open_faltante"  class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
                                 </div>
                             </group>
                         </group>
