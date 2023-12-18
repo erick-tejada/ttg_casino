@@ -13,8 +13,8 @@
                 
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="show"/>
-                <field name="amount" sum="Total" optional="show"/>
-                <field name="amount_fee" sum="Total" optional="show"/>
+                <field name="amount" sum="Total" optional="show" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                <field name="amount_fee" sum="Total" optional="show" attrs="{'readonly': [('state', '=', 'done')]}"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
