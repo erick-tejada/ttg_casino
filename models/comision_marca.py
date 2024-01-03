@@ -111,7 +111,7 @@ class ComisionMarca(models.Model):
         else:
             # Segunda Quincena: from year-month-16 to < (next_)year-next_month-01
             date_start = '%s-%s-16' % (record.year, str(record.month).zfill(2))
-            if record.month == 12:
+            if record.month == '12':
                 date_end = '%s-%s-01' % (record.year + 1, str(1).zfill(2)) # next_year-01-01
             else:
                 date_end = '%s-%s-01' % (record.year, str(int(record.month) + 1).zfill(2)) # same_year-next_month-01
