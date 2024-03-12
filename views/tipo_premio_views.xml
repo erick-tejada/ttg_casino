@@ -1,0 +1,39 @@
+<odoo>
+<!-- FORM -->
+
+    <record id="view_tipo_premio_tree" model="ir.ui.view">
+        <field name="name">casino.tipo.premio</field>
+        <field name="model">casino.tipo.premio</field>
+        <field name="arch" type="xml">
+            <tree string="tipo_premios" editable="bottom">
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="create_uid" optional="show"/>
+                <field name="create_date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tipo_premio_search" model="ir.ui.view">
+        <field name="name">casino.tipo.premio.search</field>
+        <field name="model">casino.tipo.premio</field>
+        <field name="arch" type="xml">
+            <search string="Busqueda de Premios">
+                <!-- Search fields -->
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_casino_tipo_premio" model="ir.actions.act_window">
+        <field name="name">Tipo de Premios</field>
+        <field name="res_model">casino.tipo.premio</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_tipo_premio_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Tipos de Premios.
+            </p>
+        </field>
+    </record>
+</odoo>

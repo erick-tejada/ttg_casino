@@ -15,3 +15,5 @@ from . import encargado_caja
 from . import mesa
 from . import apuesta_mesa
 from . import tipo_error_pago
+from . import tipo_premio
+from . import rifas_premios_maquina

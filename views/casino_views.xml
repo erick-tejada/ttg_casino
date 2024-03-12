@@ -116,7 +116,13 @@
         sequence="30"/>
 
     <menuitem id="menu_casino_encargados" name="Encargados de Caja" parent="menu_casino_auditoria_root"
-        sequence="30" action="action_casino_encargado_caja"/>
+        sequence="40" action="action_casino_encargado_caja"/>
+    
+    <menuitem id="menu_casino_tipo_premios"
+        name="Tipo de Premios"
+        parent="ttg_casino.menu_casino_auditoria_root"
+        action="ttg_casino.action_casino_tipo_premio"
+        sequence="50"/>
 
     <!-- CONFIGURACIONES -->
     <menuitem id="menu_casino_config_root" name="Configuraciones" parent="menu_casino_root"

@@ -72,6 +72,11 @@
                                     <field name="otros_pagos_total"/>
                                     <button name="open_otros_pagos" class="btn fa fa-list" type="object" aria-label="Otros Pagos por Máquina/Cliente" title="Otros Pagos por Máquina/Cliente" role="img"/>
                                 </div>
+                                <label for="premios_maquina_total"/>
+                                <div class="o_row">
+                                    <field name="premios_maquina_total"/>
+                                    <button name="open_premios_maquina" class="btn fa fa-list" type="object" aria-label="Premios Maquinas" title="Premios Maquinas" role="img"/>
+                                </div>
                             </group>
                         </group>
                         
@@ -84,6 +89,11 @@
                                     <button name="open_apuesta_mesa" class="btn fa fa-money" type="object" aria-label="Modificar las Apuestas en Mesa" title="Modificar las Apuestas en Mesa" role="img"/>
                                 </div>
                                 <field name="pago_apuestas_mesas" string="Pagos"/>
+                                <label for="premios_mesa_total"/>
+                                <div class="o_row">
+                                    <field name="premios_mesa_total"/>
+                                    <button name="open_premios_mesas" class="btn fa fa-list" type="object" aria-label="Premios Mesas" title="Premios Mesas" role="img"/>
+                                </div>
                             </group>
                             <group name="group_mesa_2" string="Dólares USD">
                                 <label for="apuestas_mesas_usd" string="Bill Drop Mesas USD"/>

@@ -111,6 +111,9 @@ class CuadreDeCaja(models.Model):
     
     otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Otros Pagos')
     otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos', store=True) # Egreso
+    
+    premios_maquina_ids = fields.One2many('casino.premios.maquina', 'cuadre_id', 'Premios/Rifas Maquinas')
+    premios_maquina_total = fields.Monetary('Total Premios Maquinas', compute='_compute_premios_maquina', store=True) # Egreso
 
     # CUADRE
     ingreso_maquina = fields.Monetary('Ingreso Efectivo de Maquina', compute='_compute_cuadre_maquina', store=True)
@@ -132,6 +135,9 @@ class CuadreDeCaja(models.Model):
     
     marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
     marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas', store=True) # Ingreso
+    
+    premios_mesa_ids = fields.One2many('casino.premios.mesa', 'cuadre_id', 'Premios/Rifas Mesas')
+    premios_mesa_total = fields.Monetary('Total Premios Mesas', compute='_compute_premios_mesas', store=True) # Egreso
 
     # CUADRE
     total_dop_mesa = fields.Monetary('Ganancia/Perdida DOP de Mesa', compute='_compute_cuadre_mesa', store=True)
@@ -1043,3 +1049,43 @@ class CuadreDeCaja(models.Model):
         
         res = super(CuadreDeCaja, self).unlink()
         return res
+    
+    @api.depends('premios_maquina_ids', 'premios_maquina_ids.amount')
+    def _compute_premios_maquina(self):
+        for record in self:
+            total = 0
+            for line in record.premios_maquina_ids:
+                total += line.amount
+            record.premios_maquina_total = total
+    
+    def open_premios_maquina(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_premios_maquina")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_premios_maquina_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('premios_mesa_ids', 'premios_mesa_ids.amount')
+    def _compute_premios_mesas(self):
+        for record in self:
+            total = 0
+            for line in record.premios_mesa_ids:
+                total += line.amount
+            record.premios_mesa_total = total
+    
+    def open_premios_mesas(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_premios_mesa")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_premios_mesa_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action

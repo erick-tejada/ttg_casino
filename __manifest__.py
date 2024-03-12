@@ -3,7 +3,7 @@
 {
     'name': 'TTG - Casino',
     'author': "Tejada Tech Group EIRL",
-    'version': '15.0.2.17',
+    'version': '15.0.2.18',
     'sequence': 100,
     'category': 'Accounting/Accounting',
     'description': """
@@ -37,6 +37,9 @@
         'views/apuesta_mesa_views.xml',
         'views/apuesta_mesa_usd_views.xml',
         'views/tipo_error_views.xml',
+        'views/tipo_premio_views.xml',
+        'views/premios_maquina_views.xml',
+        'views/premios_mesa_views.xml',
         'views/casino_views.xml',
         'report/comision_marca_templates.xml',
         'report/comision_marca_report.xml',

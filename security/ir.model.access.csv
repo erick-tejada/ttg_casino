@@ -26,3 +26,7 @@ access_apuesta_mesa,access_apuesta_mesa,model_casino_apuesta_mesa,ttg_casino.gro
 access_apuesta_mesa_usd,access_apuesta_mesa_usd,model_casino_apuesta_mesa_usd,ttg_casino.group_casino_user,1,1,1,1
 access_tipo_error,access_tipo_error,model_casino_tipo_error_pago,ttg_casino.group_casino_user,1,0,0,0
 access_tipo_error_audit,access_tipo_error_audit,model_casino_tipo_error_pago,ttg_casino.group_casino_audit,1,1,1,0
+access_tipo_premio,access_tipo_premio,model_casino_tipo_premio,ttg_casino.group_casino_user,1,0,0,0
+access_tipo_premio_audit,access_tipo_premio_audit,model_casino_tipo_premio,ttg_casino.group_casino_audit,1,1,1,0
+access_premios_maquina,access_premios_maquina,model_casino_premios_maquina,ttg_casino.group_casino_user,1,1,1,0
+access_premios_mesa,access_premios_mesa,model_casino_premios_mesa,ttg_casino.group_casino_user,1,1,1,0
