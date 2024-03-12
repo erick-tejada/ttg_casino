@@ -21,7 +21,6 @@
                 <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
                 <field name="amount" sum="Total" optional="show"/>
                 <field name="premio_id" optional="show" options="{'no_open': True, 'no_create': True}"/>
-                <field name="error_id" sum="Total" optional="show" options="{'no_open': True, 'no_create': True}"/>
                 <field name="note" optional="show" groups="ttg_casino.group_casino_audit"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
             </tree>
