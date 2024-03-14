@@ -12,7 +12,6 @@
                 <field name="employee_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
                 
-                <field name="mesa_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="hide"/>
                 <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>

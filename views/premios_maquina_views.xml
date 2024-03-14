@@ -8,13 +8,9 @@
             <tree string="Premios Maquinas" decoration-danger="maquina_state == 'not_operational'" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
-                <field name="maquina_state" invisible="1"/>
                 <field name="date" optional="show"/>
                 <field name="employee_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
-                <field name="maquina_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
-                <field name="brand_id" readonly="1" force_save="1" optional="hide"/>
-                <field name="model_id" readonly="1" force_save="1" optional="hide"/>
                 
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="show"/>
@@ -34,14 +30,10 @@
             <tree string="Premios Maquinas" decoration-danger="maquina_state == 'not_operational'" create="0" edit="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
-                <field name="maquina_state" invisible="1"/>
                 <field name="date" optional="show"/>
                 <field name="employee_id"  options="{'no_open': True, 'no_create': True}" readonly="1" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
-                <field name="maquina_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
-                <field name="brand_id" readonly="1" force_save="1" optional="hide"/>
-                <field name="model_id" readonly="1" force_save="1" optional="hide"/>
-                
+
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref" optional="show"/>
                 <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}"  readonly="1" optional="show"/>
@@ -64,21 +56,12 @@
                 <field name="code"/>
                 <field name="employee_id"/>
                 <field name="employee_sales_id"/>
-                <field name="maquina_id"/>
-                <field name="brand_id"/>
-                <field name="model_id"/>
 
                 <!-- Groups -->
                 <group expand="0" string="Group By">
                     <filter string="Cliente" name="partner_id"
                             domain="[]"
                             context="{'group_by':'partner_id'}"/>
-                    <filter string="Marca" name="brand_id"
-                            domain="[]"
-                            context="{'group_by':'brand_id'}"/>
-                    <filter string="Modelo" name="model_id"
-                            domain="[]"
-                            context="{'group_by':'model_id'}"/>
                 </group>
             </search>
         </field>

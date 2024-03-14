@@ -21,8 +21,6 @@ class OtrosPagos(models.Model):
     employee_sales_id = fields.Many2one('hr.employee', string="Servicio al Cliente", domain="['|', ('job_title', 'in', ['SLOT', 'MAQUINA']),('department_id','=',13)]", required=True)
     premio_id = fields.Many2one('casino.tipo.premio', string='Premio', required=True)
 
-    mesa_id = fields.Many2one('casino.mesa', string="Mesa", required=True)
-
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
     ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
     amount = fields.Monetary('Monto', required=True)
