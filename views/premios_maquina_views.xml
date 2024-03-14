@@ -5,7 +5,7 @@
         <field name="name">casino.premios.maquina</field>
         <field name="model">casino.premios.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Premios Maquinas" decoration-danger="maquina_state == 'not_operational'" editable="bottom">
+            <tree string="Premios Maquinas" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -27,7 +27,7 @@
         <field name="name">casino.premios.maquina</field>
         <field name="model">casino.premios.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Premios Maquinas" decoration-danger="maquina_state == 'not_operational'" create="0" edit="0" delete="0">
+            <tree string="Premios Maquinas" create="0" edit="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
