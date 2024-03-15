@@ -228,6 +228,10 @@
                                             <label for="maquina_gasto_faltante_account_id" class="col-lg-3 o_light_label"/>
                                             <field name="maquina_gasto_faltante_account_id" options="{'no_create': True}"/>
                                         </div>
+                                        <div class="row mt16">
+                                            <label for="maquina_premios_account_id" class="col-lg-3 o_light_label"/>
+                                            <field name="maquina_premios_account_id" options="{'no_create': True}"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -263,6 +267,10 @@
                                         <div class="row mt16">
                                             <label for="mesa_efectivo_tc_account_id" class="col-lg-3 o_light_label"/>
                                             <field name="mesa_efectivo_tc_account_id" options="{'no_create': True}"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label for="mesa_premios_account_id" class="col-lg-3 o_light_label"/>
+                                            <field name="mesa_premios_account_id" options="{'no_create': True}"/>
                                         </div>
                                     </div>
                                 </div>

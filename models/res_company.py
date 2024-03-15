@@ -40,7 +40,8 @@ class ResComapany(models.Model):
     maquina_tarjeta_cashout_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Tarjeta Cashout', help='Cuenta de Pago por Tarjeta Cashout.')
     maquina_devolucion_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Devoluciones', help='Cuenta de Pago por Devoluciones.')
     maquina_otros_pagos_account_id = fields.Many2one('account.account', 'Cuenta de Pago por Otros Pagos', help='Cuenta de Pago por Otros Pagos.')
-    maquina_gasto_faltante_account_id = fields.Many2one('account.account', 'Cuenta de Faltante en Caja', help='Cuenta de Gastp por Faltante en Caja.')
+    maquina_gasto_faltante_account_id = fields.Many2one('account.account', 'Cuenta de Faltante en Caja', help='Cuenta de Gasto por Faltante en Caja.')
+    maquina_premios_account_id = fields.Many2one('account.account', 'Cuenta de Premios Maquina', help='Cuenta de Premios Maquina.')
 
     # MESAS
     # ----------------------------------------------------------------------------------------------------------------
@@ -52,6 +53,7 @@ class ResComapany(models.Model):
     # Pago
     mesa_pagos_account_id = fields.Many2one('account.account', 'Cuenta de Pagos por Apuestas Mesas DOP', help='Cuenta de Pagos por Apuestas Mesas.')
     mesa_efectivo_tc_account_id = fields.Many2one('account.account', 'Cuenta de Efectivo de TC', help='Cuenta de Efectivo de TC.')
+    mesa_premios_account_id = fields.Many2one('account.account', 'Cuenta de Premios Mesa', help='Cuenta de Premios Mesa.')
 
     # USD
     mesa_ingreso_usd_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Apuestas Mesas USD', help='Cuenta de Ingreso por Mesas USD.')

@@ -109,8 +109,8 @@ class CuadreDeCaja(models.Model):
     
     recarga_tarjeta = fields.Monetary('Recarga de Tarjeta', states={'done': [('readonly', True)]}) # Ingreso
     
-    otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Otros Pagos')
-    otros_pagos_total = fields.Monetary('Total Otros Pagos', compute='_compute_otros_pagos', store=True) # Egreso
+    otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Pagos Manuales')
+    otros_pagos_total = fields.Monetary('Total Pagos Manuales', compute='_compute_otros_pagos', store=True) # Egreso
     
     premios_maquina_ids = fields.One2many('casino.premios.maquina', 'cuadre_id', 'Premios/Rifas Maquinas')
     premios_maquina_total = fields.Monetary('Total Premios Maquinas', compute='_compute_premios_maquina', store=True) # Egreso
@@ -400,7 +400,7 @@ class CuadreDeCaja(models.Model):
             self.company_id.caja_maquina_account_id,
             self.otros_pagos_total,
             False,
-            'MAQUINAS: Pagos por Otros Pagos',
+            'MAQUINAS: Pagos por Pagos Manuales',
         )
         self.create_aml_dict(
             list_of_aml_vals,
@@ -409,6 +409,14 @@ class CuadreDeCaja(models.Model):
             self.faltante_total,
             False,
             'MAQUINAS: Pagos por Faltante en Caja',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.maquina_premios_account_id,
+            self.company_id.caja_maquina_account_id,
+            self.premios_maquina_total,
+            False,
+            'MAQUINAS: Pagos por Premios Maquina',
         )
         # ******** INGRESOS MESAS DOP ********
         self.create_aml_dict(
@@ -462,6 +470,14 @@ class CuadreDeCaja(models.Model):
             self.cambio_dolares,
             self.currency_usd_id,
             'MESAS DOP: Pago por Cambio de Dólares',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.mesa_premios_account_id,
+            self.company_id.caja_mesa_dop_account_id,
+            self.premios_mesa_total,
+            False,
+            'MESAS DOP: Pagos por Premios Mesa',
         )
 
         
@@ -948,11 +964,11 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
-    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total', 'faltante_total', 'sobrante_total')
+    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total', 'faltante_total', 'sobrante_total', 'premios_maquina_total')
     def _compute_cuadre_maquina(self):
         for record in self:
             total_ingreso = record.bill_drop_total + record.marca_maquina_total + record.recarga_tarjeta
-            total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total
+            total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total + record.premios_maquina_total
             total_maquina = total_ingreso - total_pago
             retencion_maquina = ((total_maquina / total_ingreso) * 100) if total_ingreso else 0
             resultado_caja_maquina = total_maquina + record.sobrante_total - record.faltante_total
@@ -965,10 +981,10 @@ class CuadreDeCaja(models.Model):
                 'reposicion_caja_maquina': resultado_caja_maquina * -1 if resultado_caja_maquina < 0.0 else 0.0,
             })
     
-    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total', 'cobro_tc_comision_total', 'cobro_tc_total', 'dop_cambio_dolares', 'cambio_dolares')
+    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total', 'cobro_tc_comision_total', 'cobro_tc_total', 'dop_cambio_dolares', 'cambio_dolares', 'premios_mesa_total')
     def _compute_cuadre_mesa(self):
         for record in self:
-            total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas
+            total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas - record.premios_mesa_total
             retencion_dop_mesa = (total_dop / (record.apuestas_mesas + record.marca_mesa_total)) * 100 if (record.apuestas_mesas + record.marca_mesa_total) else 0
             total_usd = record.apuestas_mesas_usd - record.pago_apuestas_mesas_usd
             retencion_usd_mesa = (total_usd / record.apuestas_mesas_usd) * 100 if record.apuestas_mesas_usd else 0
