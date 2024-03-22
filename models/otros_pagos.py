@@ -22,11 +22,15 @@ class OtrosPagos(models.Model):
     brand_id = fields.Many2one('casino.maquina.marca', string='Marca', related='maquina_id.brand_id', store=True)
     model_id = fields.Many2one('casino.maquina.modelo', string='Modelo', related='maquina_id.model_id', store=True)
     maquina_state = fields.Selection(related='maquina_id.state', string="Estado Máquina")
+    
+    employee_id = fields.Many2one('hr.employee', string="Cajero", domain="['|', ('job_title', 'in', ['CAJERO', 'CAJERA', 'Cajera', 'Cajero']),('department_id','=',10)]", required=True)
+    employee_sales_id = fields.Many2one('hr.employee', string="Servicio al Cliente", domain="['|', ('job_title', 'in', ['SLOT', 'MAQUINA']),('department_id','=',13)]", required=True)
+    hour = fields.Char('Hora', length='8')
 
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
     ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
     amount = fields.Monetary('Monto', required=True)
-    error_id = fields.Many2one('casino.tipo.error.pago', string="Tipo de Error", required=True, ondelete='restrict')
+    error_id = fields.Many2one('casino.tipo.error.pago', string="Tipo de Pago Manual", ondelete='restrict')
     note = fields.Char('Nota')
 
     def unlink(self):
