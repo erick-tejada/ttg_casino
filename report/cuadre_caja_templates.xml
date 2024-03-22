@@ -66,8 +66,12 @@
                         <td class="text-right"><span t-field="doc.devolucion_total"/></td>
                     </tr>
                     <tr>
-                        <td>OTROS PAGOS</td>
+                        <td>PAGOS MANUALES</td>
                         <td class="text-right"><span t-field="doc.otros_pagos_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>RIFAS Y PREMIOS</td>
+                        <td class="text-right"><span t-field="doc.premios_maquina_total"/></td>
                     </tr>
                     <tr class="is-subtotal text-right">
                         <td name="td_maquina_section_subtotal" colspan="99">
@@ -159,6 +163,10 @@
                     <tr>
                         <td>PAGO APUESTAS EN MESAS DOP</td>
                         <td class="text-right"><span t-field="doc.pago_apuestas_mesas"/></td>
+                    </tr>
+                    <tr>
+                        <td>PAGO RIFAS Y PREMIOS MESAS DOP</td>
+                        <td class="text-right"><span t-field="doc.premios_mesa_total"/></td>
                     </tr>
                     <tr>
                         <td><strong>GANANCIA / PÉRDIDA DOP</strong></td>
