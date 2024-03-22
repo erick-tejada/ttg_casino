@@ -5,7 +5,7 @@
         <field name="name">casino.otros.pagos</field>
         <field name="model">casino.otros.pagos</field>
         <field name="arch" type="xml">
-            <tree string="Otros Pagos" decoration-danger="maquina_state == 'not_operational'" editable="bottom">
+            <tree string="Pagos Manuales" decoration-danger="maquina_state == 'not_operational'" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="maquina_state" invisible="1"/>
@@ -14,10 +14,13 @@
                 <field name="maquina_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
                 <field name="brand_id" readonly="1" force_save="1" optional="hide"/>
                 <field name="model_id" readonly="1" force_save="1" optional="hide"/>
+
+                <field name="employee_id"  options="{'no_create': True}" required="1" optional="show"/>
+                <field name="employee_sales_id"  options="{'no_create': True}" required="1" optional="show"/>
+                <field name="hour" optional="show" placeholder="8:00 PM" required="1"/>
                 
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="show"/>
-                <field name="hour" optional="show" placeholder="8:00 PM" required="1"/>
                 <field name="amount" sum="Total" optional="show"/>
                 <!--<field name="error_id" sum="Total" optional="show" options="{'no_open': True, 'no_create': True}"/>-->
                 <field name="note" optional="show" groups="ttg_casino.group_casino_audit"/>
@@ -30,7 +33,7 @@
         <field name="name">casino.otros.pagos</field>
         <field name="model">casino.otros.pagos</field>
         <field name="arch" type="xml">
-            <tree string="Otros Pagos" decoration-danger="maquina_state == 'not_operational'" create="0" edit="0" delete="0">
+            <tree string="Pagos Manuales" decoration-danger="maquina_state == 'not_operational'" create="0" edit="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="maquina_state" invisible="1"/>
@@ -54,7 +57,7 @@
         <field name="name">casino.otros.pagos.search</field>
         <field name="model">casino.otros.pagos</field>
         <field name="arch" type="xml">
-            <search string="Search Otros Pagos">
+            <search string="Search Pagos Manuales">
                 <!-- Search fields -->
                 <field name="partner_id"/>
                 <field name="ref"/>
@@ -80,25 +83,25 @@
     </record>
     
     <record id="action_otros_pagos" model="ir.actions.act_window">
-        <field name="name">Otros Pagos</field>
+        <field name="name">Pagos Manuales</field>
         <field name="res_model">casino.otros.pagos</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_otros_pagos_tree"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-            Detalles de Otros Pagos.
+            Detalles de Pagos Manuales.
             </p>
         </field>
     </record>
     
     <record id="action_otros_pagos_readonly" model="ir.actions.act_window">
-        <field name="name">Otros Pagos</field>
+        <field name="name">Pagos Manuales</field>
         <field name="res_model">casino.otros.pagos</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_otros_pagos_tree_readonly"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-            Detalles de Otros Pagos.
+            Detalles de Pagos Manuales.
             </p>
         </field>
     </record>

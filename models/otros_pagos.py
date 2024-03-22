@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class OtrosPagos(models.Model):
     _name = 'casino.otros.pagos'
-    _description = "Otros Pagos Maquinas"
+    _description = "Pagos Manuales Maquinas"
     _rec_name = 'partner_id'
     _order = 'cuadre_id,partner_id'
 
@@ -24,7 +24,7 @@ class OtrosPagos(models.Model):
     maquina_state = fields.Selection(related='maquina_id.state', string="Estado Máquina")
     
     employee_id = fields.Many2one('hr.employee', string="Cajero", domain="['|', ('job_title', 'in', ['CAJERO', 'CAJERA', 'Cajera', 'Cajero']),('department_id','=',10)]", required=True)
-    employee_sales_id = fields.Many2one('hr.employee', string="Servicio al Cliente", domain="['|', ('job_title', 'in', ['SLOT', 'MAQUINA']),('department_id','=',13)]", required=True)
+    employee_sales_id = fields.Many2one('hr.employee', string="Servicio al Cliente", domain="['|', ('job_title', 'in', ['MAQUINA']),('department_id','=',13)]", required=True)
     hour = fields.Char('Hora', length='8')
 
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
