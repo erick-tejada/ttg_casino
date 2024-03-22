@@ -33,12 +33,14 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
-                <field name="employee_id"  options="{'no_open': True, 'no_create': True}" readonly="1" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+
+                <field name="employee_id"  options="{'no_open': True, 'no_create': True}" readonly="1" optional="show"/>
+                <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}"  readonly="1" optional="show"/>
+                <field name="hour" optional="show" placeholder="8:00 PM" required="1"/>
                 
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
                 <field name="ref"  optional="hide"/>
-                <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}"  readonly="1" optional="show"/>
                 <field name="amount" sum="Total" optional="show"/>
                 <field name="premio_id" optional="show" readonly="1" options="{'no_open': True, 'no_create': True}"/>
                 <field name="note" optional="show"/>

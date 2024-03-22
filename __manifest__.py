@@ -3,7 +3,7 @@
 {
     'name': 'TTG - Casino',
     'author': "Tejada Tech Group EIRL",
-    'version': '15.0.3.10',
+    'version': '15.0.3.11',
     'sequence': 100,
     'category': 'Accounting/Accounting',
     'description': """
