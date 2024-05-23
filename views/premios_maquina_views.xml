@@ -11,8 +11,8 @@
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
 
-                <field name="employee_id"  options="{'no_open': True, 'no_create': True}" readonly="1" optional="show"/>
-                <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}"  readonly="1" optional="show"/>
+                <field name="employee_id"  options="{'no_open': True, 'no_create': True}" optional="show"/>
+                <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}"  optional="show"/>
                 <field name="hour" optional="show" placeholder="8:00 PM" required="1"/>
                 
                 <field name="partner_id"  options="{'no_create': True}" optional="show"/>
@@ -37,11 +37,11 @@
 
                 <field name="employee_id"  options="{'no_open': True, 'no_create': True}" readonly="1" optional="show"/>
                 <field name="employee_sales_id"  options="{'no_open': True, 'no_create': True}"  readonly="1" optional="show"/>
-                <field name="hour" optional="show" placeholder="8:00 PM" required="1"/>
+                <field name="hour" optional="show" placeholder="8:00 PM" required="1" readonly="1"/>
 
-                <field name="partner_id"  options="{'no_create': True}" optional="show"/>
-                <field name="ref" optional="show"/>
-                <field name="amount" sum="Total" optional="show"/>
+                <field name="partner_id"  options="{'no_create': True}" optional="show" readonly="1"/>
+                <field name="ref" optional="show" readonly="1"/>
+                <field name="amount" sum="Total" optional="show" readonly="1"/>
                 <field name="premio_id" optional="show" options="{'no_open': True, 'no_create': True}" readonly="1"/>
                 <field name="note" optional="show" groups="ttg_casino.group_casino_audit"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
