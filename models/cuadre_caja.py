@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import float_compare
+from odoo.tools import float_compare, float_is_zero
 from dateutil.relativedelta import relativedelta
 import logging
 import json
@@ -600,14 +600,15 @@ class CuadreDeCaja(models.Model):
             comision_proveedor_tc = self.currency_id.round(cobro_tc_total * self.company_id.tc_comision_percent)
             cobro_tc_a_depositar = cobro_tc_total - itbis_retenido_tc - comision_proveedor_tc
 
-            self.create_aml_dict(
-                list_of_aml_vals,
-                self.company_id.tc_itbis_account_id,
-                self.company_id.mesa_efectivo_tc_account_id,
-                itbis_retenido_tc,
-                False,
-                'ITBIS Retenido por Cobros con Tarjeta de Crédito',
-            )
+            if not float_is_zero(itbis_retenido_tc, precision_digits=2):
+                self.create_aml_dict(
+                    list_of_aml_vals,
+                    self.company_id.tc_itbis_account_id,
+                    self.company_id.mesa_efectivo_tc_account_id,
+                    itbis_retenido_tc,
+                    False,
+                    'ITBIS Retenido por Cobros con Tarjeta de Crédito',
+                )
             self.create_aml_dict(
                 list_of_aml_vals,
                 self.company_id.tc_comision_account_id,
@@ -906,7 +907,7 @@ class CuadreDeCaja(models.Model):
             tc_itbis_percent = record.company_id.tc_itbis_percent
             tc_comision_percent = record.company_id.tc_comision_percent
 
-            if (not tc_itbis_percent or not tc_comision_percent):
+            if (not tc_comision_percent):
                 raise ValidationError('COBROS TC NO CONFIGURADOS: Los Cobros con Tarjeta de Crédito no estan configurados.')
 
             total = 0
