@@ -398,9 +398,14 @@
                                 <td colspan="4">Total en Fondo de Bóveda DOP</td>
                                 <td class="text-right"><span t-field="doc.dop_boveda_total_despues_cierre" t-attf-class="{{ 'negative' if doc.dop_boveda_total_despues_cierre &lt; 0.0 else '' }}"/></td>
                             </tr>
-                            <tr>
+                            <tr t-if="doc.dop_boveda_a_depositar_banco &gt; 0">
                                 <td colspan="4">Depósito de Fondo de Bóveda DOP a Banco</td>
                                 <td class="text-right"><span t-field="doc.dop_boveda_a_depositar_banco"/></td>
+                            </tr>
+                            <tr t-else="">
+                                <td colspan="4">Depósito de Fondo de Bóveda DOP a Banco</td>
+                                <t t-set="faltante_dop" t-value="doc.dop_boveda_total_despues_cierre - doc.dop_boveda_fondo"/>
+                                <td class="text-right"><span t-esc="faltante_dop" class="negative" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
                             </tr>
                             <tr>
                                 <td colspan="4">Fondo de Bóveda DOP Despues del Cuadre</td>
