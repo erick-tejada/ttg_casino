@@ -12,6 +12,7 @@ class ResConfigSettings(models.TransientModel):
     tc_itbis_account_id = fields.Many2one(related='company_id.tc_itbis_account_id', readonly=False)
     tc_comision_percent = fields.Float(related='company_id.tc_comision_percent', readonly=False)
     tc_comision_account_id = fields.Many2one(related='company_id.tc_comision_account_id', readonly=False)
+    tc_partner_id = fields.Many2one(related='company_id.tc_partner_id', readonly=False, help='Proveedor de Tarjeta de Crédito utilizado para los cobros de Tarjeta de Crédito.')
     
     # Fondos
     dop_boveda_fondo = fields.Float(related='company_id.dop_boveda_fondo', readonly=False, help='Fondo en DOP a mantener en la Bóveda de Pesos.')

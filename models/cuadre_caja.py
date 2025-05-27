@@ -273,7 +273,7 @@ class CuadreDeCaja(models.Model):
             finally:
                 self.cajas_move_id = False
 
-    def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description=''):
+    def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description='', partner_id=False):
             '''
             account_debit: account used for debit (if not inverted)
             account_credit: account used for credit (if not inverted)
@@ -296,6 +296,7 @@ class CuadreDeCaja(models.Model):
                     'credit': 0,
                     'amount_currency': amount_currency,
                     'currency_id': foreign_currency.id,
+                    'partner_id': partner_id.id if partner_id else False,
                 }
                 list_of_aml_vals.append(debit_aml)
 
@@ -307,6 +308,7 @@ class CuadreDeCaja(models.Model):
                     'credit': amount_dbcr,
                     'amount_currency': -1 * amount_currency if amount_currency else 0.0,
                     'currency_id': foreign_currency.id,
+                    'partner_id': partner_id.id if partner_id else False,
                 }
                 list_of_aml_vals.append(credit_aml)
     
@@ -589,6 +591,7 @@ class CuadreDeCaja(models.Model):
                 amount,
                 False,
                 description,
+                partner_id=self.company_id.partner_id,
             )
         
         # MANEJAR TARJETA DE CREDITO Y SU COMISION
@@ -608,7 +611,11 @@ class CuadreDeCaja(models.Model):
                     itbis_retenido_tc,
                     False,
                     'ITBIS Retenido por Cobros con Tarjeta de Crédito',
+                    partner_id=tc_partner_id,
                 )
+            
+            tc_partner_id = self.company_id.tc_partner_id
+            
             self.create_aml_dict(
                 list_of_aml_vals,
                 self.company_id.tc_comision_account_id,
@@ -616,6 +623,7 @@ class CuadreDeCaja(models.Model):
                 comision_proveedor_tc,
                 False,
                 'Comisiones Bancarias por Cobros con Tarjeta de Crédito',
+                partner_id=tc_partner_id,
             )
             self.create_aml_dict(
                 list_of_aml_vals,
@@ -624,6 +632,7 @@ class CuadreDeCaja(models.Model):
                 cobro_tc_a_depositar,
                 False,
                 'Cobros con Tarjeta de Crédito',
+                partner_id=tc_partner_id,
             )
 
         self.deposito_dop_move_id = self.create_move(list_of_aml_vals, 
@@ -652,6 +661,7 @@ class CuadreDeCaja(models.Model):
                 description,
                 amount,
                 self.currency_usd_id
+                partner_id=self.company_id.partner_id,
         )
         self.deposito_usd_move_id = self.create_move(list_of_aml_vals, 
                                                      name='DEPÓSITO A BANCO USD', 

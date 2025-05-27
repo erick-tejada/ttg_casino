@@ -113,6 +113,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-6 col-12 o_setting_box" id="tc_partner_id" title="Contacto de Tarjeta de Credito.">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="tc_partner_id" class="col-lg-3 o_light_label"/>
+                                            <field name="tc_partner_id"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Contacto a ser utilizado para las líneas de Comisiones de Cobro de Tarjeta de Credito.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
 
