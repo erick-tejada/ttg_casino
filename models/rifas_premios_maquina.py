@@ -20,7 +20,7 @@ class OtrosPagos(models.Model):
     employee_id = fields.Many2one('hr.employee', string="Cajero", domain="['|', ('job_title', 'in', ['CAJERO', 'CAJERA', 'Cajera', 'Cajero']),('department_id','=',10)]", required=True)
     employee_sales_id = fields.Many2one('hr.employee', string="Servicio al Cliente", domain="[('department_id','=',7)]", required=True)
     premio_id = fields.Many2one('casino.tipo.premio', string='Premio', required=True)
-    hour = fields.Char('Hora', length='8')
+    hour = fields.Char('Hora')
 
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
     ref = fields.Char('Código Cliente', related='partner_id.ref', store=True, index=True)
