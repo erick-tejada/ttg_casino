@@ -660,7 +660,7 @@ class CuadreDeCaja(models.Model):
                 False,
                 description,
                 amount,
-                self.currency_usd_id
+                self.currency_usd_id,
                 partner_id=self.company_id.partner_id,
         )
         self.deposito_usd_move_id = self.create_move(list_of_aml_vals, 
