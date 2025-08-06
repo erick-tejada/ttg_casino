@@ -21,6 +21,11 @@ class ResConfigSettings(models.TransientModel):
     dop_boveda_account_id = fields.Many2one(related='company_id.dop_boveda_account_id', readonly=False, help='Cuenta con valor en Bóveda de Pesos.')
     usd_boveda_account_id = fields.Many2one(related='company_id.usd_boveda_account_id', readonly=False, help='Cuenta con valor en Bóveda de Dólares.')
 
+    # Fondos Informativos
+    dop_mesa_fondo = fields.Float(related='company_id.dop_mesa_fondo', readonly=False, help='Fondo en DOP a mantener en la Mesa de Pesos.')
+    usd_mesa_fondo = fields.Float(related='company_id.usd_mesa_fondo', readonly=False, help='Fondo en USD a mantener en la Mesa de Dólares.')
+    dop_maquinas_fondo = fields.Float(related='company_id.dop_maquinas_fondo', readonly=False, help='Fondo en DOP a mantener en la Maquina de Pesos.')
+    
     # Asiento Contable
     cierre_journal_id = fields.Many2one(related='company_id.cierre_journal_id', readonly=False, help='Diario con el cual se asentarán los ingresos diarios.')
     caja_maquina_account_id = fields.Many2one(related='company_id.caja_maquina_account_id', readonly=False, help='Cuenta de Caja Máquinas DOP.')

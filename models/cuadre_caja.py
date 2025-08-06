@@ -186,6 +186,13 @@ class CuadreDeCaja(models.Model):
     usd_boveda_fondo_diponible = fields.Monetary('Fondo Disponible Boveda USD', currency_field='currency_usd_id', compute='_compute_fondos', store=True)
     usd_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda USD', compute='_compute_fondos', store=True, help='Cuenta con valor en Bóveda de Dólares.')
 
+    
+    # FONDOS INFORMATIVOS
+    dop_mesa_fondo = fields.Monetary('Fondo Mesa DOP', compute='_compute_fondos_informativos', store=True, help='Fondo en DOP a mantener en la Mesa de Pesos.')
+    usd_mesa_fondo = fields.Monetary('Fondo Mesa USD', currency_field='currency_usd_id', compute='_compute_fondos_informativos', store=True, help='Fondo en USD a mantener en la Mesa de Dólares.')
+    dop_maquinas_fondo = fields.Monetary('Fondo Maquinas DOP', compute='_compute_fondos_informativos', store=True, help='Fondo en DOP a mantener en la Maquina de Pesos.')
+    # ----------------------------------------------------------------------------------------------------------------
+    
     # DEPOSITOS
     # ----------------------------------------------------------------------------------------------------------------
     # DOP
@@ -738,6 +745,25 @@ class CuadreDeCaja(models.Model):
         balance = self.env.cr.dictfetchall()[0].get('sum', 0.0)
         return balance if balance else 0.0
 
+    @api.depends('date')
+    def _compute_fondos_informativos(self):
+        for record in self:
+
+            if not record.dop_mesa_fondo or not record.usd_mesa_fondo or not record.dop_maquinas_fondo:
+                # DOP
+                dop_mesa_fondo = record.company_id.dop_mesa_fondo
+                usd_mesa_fondo = record.company_id.usd_mesa_fondo
+                dop_maquinas_fondo = record.company_id.dop_maquinas_fondo
+            else:
+                dop_mesa_fondo = record.dop_mesa_fondo
+                usd_mesa_fondo = record.usd_mesa_fondo
+                dop_maquinas_fondo = record.dop_maquinas_fondo
+            
+            record.write({
+                'dop_mesa_fondo': dop_mesa_fondo,
+                'usd_mesa_fondo': usd_mesa_fondo,
+                'dop_maquinas_fondo': dop_maquinas_fondo,
+            })
     
     @api.depends('date')
     def _compute_fondos(self):

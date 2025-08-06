@@ -20,6 +20,11 @@ class ResComapany(models.Model):
     dop_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda DOP', help='Cuenta con valor en Bóveda de Pesos.')
     usd_boveda_fondo = fields.Float('Fondo Boveda USD', default=10000, help='Fondo en USD a mantener en la Bóveda de Dólares.')
     usd_boveda_account_id = fields.Many2one('account.account', 'Cuenta de Boveda USD', help='Cuenta con valor en Bóveda de Dólares.')
+    
+    # Fondos Informativos
+    dop_mesa_fondo = fields.Float('Fondo Mesa DOP', default=2000000, help='Fondo en DOP a mantener en la Mesa de Pesos.')
+    usd_mesa_fondo = fields.Float('Fondo Mesa USD', default=10000, help='Fondo en USD a mantener en la Mesa de Dólares.')
+    dop_maquinas_fondo = fields.Float('Fondo Maquinas DOP', default=3000000, help='Fondo en DOP a mantener en la Maquina de Pesos.')
 
     # Asiento Contable
     cierre_journal_id = fields.Many2one('account.journal', 'Diario de Ingresos', help='Diario con el cual se asentarán los ingresos diarios.')
