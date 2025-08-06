@@ -228,6 +228,7 @@ class CuadreDeCaja(models.Model):
         return self._redirect_if_needed(next_state)
 
     def action_done(self):
+        
         # Clear Moves
         self._delete_moves()
 
@@ -236,8 +237,23 @@ class CuadreDeCaja(models.Model):
 
         # Create Moves
         self._create_moves()
-        # TODO REMOVE COMMENT TO CHANGE STATE PROPERLY
         self.state = 'done'
+        
+        # Si la compañía tiene activado el refresco de futuros cuadre
+        # Solo ejecutar si NO se está llamando desde un cuadre anterior (para evitar recursión)
+        if self.company_id.casino_refresh_future and not self.env.context.get('called_from_previous_cuadre'):
+            future_cuadres = self.env['casino.cuadre'].search(
+            [('company_id', '=', self.company_id.id), ('date', '>', self.date)],
+            order='date asc'
+            )
+            for cuadre in future_cuadres:
+            if cuadre.state != 'done':
+                cuadre._compute_all()
+            else:
+                cuadre.with_context(called_from_previous_cuadre=True).action_done()
+            cuadre.message_post(
+            body="Este cuadre fue recalculado automáticamente porque el cuadre del día %s fue cerrado." % (self.date.strftime('%d/%m/%Y'))
+            )
 
     def _delete_moves(self):
         if self.deposito_dop_move_id:

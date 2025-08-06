@@ -5,6 +5,7 @@ from odoo import fields, models, api
 class ResComapany(models.Model):
     _inherit = 'res.company'
 
+    casino_refresh_future = fields.Boolean('Refrescar Balances Futuros', default=True, help='Si está activo, al Cerrar un Cuadre, si existen cuadres futuros, se actualizarán los balances automáticamente.')
     casino_tasa_usd = fields.Float('Tasa USD Caja', default=55.0, help='Tasa USD utilizada para el cambio de Divisas en el Módulo de Ingresos.')
 
     # Comisiones de Tarjeta de Credito

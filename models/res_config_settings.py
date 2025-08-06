@@ -4,7 +4,8 @@ from odoo import fields, models, api
 
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
-    
+
+    casino_refresh_future = fields.Boolean('Refrescar Balances Futuros', related='company_id.casino_refresh_future', help='Si está activo, al Cerrar un Cuadre, si existen cuadres futuros, se actualizarán los balances automáticamente.')
     casino_tasa_usd = fields.Float('Tasa USD Caja', related='company_id.casino_tasa_usd', readonly=False, help='Tasa USD utilizada para el cambio de Divisas en el Módulo de Ingresos.')
 
     # Comisiones de Tarjeta de Credito

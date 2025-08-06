@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[hasclass('settings')]" position="inside">
                     <div class="app_settings_block" data-string="Casino" string="Casino" data-key="ttg_casino" groups="ttg_casino.group_casino_accountant">
-                        <h2>Tasa Divisa USD</h2>
+                        <h2>Generales</h2>
                         <div class="row mt16 o_settings_container" name="divisa_setting_container">
                             <div class="col-lg-6 col-12 o_setting_box" id="divisa" title="Tasa de Cambio de Divisas utilizadas en la venta de monedas extranjeras.">
                                 <div class="o_setting_right_pane">
@@ -20,6 +20,21 @@
                                         </div>
                                         <div class="text-muted">
                                             Tasa utilizada para los Registros de Ingresos de Caja.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt16 o_settings_container" name="casino_refresh_future_setting_container">
+                            <div class="col-lg-6 col-12 o_setting_box" id="casino_refresh_future" title="Refrescar Balances Futuros">
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Refrescar Balances Futuros" for="casino_refresh_future" class="col-lg-3 o_light_label"/>
+                                            <field name="casino_refresh_future"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Si está activo, al Cerrar un Cuadre, si existen cuadres futuros se actualizarán los balances automáticamente.
                                         </div>
                                     </div>
                                 </div>
