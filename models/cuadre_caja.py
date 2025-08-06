@@ -247,13 +247,13 @@ class CuadreDeCaja(models.Model):
             order='date asc'
             )
             for cuadre in future_cuadres:
-            if cuadre.state != 'done':
-                cuadre._compute_all()
-            else:
-                cuadre.with_context(called_from_previous_cuadre=True).action_done()
-            cuadre.message_post(
-            body="Este cuadre fue recalculado automáticamente porque el cuadre del día %s fue cerrado." % (self.date.strftime('%d/%m/%Y'))
-            )
+                if cuadre.state != 'done':
+                    cuadre._compute_all()
+                else:
+                    cuadre.with_context(called_from_previous_cuadre=True).action_done()
+                cuadre.message_post(
+                    body="Este cuadre fue recalculado automáticamente porque el cuadre del día %s fue cerrado." % (self.date.strftime('%d/%m/%Y'))
+                )
 
     def _delete_moves(self):
         if self.deposito_dop_move_id:
