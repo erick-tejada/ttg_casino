@@ -289,29 +289,57 @@
                         <th colspan="5" class="text-center">FONDOS</th>
                     </tr>
                     <tr>
-                        <th colspan="2" class="text-center">FONDOS DE BÓVEDA</th>
-                        <th width="25px;"></th>
-                        <th colspan="2" class="text-center">FONDOS DISPONIBLES ANTES DEL CUADRE</th>
+                        <th colspan="2" class="text-center">FONDOS OPERATIVOS DOP</th>
+                        <th wdith="25%"></th>
+                        <th colspan="2" class="text-center">FONDOS OPERATIVOS USD</th>
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
                     <tr>
-                        <td>Fondo Bóveda DOP</td>
+                        <td><strong>Fondo Bóveda DOP</strong></td>
                         <td class="text-right"><span t-field="doc.dop_boveda_fondo"/></td>
-                        <td></td>
-                        <td>Disponible DOP</td>
-                        <td class="text-right"><span t-field="doc.dop_boveda_fondo_diponible"/></td>
+                        <td wdith="25%"></td>
+                        <td><strong>Fondo Boveda USD</strong></td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo"/></td>
                     </tr>
                     <tr>
-                        <td>Fondo Boveda USD</td>
-                        <td class="text-right"><span t-field="doc.usd_boveda_fondo"/></td>
+                        <td><strong>Fondo Mesa DOP</strong></td>
+                        <td class="text-right"><span t-field="doc.dop_mesa_fondo"/></td>
+                        <td wdith="25%"></td>
+                        <td><strong>Fondo Mesa USD</strong></td>
+                        <td class="text-right"><span t-field="doc.usd_mesa_fondo"/></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fondo Maquinas DOP</strong></td>
+                        <td class="text-right"><span t-field="doc.dop_maquinas_fondo"/></td>
+                        <td wdith="25%"></td>
                         <td></td>
-                        <td>Disponible USD</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        
+                        <td><strong>Total Fondos DOP</strong></td>
+                        <td class="text-right"><strong><span t-esc="doc.dop_boveda_fondo + doc.dop_mesa_fondo + doc.dop_maquinas_fondo" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong></td>
+                        <td wdith="25%"></td>
+                        <td><strong>Total Fondos USD</strong></td>
+                        <td class="text-right"><strong><span t-esc="doc.usd_boveda_fondo + doc.usd_mesa_fondo" t-options='{"widget": "monetary", "display_currency": doc.currency_usd_id}'/></strong></td>
+                    </tr>
+                </tbody>
+                <thead >
+                    <tr class="active" style="background-color: #F8F8FF; border-top: 3px solid;">
+                        <th colspan="5" class="text-center">DISPONIBLE ANTES DEL CUADRE</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <tr>
+                        <td><strong>Disponible Bóveda DOP</strong></td>
+                        <td class="text-right"><span t-field="doc.dop_boveda_fondo_diponible"/></td>
+                        <td wdith="25%"></td>
+                        <td><strong>Disponible Bóveda USD</strong></td>
                         <td class="text-right"><span t-field="doc.usd_boveda_fondo_diponible"/></td>
                     </tr>
                 </tbody>
             </table>
-            <br/>
             <div class="row">
                 <div class="col-6">
                     <table class="table table-sm o_main_table">
@@ -477,7 +505,6 @@
             </div>
             <br/>
             <br/>
-            <br/>
 
             <div class="row text-center">
                 <div class="col-5" style="border-top: 1px solid #bbb;">
@@ -513,8 +540,8 @@
                         <th colspan="5" class="text-center">FONDOS</th>
                     </tr>
                     <tr>
-                        <th colspan="2" class="text-center">FONDOS DE BÓVEDA</th>
-                        <th width="25px;"></th>
+                        <th colspan="2" class="text-center">FONDOS OPERATIVOS DOP</th>
+                        <th colspan="2" class="text-center">FONDOS OPERATIVOS USD</th>
                         <th colspan="2" class="text-center">FONDOS DISPONIBLES ANTES DEL CUADRE</th>
                     </tr>
                 </thead>
@@ -522,18 +549,38 @@
                     <tr>
                         <td>Fondo Bóveda DOP</td>
                         <td class="text-right"><span t-field="doc.dop_boveda_fondo"/></td>
-                        <td></td>
-                        <td>Disponible DOP</td>
+                        <td>Fondo Boveda USD</td>
+                        <td class="text-right"><span t-field="doc.usd_boveda_fondo"/></td>
+                        <td>Disponible Bóveda DOP</td>
                         <td class="text-right"><span t-field="doc.dop_boveda_fondo_diponible"/></td>
                     </tr>
                     <tr>
-                        <td>Fondo Boveda USD</td>
-                        <td class="text-right"><span t-field="doc.usd_boveda_fondo"/></td>
-                        <td></td>
-                        <td>Disponible USD</td>
+                        <td>Fondo Mesa DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_mesa_fondo"/></td>
+                        <td>Fondo Mesa USD</td>
+                        <td class="text-right"><span t-field="doc.usd_mesa_fondo"/></td>
+                        <td>Disponible Bóveda USD</td>
                         <td class="text-right"><span t-field="doc.usd_boveda_fondo_diponible"/></td>
                     </tr>
+                    <tr>
+                        <td>Fondo Maquinas DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_maquinas_fondo"/></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total Fondos DOP</td>
+                        <td class="text-right"><span t-field="doc.dop_maquinas_fondo"/></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </tbody>
+            </table>
+            <table class="table table-sm o_main_table">
                 <thead >
                     <tr class="active" style="background-color: #F8F8FF;">
                         <th colspan="5" class="text-center">OPERACIONES EN PESOS (DOP)</th>
