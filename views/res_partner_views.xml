@@ -4,17 +4,19 @@
             <field name="name">res.partner.casino.form.inherit</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="groups_id" eval="[(4, ref('ttg_casino.group_casino_audit'))]"/>
+<!--                no se puede usar groups_id en una vista heredada &ndash;&gt;            -->
+<!--            <field name="groups_id" eval="[(4, ref('ttg_casino.group_casino_audit'))]"/>-->
             <field name="arch" type="xml">
+<!--               se aplican los grupos directamente a los campos -->
                 <field name="function" position="before">
-                    <field name="x_is_casino_client"/>
-                    <field name="casino_categ" attrs="{'invisible': [('x_is_casino_client','=',False)]}"/>
+                    <field name="x_is_casino_client" groups="ttg_casino.group_casino_audit"/>
+                    <field name="casino_categ" invisible="x_is_casino_client == False" groups="ttg_casino.group_casino_audit"/>
                 </field>
                 <field name="category_id" position="after">
-                    <field name="x_is_lender" groups="ttg_casino.group_casino_audit"/>
-                    <field name="x_tier2_amount" groups="ttg_casino.group_casino_audit" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
-                    <field name="x_tier1_percent" groups="ttg_casino.group_casino_audit" widget="percentage" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
-                    <field name="x_tier2_percent" groups="ttg_casino.group_casino_audit" widget="percentage" attrs="{'invisible': [('x_is_lender','=',False)]}"/>
+                    <field name="x_is_lender" groups="ttg_casino.group_casino_audit" />
+                    <field name="x_tier2_amount" groups="ttg_casino.group_casino_audit" invisible="x_is_lender == False"/>
+                    <field name="x_tier1_percent" groups="ttg_casino.group_casino_audit" widget="percentage" invisible="x_is_lender == False"/>
+                    <field name="x_tier2_percent" groups="ttg_casino.group_casino_audit" widget="percentage" invisible="x_is_lender == False"/>
                 </field>
             </field>
         </record>
@@ -43,8 +45,8 @@
                         <div class="oe_title">
                             <field name="company_type" options="{'horizontal': true}" widget="radio" groups="base.group_no_one"/>
                             <h1>
-                                <field id="company" name="name" default_focus="1" placeholder="e.g. Lumber Inc" attrs="{'required' : [('type', '=', 'contact')], 'invisible': [('is_company','=', False)]}"/>
-                                <field id="individual" name="name" default_focus="1" placeholder="e.g. Brandom Freeman" attrs="{'required' : [('type', '=', 'contact')], 'invisible': [('is_company','=', True)]}"/>
+                                <field id="company" name="name" default_focus="1" placeholder="e.g. Lumber Inc" required="type == 'contact'" invisible="is_company == False"/>
+                                <field id="individual" name="name" default_focus="1" placeholder="e.g. Brandom Freeman" required="type == 'contact'" invisible="is_company == True"/>
                             </h1>
                             <field name="x_marca_maquina_ids" invisible="1"/>
                             <field name="x_marca_mesa_ids" invisible="1"/>
@@ -79,27 +81,27 @@
 
         <!-- USER: NO CREATE/DELETE -->
 
-        <record id="view_casino_partner_prestamista_tree_user" model="ir.ui.view">
-            <field name="name">view_casino_partner_prestamista_tree_user</field>
+        <record id="view_casino_partner_prestamista_list_user" model="ir.ui.view">
+            <field name="name">view_casino_partner_prestamista_list_user</field>
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
-                <tree string="Prestamistas" create="0" delete="0">
+                <list string="Prestamistas" create="0" delete="0">
                     <field name="company_id" invisible="1"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="display_name" string="Nombre"/>
                     <field name="x_amount_available"/>
                     <button type="object" name="open_lender_deposits" icon="fa-list"/>
                     <field name="active" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_casino_partner_prestamista_user" model="ir.actions.act_window">
             <field name="name">Prestamistas</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">list</field>
             <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_casino_partner_prestamista_tree_user')}),]"/>
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_casino_partner_prestamista_list_user')}),]"/>
             <field name="search_view_id" ref="view_casino_partner_prestamista_filter"/>
             <field name="context">{'search_default_x_is_lender_filter': 1, 'default_x_is_lender': True}</field>
             <field name="help" type="html">
@@ -112,27 +114,27 @@
 
         <!-- ACCOUNTING: NO CREATE/DELETE -->
 
-        <record id="view_casino_partner_prestamista_tree" model="ir.ui.view">
-            <field name="name">view_casino_partner_prestamista_tree</field>
+        <record id="view_casino_partner_prestamista_list" model="ir.ui.view">
+            <field name="name">view_casino_partner_prestamista_list</field>
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
-                <tree string="Prestamistas" multi_edit="1">
+                <list string="Prestamistas" multi_edit="1">
                     <field name="company_id" invisible="1"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="display_name" string="Nombre"/>
                     <field name="x_amount_available"/>
                     <button type="object" name="open_lender_deposits" icon="fa-list"/>
                     <field name="active" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_casino_partner_prestamista" model="ir.actions.act_window">
             <field name="name">Prestamistas</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">list</field>
             <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_casino_partner_prestamista_tree')}),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_casino_partner_prestamista_list')}),
                 (0, 0, {'view_mode': 'form', 'view_id': ref('view_casino_partner_prestamista_form')})]"/>
             <field name="search_view_id" ref="view_casino_partner_prestamista_filter"/>
             <field name="context">{'search_default_x_is_lender_filter': 1, 'default_x_is_lender': True}</field>
@@ -157,7 +159,7 @@
         <record id="action_casino_partner_cliente" model="ir.actions.act_window">
             <field name="name">Clientes Casino</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="search_view_id" ref="view_casino_partner_cliente_filter"/>
             <field name="context">{'search_default_x_is_casino_client': 1, 'default_x_is_casino_client': True}</field>
             <field name="help" type="html">

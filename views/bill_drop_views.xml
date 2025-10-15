@@ -35,7 +35,7 @@
                                         <tr>
                                             <td class="text-center">2000</td>
                                             <td class="text-center">
-                                                <field name="qty_2000" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                                <field name="qty_2000" readonly="state == 'done'"/>
                                             </td>
                                             <td class="text-right">
                                                 <field name="amount_2000"/>
@@ -44,7 +44,7 @@
                                         <tr>
                                             <td class="text-center">1000</td>
                                             <td class="text-center">
-                                                <field name="qty_1000" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                                <field name="qty_1000" readonly="state == 'done'"/>
                                             </td>
                                             <td class="text-right">
                                                 <field name="amount_1000"/>
@@ -53,7 +53,7 @@
                                         <tr>
                                             <td class="text-center">500</td>
                                             <td class="text-center">
-                                                <field name="qty_500" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                                <field name="qty_500" readonly="state == 'done' "/>
                                             </td>
                                             <td class="text-right">
                                                 <field name="amount_500"/>
@@ -62,7 +62,7 @@
                                         <tr>
                                             <td class="text-center">200</td>
                                             <td class="text-center">
-                                                <field name="qty_200" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                                <field name="qty_200" readonly="state == 'done' "/>
                                             </td>
                                             <td class="text-right">
                                                 <field name="amount_200"/>
@@ -71,7 +71,7 @@
                                         <tr>
                                             <td class="text-center">100</td>
                                             <td class="text-center">
-                                                <field name="qty_100" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                                <field name="qty_100" readonly="state == 'done' "/>
                                             </td>
                                             <td class="text-right">
                                                 <field name="amount_100"/>
@@ -80,7 +80,7 @@
                                         <tr>
                                             <td class="text-center">50</td>
                                             <td class="text-center">
-                                                <field name="qty_50" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                                <field name="qty_50" readonly="state == 'done'"/>
                                             </td>
                                             <td class="text-right">
                                                 <field name="amount_50"/>
@@ -102,11 +102,11 @@
         </field>
     </record>
 
-    <record id="view_bill_drop_tree" model="ir.ui.view">
+    <record id="view_bill_drop_list" model="ir.ui.view">
         <field name="name">casino.bill.drop</field>
         <field name="model">casino.bill.drop</field>
         <field name="arch" type="xml">
-            <tree string="Bill Drop" create="0" delete="0" decoration-danger="maquina_state == 'not_operational'" editable="top">
+            <list string="Bill Drop" create="0" delete="0" decoration-danger="maquina_state == 'not_operational'" editable="top">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="maquina_state" invisible="1"/>
@@ -126,15 +126,15 @@
                 <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
 
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
-    <record id="view_bill_drop_readonly_tree" model="ir.ui.view">
+    <record id="view_bill_drop_readonly_list" model="ir.ui.view">
         <field name="name">casino.bill.drop</field>
         <field name="model">casino.bill.drop</field>
         <field name="arch" type="xml">
-            <tree string="Bill Drop" create="0" delete="0" edit="0" decoration-danger="maquina_state == 'not_operational'">
+            <list string="Bill Drop" create="0" delete="0" edit="0" decoration-danger="maquina_state == 'not_operational'">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="maquina_state" invisible="1"/>
@@ -160,7 +160,7 @@
                 <field name="amount_total" sum="Total" optional="show" decoration-bf="1"/>
 
                 <field name="state" optional="show" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -191,8 +191,8 @@
     <record id="action_bill_drop" model="ir.actions.act_window">
         <field name="name">Bill Drop</field>
         <field name="res_model">casino.bill.drop</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_bill_drop_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_bill_drop_list"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Bill Drop.
@@ -203,8 +203,8 @@
     <record id="action_bill_drop_readonly" model="ir.actions.act_window">
         <field name="name">Bill Drop</field>
         <field name="res_model">casino.bill.drop</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_bill_drop_readonly_tree"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_bill_drop_readonly_list"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Bill Drop.

@@ -1,11 +1,11 @@
 <odoo>
 <!-- FORM -->
 
-    <record id="view_marca_maquina_tree" model="ir.ui.view">
+    <record id="view_marca_maquina_list" model="ir.ui.view">
         <field name="name">casino.marca.maquina</field>
         <field name="model">casino.marca.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Marcas Maquinas" editable="bottom">
+            <list string="Marcas Maquinas" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -17,15 +17,15 @@
                 <field name="amount" sum="Total" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
-    <record id="view_marca_maquina_tree_readonly" model="ir.ui.view">
+    <record id="view_marca_maquina_list_readonly" model="ir.ui.view">
         <field name="name">casino.marca.maquina</field>
         <field name="model">casino.marca.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Marcas Maquinas" create="0" edit="0" delete="0">
+            <list string="Marcas Maquinas" create="0" edit="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -37,7 +37,7 @@
                 <field name="amount" sum="Total" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -67,8 +67,8 @@
     <record id="action_marca_maquina" model="ir.actions.act_window">
         <field name="name">Marcas Máquinas</field>
         <field name="res_model">casino.marca.maquina</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_marca_maquina_tree"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_marca_maquina_list"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Marcas de Maquinas.
@@ -79,8 +79,8 @@
     <record id="action_marca_maquina_readonly" model="ir.actions.act_window">
         <field name="name">Marcas Máquinas</field>
         <field name="res_model">casino.marca.maquina</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_marca_maquina_tree_readonly"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_marca_maquina_list_readonly"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Marcas de Maquinas.

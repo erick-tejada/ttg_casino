@@ -1,11 +1,11 @@
 <odoo>
 <!-- FORM -->
 
-    <record id="view_marca_mesa_tree" model="ir.ui.view">
+    <record id="view_marca_mesa_list" model="ir.ui.view">
         <field name="name">casino.marca.mesa</field>
         <field name="model">casino.marca.mesa</field>
         <field name="arch" type="xml">
-            <tree string="Marcas Mesas" editable="bottom">
+            <list string="Marcas Mesas" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -18,15 +18,15 @@
                 <field name="amount" sum="Total" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
-    <record id="view_marca_mesa_tree_readonly" model="ir.ui.view">
+    <record id="view_marca_mesa_list_readonly" model="ir.ui.view">
         <field name="name">casino.marca.mesa</field>
         <field name="model">casino.marca.mesa</field>
         <field name="arch" type="xml">
-            <tree string="Marcas Mesas" create="0" edit="0" delete="0">
+            <list string="Marcas Mesas" create="0" edit="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -38,7 +38,7 @@
                 <field name="amount" sum="Total" optional="show"/>
                 <field name="note" optional="show"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -68,8 +68,8 @@
     <record id="action_marca_mesa" model="ir.actions.act_window">
         <field name="name">Marca Mesas</field>
         <field name="res_model">casino.marca.mesa</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_marca_mesa_tree"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_marca_mesa_list"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Marcas de mesas.
@@ -80,8 +80,8 @@
     <record id="action_marca_mesa_readonly" model="ir.actions.act_window">
         <field name="name">Marca Mesas</field>
         <field name="res_model">casino.marca.mesa</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_marca_mesa_tree_readonly"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_marca_mesa_list_readonly"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Marcas de mesas.

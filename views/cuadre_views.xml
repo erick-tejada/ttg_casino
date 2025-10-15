@@ -7,21 +7,21 @@
           <form string="Cuadre" create="false">
             <header>
                 <button string="Devolver a Borrador" name="action_draft" type="object" groups="ttg_casino.group_casino_accountant"
-                                attrs="{'invisible': [('state', '!=', 'done')]}" confirm="Está seguro que desea Devolver a Borrador? Esto Reversará los asientos contables anteriores."/>
+                                invisible="state != 'done'" confirm="Está seguro que desea Devolver a Borrador? Esto Reversará los asientos contables anteriores."/>
 
                 <button string="Presentar a Auditor" name="action_audit" type="object" class="oe_highlight"
-                                attrs="{'invisible': [('state', '!=', 'draft')]}" confirm="Está seguro que desea Presentar este cuadre al Auditor?"/>
+                                invisible="state != 'draft'" confirm="Está seguro que desea Presentar este cuadre al Auditor?"/>
 
                 <button string="Presentar a Contabilidad" name="action_accounting" groups="ttg_casino.group_casino_audit"
-                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'audit')]}" confirm="Está seguro que desea Presentar este cuadre a Contabilidad?"/>
+                        type="object" class="oe_highlight" invisible="state != 'audit'" confirm="Está seguro que desea Presentar este cuadre a Contabilidad?"/>
 
                 <button string="Cerrar y Contabilizar" name="action_done" groups="ttg_casino.group_casino_accountant"
-                        type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'accounting')]}" confirm="Está seguro que desea Cerrar y Contabilizar este cuadre?"/>
+                        type="object" class="oe_highlight" invisible="state != 'accounting' " confirm="Está seguro que desea Cerrar y Contabilizar este cuadre?"/>
                 <field name="state" widget="statusbar" statusbar_visible="draft,audit,accounting,done"/>
             </header>
             <sheet>
                 <div class="oe_button_box" name="button_box">
-                    <button class="oe_stat_button" name="open_all_move_lines" icon="fa-list" attrs="{'invisible': [('state', '!=', 'done')]}"
+                    <button class="oe_stat_button" name="open_all_move_lines" icon="fa-list" invisible="state != 'done'"
                             type="object" groups="ttg_casino.group_casino_accountant">
                         <div class="o_field_widget o_stat_info">
                             <span>
@@ -37,7 +37,7 @@
                 </div>
                 <group>
                     <group>
-                        <field name="encargado_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="encargado_id" options="{'no_open': True, 'no_create': True}" readonly="state != 'draft'"/>
                     </group>
                 </group>
 
@@ -118,7 +118,7 @@
                                 <label for="casino_tasa_usd"/>
                                 <div class="o_row">
                                     <field name="casino_tasa_usd" readonly="1" force_save="1"/>
-                                    <button name="action_refresh_tasa_usd"  attrs="{'invisible': [('state', '=', 'done')]}" class="btn fa fa-refresh" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
+                                    <button name="action_refresh_tasa_usd"  invisible="state == 'done'" class="btn fa fa-refresh" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
                                 </div>
                                 <field name="cambio_dolares" force_save="1"/>
                                 <field name="dop_cambio_dolares" force_save="1"/>
@@ -431,20 +431,20 @@
                     </page>
                 </notebook>
             </sheet>
-            <div class="oe_chatter">
+            <chatter>
                 <field name="message_follower_ids"/>
                 <field name="activity_ids"/>
                 <field name="message_ids"/>
-            </div>
+            </chatter>
           </form>
         </field>
     </record>
     
-    <record id="view_cuadre_tree" model="ir.ui.view">
+    <record id="view_cuadre_list" model="ir.ui.view">
         <field name="name">casino.cuadre</field>
         <field name="model">casino.cuadre</field>
         <field name="arch" type="xml">
-            <tree string="Cuadre">
+            <list string="Cuadre">
                 <field name="currency_id" invisible="1"/>
                 <field name="currency_usd_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
@@ -456,8 +456,8 @@
                 <field name="resultado_usd_caja_mesa" optional="show" decoration-danger="resultado_usd_caja_mesa &lt; 0.0"/>
                 <field name="activity_ids" widget="list_activity" optional="show"/>
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-                <field name="cash_received" groups="ttg_casino.group_casino_manager" force_save="1" attrs="{'readonly': [('cash_received', '=', True)]}" widget="boolean_toggle"/>
-            </tree>
+                <field name="cash_received" groups="ttg_casino.group_casino_manager" force_save="1" readonly="cash_received == True" widget="boolean_toggle"/>
+            </list>
         </field>
     </record>
 
@@ -477,8 +477,8 @@
     <record id="action_cuadre" model="ir.actions.act_window">
         <field name="name">Cuadre de Caja</field>
         <field name="res_model">casino.cuadre</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_cuadre_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_cuadre_list"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Cuadres de Caja.
@@ -511,7 +511,7 @@
     <record id="action_report_cuadres_maquinas" model="ir.actions.act_window">
         <field name="name">Reporte de Operaciones de Máquinas</field>
         <field name="res_model">casino.cuadre</field>
-        <field name="view_mode">pivot,tree</field>
+        <field name="view_mode">pivot,list</field>
         <field name="view_id" ref="view_cuadre_maquina_pivot"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -548,7 +548,7 @@
     <record id="action_report_cuadres_mesas" model="ir.actions.act_window">
         <field name="name">Reporte de Operaciones de Mesas</field>
         <field name="res_model">casino.cuadre</field>
-        <field name="view_mode">pivot,tree</field>
+        <field name="view_mode">pivot,list</field>
         <field name="view_id" ref="view_cuadre_mesa_pivot"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

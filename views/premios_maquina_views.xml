@@ -1,11 +1,11 @@
 <odoo>
 <!-- FORM -->
 
-    <record id="view_premios_maquina_tree" model="ir.ui.view">
+    <record id="view_premios_maquina_list" model="ir.ui.view">
         <field name="name">casino.premios.maquina</field>
         <field name="model">casino.premios.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Premios Maquinas" editable="bottom">
+            <list string="Premios Maquinas" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -21,15 +21,15 @@
                 <field name="premio_id" optional="show" options="{'no_open': True, 'no_create': True}"/>
                 <field name="note" optional="show" groups="ttg_casino.group_casino_audit"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
-    <record id="view_premios_maquina_tree_readonly" model="ir.ui.view">
+    <record id="view_premios_maquina_list_readonly" model="ir.ui.view">
         <field name="name">casino.premios.maquina</field>
         <field name="model">casino.premios.maquina</field>
         <field name="arch" type="xml">
-            <tree string="Premios Maquinas" create="0" edit="0" delete="0">
+            <list string="Premios Maquinas" create="0" edit="0" delete="0">
                 <field name="currency_id" invisible="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="date" optional="show"/>
@@ -45,7 +45,7 @@
                 <field name="premio_id" optional="show" options="{'no_open': True, 'no_create': True}" readonly="1"/>
                 <field name="note" optional="show" groups="ttg_casino.group_casino_audit"/>
                 <field name="state" widget="badge" optional="hide" decoration-success="state == 'done'" decoration-info="state == 'audit'" decoration-warning="state == 'accounting'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -73,8 +73,8 @@
     <record id="action_premios_maquina" model="ir.actions.act_window">
         <field name="name">Premios Maquinas</field>
         <field name="res_model">casino.premios.maquina</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_premios_maquina_tree"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_premios_maquina_list"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Premios Maquinas.
@@ -85,8 +85,8 @@
     <record id="action_premios_maquina_readonly" model="ir.actions.act_window">
         <field name="name">Premios Maquinas</field>
         <field name="res_model">casino.premios.maquina</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_premios_maquina_tree_readonly"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_premios_maquina_list_readonly"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
             Detalles de Premios Maquinas.

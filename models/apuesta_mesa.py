@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import float_compare
+# from odoo.tools import float_compare
 import logging
 _logger = logging.getLogger(__name__)
 
