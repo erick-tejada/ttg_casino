@@ -65,3 +65,13 @@ class ResComapany(models.Model):
     # USD
     mesa_ingreso_usd_account_id = fields.Many2one('account.account', 'Cuenta de Ingreso por Apuestas Mesas USD', help='Cuenta de Ingreso por Mesas USD.')
     mesa_pagos_usd_account_id = fields.Many2one('account.account', 'Cuenta de Pagos por Apuestas Mesas USD', help='Cuenta de Pagos por Apuestas Mesas USD.')
+
+    x_is_mass_order_pos = fields.Boolean(
+        string='Habilitar Órdenes Masivas en POS',
+        default=False,
+    )
+
+    x_mass_order_product_ids = fields.Many2many(
+        'product.product',
+        string='Productos para Órdenes Masivas',
+    )

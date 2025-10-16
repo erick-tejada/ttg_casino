@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
 {
     'name': 'TTG - Casino',
     'author': "Tejada Tech Group EIRL",
-    'version': '18.0.0.0',
+    'version': '18.0.0.1',
     'sequence': 100,
     'category': 'Accounting/Accounting',
     'description': """

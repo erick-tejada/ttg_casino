@@ -65,3 +65,16 @@ class ResConfigSettings(models.TransientModel):
     # USD
     mesa_ingreso_usd_account_id = fields.Many2one(related='company_id.mesa_ingreso_usd_account_id', readonly=False, help='Cuenta de Ingreso por Mesas USD.')
     mesa_pagos_usd_account_id = fields.Many2one(related='company_id.mesa_pagos_usd_account_id', readonly=False, help='Cuenta de Pagos por Apuestas Mesas USD.')
+
+    x_is_mass_order_pos = fields.Boolean(
+        string='Habilitar Órdenes Masivas en POS',
+        related='company_id.x_is_mass_order_pos',
+        readonly=False
+    )
+
+    x_mass_order_product_ids = fields.Many2many(
+        'product.product',
+        string='Productos para Órdenes Masivas',
+        related='company_id.x_mass_order_product_ids',
+        readonly=False
+    )

@@ -1,369 +1,437 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+
         <record id="res_config_settings_view_form" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.casino</field>
-            <field name="model">res.config.settings</field>
-            <field name="priority" eval="35"/>
-            <field name="inherit_id" ref="base.res_config_settings_view_form" />
-            <field name="arch" type="xml">
-<!--                <xpath expr="//div[hasclass('settings')]" position="inside">-->
-                <xpath expr="//app[@name='general_settings']" position="inside">
-                    <div class="app_settings_block" data-string="Casino" string="Casino" data-key="ttg_casino" groups="ttg_casino.group_casino_accountant">
-                        <h2>Generales</h2>
-                        <div class="row mt16 o_settings_container" name="divisa_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box" id="divisa" title="Tasa de Cambio de Divisas utilizadas en la venta de monedas extranjeras.">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label string="Tasa USD Cambio Divisa" for="casino_tasa_usd" class="col-lg-3 o_light_label"/>
-                                            <field name="casino_tasa_usd"/>
+        <field name="name">res.config.settings.view.form.inherit.casino</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="77"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app
+                     data-string="Casino"
+                     string="Casino"
+                     name="ttg_casino"
+                     groups="sales_team.group_sale_manager">
+<!--&lt;!&ndash;                    BLOQUE 1&ndash;&gt;-->
+<!--                    <block title="Rentafffl">-->
+<!--                        <setting title="Those values are applied to any new rental product and can be changed on product forms." name="rental_delay_costsf" string="Default Delay Costs" help="Additional costs for late returns">-->
+<!--                            <div class="row mt16 o_settings_container" name="divisa_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box" id="divisa" title="Tasa de Cambio de Divisas utilizadas en la venta de monedas extranjeras.">-->
+<!--                                    <div class="o_setting_right_pane">-->
+<!--                                        <div class="content-group">-->
+<!--                                            <div class="row mt16">-->
+<!--                                                <label string="Tasa USD Cambio Divisa" for="casino_tasa_usd" class="col-lg-3 o_light_label"/>-->
+<!--                                                <field name="casino_tasa_usd"/>-->
+<!--                                            </div>-->
+<!--                                            <div class="text-muted">-->
+<!--                                                Tasa utilizada para los Registros de Ingresos de Caja.-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </setting>-->
+<!--                        <setting id="rental_signf" help="Ask customer to sign documents on the spot.">-->
+<!--                            <span>Test</span>-->
+<!--                        </setting>-->
+<!--                    </block>-->
+<!--                    BLOQUE 2-->
+                    <block title="Generales"  name="generales_setting_container">
+                        <setting id="divisa_setting" title="Tasa de cambio de Divisas utilizadas en la venta de monedas extranjeras." name="divisa_setting_container" string="Configuración de divisas">
+<!--                                <div class="row mt16 o_settings_container" name="divisa_setting_container">-->
+<!--                                    <div class="col-lg-6 col-12 o_setting_box" id="divisa" title="Tasa de Cambio de Divisas utilizadas en la venta de monedas extranjeras.">-->
+<!--                                        <div class="o_setting_right_pane">-->
+                                            <div class="content-group" name="divisa_setting_options">
+                                                <div class="d-flex">
+                                                    <label string="Tasa USD Cambio Divisa" for="casino_tasa_usd" class="o_light_label"/>
+                                                    <field name="casino_tasa_usd" class="ml16"/>
+                                                </div>
+                                                <div class="text-muted">
+                                                    Tasa utilizada para los Registros de Ingresos de Caja.
+                                                </div>
+                                            </div>
+                        </setting>
+                        <setting id="casino_refresh_future"  title="Refrescar Balances Futuros">
+<!--                                <div class="row mt16 o_settings_container" name="casino_refresh_future_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box" id="casino_refresh_future" title="Refrescar Balances Futuros">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" name="casino_refresh_future_setting_container">
+                                            <div class="d-flex">
+                                                <label string="Refrescar Balances Futuros" for="casino_refresh_future" class="o_light_label"/>
+                                                <field name="casino_refresh_future"  class="ml16"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Si está activo, al Cerrar un Cuadre, si existen cuadres futuros se actualizarán los balances automáticamente.
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Tasa utilizada para los Registros de Ingresos de Caja.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt16 o_settings_container" name="casino_refresh_future_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box" id="casino_refresh_future" title="Refrescar Balances Futuros">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label string="Refrescar Balances Futuros" for="casino_refresh_future" class="col-lg-3 o_light_label"/>
-                                            <field name="casino_refresh_future"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Si está activo, al Cerrar un Cuadre, si existen cuadres futuros se actualizarán los balances automáticamente.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+<!--                    bloque 3-->
 
-                        <h2>Fondos de Bóveda</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="dop_boveda_fondo" class="col-lg-3 o_light_label"/>
-                                            <field name="dop_boveda_fondo"/>
+                    <block title="Fondos de Bóveda">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="dop_boveda_fondo" class="col-lg-3 o_light_label"/>
+                                                <field name="dop_boveda_fondo"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Monto que se desea siempre permanezca en la Bóveda de Pesos.
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="dop_boveda_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="dop_boveda_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Cuenta contable que mantiene el balance de Fondo de Bóveda DOP.
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Monto que se desea siempre permanezca en la Bóveda de Pesos.
-                                        </div>                                        
-                                        <div class="row mt16">
-                                            <label for="dop_boveda_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="dop_boveda_account_id" options="{'no_create': True}"/>
+                        </setting>
+<!--                                    </div>-->
+<!--                                </div>-->
+                        <setting>
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="usd_boveda_fondo" class="col-lg-3 o_light_label"/>
+                                                <field name="usd_boveda_fondo"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Monto que se desea siempre permanezca en la Bóveda de Dólares.
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="usd_boveda_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="usd_boveda_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Cuenta contable que mantiene el balance de Fondo de Bóveda USD.
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Cuenta contable que mantiene el balance de Fondo de Bóveda DOP.
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                       </setting>
+                    </block>
+<!--                    bloque 4-->
+                    <block title="Fondos Mesa y Máquinas (Informativo)">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="dop_mesa_fondo" class="col-lg-3 o_light_label"/>
+                                                <field name="dop_mesa_fondo"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Monto que se desea siempre permanezca en la Mesa DOP.
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="usd_mesa_fondo" class="col-lg-3 o_light_label"/>
+                                                <field name="usd_mesa_fondo"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Monto que se desea siempre permanezca en la Mesa USD.
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="dop_maquinas_fondo" class="col-lg-3 o_light_label"/>
+                                                <field name="dop_maquinas_fondo"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Monto que se desea siempre permanezca en la Máquina DOP.
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="usd_boveda_fondo" class="col-lg-3 o_light_label"/>
-                                            <field name="usd_boveda_fondo"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Monto que se desea siempre permanezca en la Bóveda de Dólares.
-                                        </div>                                        
-                                        <div class="row mt16">
-                                            <label for="usd_boveda_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="usd_boveda_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Cuenta contable que mantiene el balance de Fondo de Bóveda USD.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h2>Fondos Mesa y Máquinas (Informativo)</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="dop_mesa_fondo" class="col-lg-3 o_light_label"/>
-                                            <field name="dop_mesa_fondo"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Monto que se desea siempre permanezca en la Mesa DOP.
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="usd_mesa_fondo" class="col-lg-3 o_light_label"/>
-                                            <field name="usd_mesa_fondo"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Monto que se desea siempre permanezca en la Mesa USD.
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="dop_maquinas_fondo" class="col-lg-3 o_light_label"/>
-                                            <field name="dop_maquinas_fondo"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Monto que se desea siempre permanezca en la Máquina DOP.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+<!--                    bloque 5-->
+                    <block title="Tarjeta de Crédito">
+                              <setting name="tc_setting_container" id="tc" title="ITBIS Retenido con cobros de Tarjeta de Crédito.">
+<!--                                <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                    <div class="col-lg-6 col-12 o_setting_box" id="tc" title="ITBIS Retenido con cobros de Tarjeta de Crédito.">-->
+<!--                                        <div class="o_setting_right_pane">-->
+                                            <div class="content-group">
+                                                <div class="row mt16">
+                                                    <label for="tc_itbis_percent" class="col-lg-3 o_light_label"/>
+                                                    <field name="tc_itbis_percent" widget="percentage"/>
+                                                </div>
+                                                <div class="text-muted">
+                                                    % de ITBIS Retenido en los cobros de Tarjeta de Crédito.
+                                                </div>
+                                                <div class="row mt16">
+                                                    <label for="tc_itbis_account_id" class="col-lg-3 o_light_label"/>
+                                                    <field name="tc_itbis_account_id" options="{'no_create': True}"/>
+                                                </div>
+                                                <div class="text-muted">
+                                                    Cuenta donde se registrará el ITBIS Retenido en los cobros de Tarjeta de Crédito.
+                                                </div>
+                                            </div>
+                              </setting>
+<!--                                        </div>-->
+<!--                                    </div>-->
+                             <setting id="tc" title="Gastos de Comision en cobros con Tarjeta de Crédito.">
+<!--                                    <div class="col-lg-6 col-12 o_setting_box" id="tc" title="Gastos de Comision en cobros con Tarjeta de Crédito.">-->
+<!--                                        <div class="o_setting_right_pane">-->
+                                            <div class="content-group">
+                                                <div class="d-flex">
+                                                    <label for="tc_comision_percent" class="col-lg-3 o_light_label"/>
+                                                    <field name="tc_comision_percent" widget="percentage"/>
+                                                </div>
+                                                <div class="text-muted">
+                                                    % de Comisión Retenida en los cobros de Tarjeta de Crédito.
+                                                </div>
+                                                <div class="d-flex">
+                                                    <label for="tc_comision_account_id" class="col-lg-3 o_light_label"/>
+                                                    <field name="tc_comision_account_id" options="{'no_create': True}"/>
+                                                </div>
+                                                <div class="text-muted">
+                                                    Cuenta donde se registrará la Comisión Retenida en los cobros de Tarjeta de Crédito.
+                                                </div>
+                                            </div>
+<!--                                        </div>-->
+<!--                                    </div>-->
+                             </setting>
+                             <setting id="tc_partner_id" title="Contacto de Tarjeta de Credito.">
 
-                        <h2>Tarjeta de Crédito</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box" id="tc" title="ITBIS Retenido con cobros de Tarjeta de Crédito.">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="tc_itbis_percent" class="col-lg-3 o_light_label"/>
-                                            <field name="tc_itbis_percent" widget="percentage"/>
+<!--                                    <div class="col-lg-6 col-12 o_setting_box" id="tc_partner_id" title="Contacto de Tarjeta de Credito.">-->
+<!--                                        <div class="o_setting_right_pane">-->
+                                            <div class="content-group">
+                                                <div class="d-flex">
+                                                    <label for="tc_partner_id" class="col-lg-3 o_light_label"/>
+                                                    <field name="tc_partner_id"/>
+                                                </div>
+                                                <div class="text-muted">
+                                                    Contacto a ser utilizado para las líneas de Comisiones de Cobro de Tarjeta de Credito.
+                                                </div>
+                                            </div>
+<!--                                        </div>-->
+<!--                                    </div>-->
+                          </setting>
+                    </block>
+<!--                    bloque 6-->
+                    <block title="Diario y Cuentas de Operaciones de Cajas">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="cierre_journal_id" class="col-lg-3 o_light_label"/>
+                                                <field name="cierre_journal_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Diario Contable Utilizado para las apuntes de Cierre.
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="caja_maquina_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="caja_maquina_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Cuenta de Operaciones de Caja de Maquina.
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            % de ITBIS Retenido en los cobros de Tarjeta de Crédito.
-                                        </div>                                        
-                                        <div class="row mt16">
-                                            <label for="tc_itbis_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="tc_itbis_account_id" options="{'no_create': True}"/>
+<!--                                    </div>-->
+<!--                                </div>-->
+                        </setting>
+                        <setting>
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="caja_mesa_dop_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="caja_mesa_dop_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Cuenta de Operaciones de Caja de Mesa DOP.
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="caja_mesa_usd_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="caja_mesa_usd_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="text-muted">
+                                                Cuenta de Operaciones de Caja de Mesa USD.
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Cuenta donde se registrará el ITBIS Retenido en los cobros de Tarjeta de Crédito.
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+<!--                    bloque7-->
+                    <block title="Diarios de Banco">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="banco_dop_journal_id" class="col-lg-3 o_light_label"/>
+                                                <field name="banco_dop_journal_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box" id="tc" title="Gastos de Comision en cobros con Tarjeta de Crédito.">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="tc_comision_percent" class="col-lg-3 o_light_label"/>
-                                            <field name="tc_comision_percent" widget="percentage"/>
+<!--                                    </div>-->
+<!--                                </div>-->
+                        </setting>
+                        <setting>
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group">
+                                            <div class="d-flex">
+                                                <label for="banco_usd_journal_id" class="col-lg-3 o_light_label"/>
+                                                <field name="banco_usd_journal_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            % de Comisión Retenida en los cobros de Tarjeta de Crédito.
-                                        </div>                                        
-                                        <div class="row mt16">
-                                            <label for="tc_comision_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="tc_comision_account_id" options="{'no_create': True}"/>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+                    <!--     bloque8-->
+                    <block title="Cuentas de Máquinas">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" string="Ingresos">
+                                            <div class="d-flex">
+                                                <label for="maquina_ingreso_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_ingreso_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_ingreso_marcas_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_ingreso_marcas_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_ingreso_recarga_tarjetas_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_ingreso_recarga_tarjetas_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_ingreso_sobrante_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_ingreso_sobrante_account_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Cuenta donde se registrará la Comisión Retenida en los cobros de Tarjeta de Crédito.
+<!--                                    </div>-->
+<!--                                </div>-->
+                        </setting>
+                        <setting>
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" string="Egresos/Pagos">
+                                            <div class="d-flex">
+                                                <label for="maquina_tarjeta_cashout_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_tarjeta_cashout_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_devolucion_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_devolucion_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_otros_pagos_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_otros_pagos_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_gasto_faltante_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_gasto_faltante_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="maquina_premios_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="maquina_premios_account_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box" id="tc_partner_id" title="Contacto de Tarjeta de Credito.">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="tc_partner_id" class="col-lg-3 o_light_label"/>
-                                            <field name="tc_partner_id"/>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+                    <!--                    bloque9-->
+                    <block title="Cuentas de Mesas DOP">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" string="Ingresos">
+                                            <div class="d-flex">
+                                                <label for="mesa_ingreso_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_ingreso_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="mesa_ingreso_marcas_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_ingreso_marcas_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="mesa_ingreso_comision_tc_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_ingreso_comision_tc_account_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Contacto a ser utilizado para las líneas de Comisiones de Cobro de Tarjeta de Credito.
+<!--                                    </div>-->
+<!--                                </div>-->
+                        </setting>
+                        <setting>
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" string="Egresos/Pagos">
+                                            <div class="d-flex">
+                                                <label for="mesa_pagos_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_pagos_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="mesa_efectivo_tc_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_efectivo_tc_account_id" options="{'no_create': True}"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                <label for="mesa_premios_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_premios_account_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-
-                        <h2>Diario y Cuentas de Operaciones de Cajas</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="cierre_journal_id" class="col-lg-3 o_light_label"/>
-                                            <field name="cierre_journal_id" options="{'no_create': True}"/>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+                    <!--                    bloque10-->
+                    <block title="Cuentas de Mesas USD">
+                        <setting name="tc_setting_container">
+<!--                            <div class="row mt16 o_settings_container" name="tc_setting_container">-->
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" string="Ingresos">
+                                            <div class="d-flex">
+                                                <label for="mesa_ingreso_usd_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_ingreso_usd_account_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Diario Contable Utilizado para las apuntes de Cierre.
-                                        </div>                                        
-                                        <div class="row mt16">
-                                            <label for="caja_maquina_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="caja_maquina_account_id" options="{'no_create': True}"/>
+<!--                                    </div>-->
+<!--                                </div>-->
+                        </setting>
+                        <setting>
+<!--                                <div class="col-lg-6 col-12 o_setting_box">-->
+<!--                                    <div class="o_setting_right_pane">-->
+                                        <div class="content-group" string="Egresos/Pagos">
+                                            <div class="d-flex">
+                                                <label for="mesa_pagos_usd_account_id" class="col-lg-3 o_light_label"/>
+                                                <field name="mesa_pagos_usd_account_id" options="{'no_create': True}"/>
+                                            </div>
                                         </div>
-                                        <div class="text-muted">
-                                            Cuenta de Operaciones de Caja de Maquina.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="caja_mesa_dop_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="caja_mesa_dop_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Cuenta de Operaciones de Caja de Mesa DOP.
-                                        </div>                                        
-                                        <div class="row mt16">
-                                            <label for="caja_mesa_usd_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="caja_mesa_usd_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="text-muted">
-                                            Cuenta de Operaciones de Caja de Mesa USD.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-
-                        <h2>Diarios de Banco</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="banco_dop_journal_id" class="col-lg-3 o_light_label"/>
-                                            <field name="banco_dop_journal_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group">
-                                        <div class="row mt16">
-                                            <label for="banco_usd_journal_id" class="col-lg-3 o_light_label"/>
-                                            <field name="banco_usd_journal_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h2>Cuentas de Máquinas</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group" string="Ingresos">
-                                        <div class="row mt16">
-                                            <label for="maquina_ingreso_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_ingreso_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_ingreso_marcas_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_ingreso_marcas_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_ingreso_recarga_tarjetas_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_ingreso_recarga_tarjetas_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_ingreso_sobrante_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_ingreso_sobrante_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group" string="Egresos/Pagos">
-                                        <div class="row mt16">
-                                            <label for="maquina_tarjeta_cashout_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_tarjeta_cashout_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_devolucion_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_devolucion_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_otros_pagos_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_otros_pagos_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_gasto_faltante_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_gasto_faltante_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="maquina_premios_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="maquina_premios_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h2>Cuentas de Mesas DOP</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group" string="Ingresos">
-                                        <div class="row mt16">
-                                            <label for="mesa_ingreso_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_ingreso_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="mesa_ingreso_marcas_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_ingreso_marcas_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="mesa_ingreso_comision_tc_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_ingreso_comision_tc_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group" string="Egresos/Pagos">
-                                        <div class="row mt16">
-                                            <label for="mesa_pagos_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_pagos_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="mesa_efectivo_tc_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_efectivo_tc_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="mesa_premios_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_premios_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h2>Cuentas de Mesas USD</h2>
-                        <div class="row mt16 o_settings_container" name="tc_setting_container">
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group" string="Ingresos">
-                                        <div class="row mt16">
-                                            <label for="mesa_ingreso_usd_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_ingreso_usd_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 o_setting_box">
-                                <div class="o_setting_right_pane">
-                                    <div class="content-group" string="Egresos/Pagos">
-                                        <div class="row mt16">
-                                            <label for="mesa_pagos_usd_account_id" class="col-lg-3 o_light_label"/>
-                                            <field name="mesa_pagos_usd_account_id" options="{'no_create': True}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </xpath>
-            </field>
-        </record>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
 
         <record id="action_casino_config" model="ir.actions.act_window">
             <field name="name">Casino Configuraciones</field>
@@ -371,7 +439,8 @@
             <field name="res_model">res.config.settings</field>
             <field name="view_mode">form</field>
             <field name="target">inline</field>
-            <field name="context">{'module' : 'ttg_casino'}</field>
+            <field name="view_id" ref="res_config_settings_view_form"/>
+            <field name="context">{'module' : 'ttg_casino', 'bin_size': False}</field>
         </record>
     </data>
 </odoo>
