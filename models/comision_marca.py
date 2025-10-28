@@ -83,7 +83,7 @@ class ComisionMarca(models.Model):
             if count > 1:
                 raise ValidationError('COMISIÓN DUPLICADA: No puede generar un reporte de Comisiones para el mismo prestamista dentro del mismo periodo.')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('casino.comision.marca') or 'Nuevo'
         result = super(ComisionMarca, self).create(vals)

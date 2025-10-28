@@ -37,7 +37,7 @@ class MarcaMaquina(models.Model):
         res = super(MarcaMaquina, self).unlink()
         return res
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         marca = super(MarcaMaquina, self).create(vals)
         marca._verify_state()
@@ -85,7 +85,7 @@ class MarcaMesa(models.Model):
         res = super(MarcaMesa, self).unlink()
         return res
     
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         marca = super(MarcaMesa, self).create(vals)
         marca._verify_state()
