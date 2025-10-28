@@ -1084,7 +1084,6 @@ class CuadreDeCaja(models.Model):
             record._compute_cuadre_mesa()
             record._compute_depositos()
 
-    @api.model_create_multi
     def create(self, vals):
         cuadre = super(CuadreDeCaja, self).create(vals)
         if not cuadre.bill_drop_ids:

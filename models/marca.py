@@ -37,7 +37,6 @@ class MarcaMaquina(models.Model):
         res = super(MarcaMaquina, self).unlink()
         return res
 
-    @api.model_create_multi
     def create(self, vals):
         marca = super(MarcaMaquina, self).create(vals)
         marca._verify_state()
@@ -84,8 +83,7 @@ class MarcaMesa(models.Model):
             raise ValidationError('CUADRE CERRADO: No puede borrar una Marca si el Cuadre está cerrado.')
         res = super(MarcaMesa, self).unlink()
         return res
-    
-    @api.model_create_multi
+
     def create(self, vals):
         marca = super(MarcaMesa, self).create(vals)
         marca._verify_state()
