@@ -119,7 +119,7 @@ class CuadreDeCaja(models.Model):
     ingreso_maquina = fields.Monetary('Ingreso Efectivo de Maquina', compute='_compute_cuadre_maquina', store=True)
     egreso_maquina = fields.Monetary('Pagos de Maquina', compute='_compute_cuadre_maquina', store=True)
     total_maquina = fields.Monetary('Ganancia/Perdida Maquina', compute='_compute_cuadre_maquina', store=True)
-    retencion_maquina = fields.Monetary('Retención Maquina', compute='_compute_cuadre_maquina', group_operator="avg", store=True)
+    retencion_maquina = fields.Monetary('Retención Maquina', compute='_compute_cuadre_maquina', aggregator="avg", store=True)
     resultado_caja_maquina = fields.Monetary('Resultado Caja Maquina', compute='_compute_cuadre_maquina', store=True)
     reposicion_caja_maquina = fields.Monetary('Reposicion a Caja Maquinas', compute='_compute_cuadre_maquina', store=True)
 
@@ -141,12 +141,12 @@ class CuadreDeCaja(models.Model):
 
     # CUADRE
     total_dop_mesa = fields.Monetary('Ganancia/Perdida DOP de Mesa', compute='_compute_cuadre_mesa', store=True)
-    retencion_dop_mesa = fields.Monetary('Retención Mesa DOP', compute='_compute_cuadre_mesa', group_operator="avg", store=True)
+    retencion_dop_mesa = fields.Monetary('Retención Mesa DOP', compute='_compute_cuadre_mesa', aggregator="avg", store=True)
     total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
-    retencion_usd_mesa = fields.Monetary('Retención Mesa UDS', compute='_compute_cuadre_mesa', group_operator="avg", store=True)
+    retencion_usd_mesa = fields.Monetary('Retención Mesa UDS', compute='_compute_cuadre_mesa', aggregator="avg", store=True)
     eqiv_dop_total_usd_mesa = fields.Monetary('Ganancia/Perdida USD de Mesa (DOP)', compute='_compute_cuadre_mesa', store=True)
     total_general_op_mesa = fields.Monetary('Ganancia/Perdida Total de Mesa (DOP)', compute='_compute_cuadre_mesa', store=True, help='Suma de las Ganancias/Perdidas en DOP + Equivalente en DOP de las Ganancias/Perdidas en USD.')
-    retencion_gral_mesa = fields.Monetary('Retención General', compute='_compute_cuadre_mesa', group_operator="avg", store=True)
+    retencion_gral_mesa = fields.Monetary('Retención General', compute='_compute_cuadre_mesa', aggregator="avg", store=True)
     resultado_caja_mesa = fields.Monetary('Resultado Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     reposicion_caja_mesa = fields.Monetary('Reposicion a Caja Mesa', compute='_compute_cuadre_mesa', store=True)
     resultado_usd_caja_mesa = fields.Monetary('Resultado USD Caja Mesa', currency_field='currency_usd_id', compute='_compute_cuadre_mesa', store=True)
