@@ -445,12 +445,11 @@
         <field name="model">casino.cuadre</field>
         <field name="arch" type="xml">
             <list string="Cuadre">
-                <field name="currency_id" invisible="1"/>
-                <field name="currency_usd_id" invisible="1"/>
-                <field name="company_id" invisible="1"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="currency_usd_id" optional="hide"/>
+                <field name="company_id" optional="hide"/>
                 <field name="date" optional="show"/>
                 <field name="encargado_id" optional="show"/>
-                
                 <field name="resultado_caja_maquina" optional="show" decoration-danger="resultado_caja_maquina &lt; 0.0"/>
                 <field name="resultado_caja_mesa" optional="show" decoration-danger="resultado_caja_mesa &lt; 0.0"/>
                 <field name="resultado_usd_caja_mesa" optional="show" decoration-danger="resultado_usd_caja_mesa &lt; 0.0"/>

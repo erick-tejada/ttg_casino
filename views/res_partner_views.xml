@@ -86,12 +86,12 @@
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <list string="Prestamistas" create="0" delete="0">
-                    <field name="company_id" invisible="1"/>
-                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="currency_id" optional="hide"/>
                     <field name="display_name" string="Nombre"/>
                     <field name="x_amount_available"/>
                     <button type="object" name="open_lender_deposits" icon="fa-list"/>
-                    <field name="active" invisible="1"/>
+                    <field name="active" optional="hide"/>
                 </list>
             </field>
         </record>

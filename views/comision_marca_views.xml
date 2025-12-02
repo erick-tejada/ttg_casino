@@ -79,8 +79,8 @@
         <field name="model">casino.comision.marca</field>
         <field name="arch" type="xml">
             <list string="Cuadre">
-                <field name="currency_id" invisible="1"/>
-                <field name="company_id" invisible="1"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="company_id" optional="hide"/>
                 
                 <field name="name" optional="show"/>
                 <field name="year" optional="show" widget="integer" options="{'format': 0}"/>
