@@ -5,9 +5,9 @@
             <field name="model">casino.lender.deposit</field>
             <field name="arch" type="xml">
                 <list string="Depósitos" delete="0" editable="top">
-                    <field name="company_id" invisible="1"/>
-                    <field name="currency_id" invisible="1"/>
-                    <field name="partner_id" invisible="1"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="currency_id" optional="hide"/>
+                    <field name="partner_id" optional="hide"/>
                     <field name="date"/>
                     <field name="amount" sum="Total"/>
                     <field name="note"/>

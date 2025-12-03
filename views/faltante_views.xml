@@ -6,8 +6,8 @@
         <field name="model">casino.faltante</field>
         <field name="arch" type="xml">
             <list string="Faltantes" editable="bottom">
-                <field name="currency_id" invisible="1"/>
-                <field name="company_id" invisible="1"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="company_id" optional="hide"/>
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
                 
