@@ -24,7 +24,7 @@ class OtrosPagos(models.Model):
     maquina_state = fields.Selection(related='maquina_id.state', string="Estado Máquina")
     
     employee_id = fields.Many2one('hr.employee', string="Cajero", domain="['|', ('job_title', 'in', ['CAJERO', 'CAJERA', 'Cajera', 'Cajero']),('department_id','=',10)]")
-    employee_sales_id = fields.Many2one('hr.employee', string="Slot", domain="['|', ('job_title', 'in', ['MAQUINA']),('department_id','=',13)]")
+    employee_sales_id = fields.Many2one('hr.employee', string="Slot", domain="['|', ('job_title', 'ilike', 'MAQUINA'),('department_id','=',13)]")
     hour = fields.Char('Hora')
 
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
