@@ -114,6 +114,9 @@ class CuadreDeCaja(models.Model):
     
     premios_maquina_ids = fields.One2many('casino.premios.maquina', 'cuadre_id', 'Premios/Rifas Maquinas')
     premios_maquina_total = fields.Monetary('Total Premios Maquinas', compute='_compute_premios_maquina', store=True) # Egreso
+    
+    efectivo_entregado_tc_ids = fields.One2many('casino.efectivotc.maquina', 'cuadre_id', 'Detalle Efectivo Entregado TC Maquinas')
+    efectivo_entregado_tc_total = fields.Monetary('Total Efectivo Entregado TC Maquinas', compute='_compute_efectivo_entregado_tc', store=True) # Egreso
 
     # CUADRE
     ingreso_maquina = fields.Monetary('Ingreso Efectivo de Maquina', compute='_compute_cuadre_maquina', store=True)
@@ -1024,7 +1027,7 @@ class CuadreDeCaja(models.Model):
             total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total + record.premios_maquina_total
             total_maquina = total_ingreso - total_pago
             retencion_maquina = ((total_maquina / total_ingreso) * 100) if total_ingreso else 0
-            resultado_caja_maquina = total_maquina + record.sobrante_total - record.faltante_total
+            resultado_caja_maquina = total_maquina + record.sobrante_total - record.faltante_total - record.efectivo_entregado_tc_total
             record.write({
                 'ingreso_maquina': total_ingreso,
                 'egreso_maquina': total_pago,
@@ -1083,6 +1086,7 @@ class CuadreDeCaja(models.Model):
             record._compute_cuadre_maquina()
             record._compute_cuadre_mesa()
             record._compute_depositos()
+            record._compute_efectivo_entregado_tc()
 
     @api.model
     def create(self, vals):
@@ -1152,6 +1156,26 @@ class CuadreDeCaja(models.Model):
             action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_premios_mesa")
         else:
             action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_premios_mesa_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+    
+    @api.depends('efectivo_entregado_tc_ids', 'efectivo_entregado_tc_ids.amount')
+    def _compute_efectivo_entregado_tc(self):
+        for record in self:
+            total = 0
+            for line in record.efectivo_entregado_tc_ids:
+                total += line.amount
+            record.efectivo_entregado_tc_total = total
+    
+    def open_efectivo_entregado_tc(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_efectivo_entregado_tc")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_efectivo_entregado_tc_readonly")
         action['domain'] = [('cuadre_id', '=', self.id)]
         context = {
             'default_cuadre_id': self.id,

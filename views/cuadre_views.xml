@@ -130,6 +130,11 @@
                                     <button name="open_cobros_tc"  class="btn fa fa-list" type="object" aria-label="Refrescar Tasa USD" title="Refrescar Tasa USD" role="img"/>
                                 </div>
                                 <field name="cobro_tc_comision_total"/>
+                                <label for="efectivo_entregado_tc_total"/>
+                                <div class="o_row">
+                                    <field name="efectivo_entregado_tc_total"/>
+                                    <button name="open_efectivo_entregado_tc"  class="btn fa fa-list" type="object" aria-label="Efectivo Entregado TC Maquinas" title="Efectivo Entregado TC Maquinas" role="img"/>
+                                </div>
                             </group>
                             <group name="group3_group3" string="Sobrantes y Faltantes">
                                 <label for="sobrante_total"/>

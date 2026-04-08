@@ -41,6 +41,7 @@
         'views/premios_maquina_views.xml',
         'views/premios_mesa_views.xml',
         'views/casino_views.xml',
+        'views/efectivo_entregado_tc_mesa.xml',
         'report/comision_marca_templates.xml',
         'report/comision_marca_report.xml',
         'report/cuadre_caja_templates.xml',
