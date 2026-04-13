@@ -317,10 +317,12 @@ class CuadreDeCaja(models.Model):
                     'name': description,
                     'debit': amount_dbcr,
                     'credit': 0,
-                    'amount_currency': amount_currency,
-                    'currency_id': foreign_currency.id,
-                    'partner_id': partner_id.id if partner_id else False,
                 }
+                if amount_currency:
+                    debit_aml['amount_currency'] = amount_currency
+                    debit_aml['currency_id'] = foreign_currency.id
+                    debit_aml['partner_id'] = partner_id.id if partner_id else False
+                    
                 list_of_aml_vals.append(debit_aml)
 
                 # Credit
@@ -329,10 +331,12 @@ class CuadreDeCaja(models.Model):
                     'name': credit_currency_description if amount_currency and credit_currency_description else description,
                     'debit': 0,
                     'credit': amount_dbcr,
-                    'amount_currency': -1 * amount_currency if amount_currency else 0.0,
-                    'currency_id': foreign_currency.id,
-                    'partner_id': partner_id.id if partner_id else False,
-                }
+                }                
+                if amount_currency:
+                    debit_aml['amount_currency'] = -1 * amount_currency
+                    debit_aml['currency_id'] = foreign_currency.id
+                    debit_aml['partner_id'] = partner_id.id if partner_id else False
+                    
                 list_of_aml_vals.append(credit_aml)
     
     def create_move(self, aml_list, name='', journal=False):
