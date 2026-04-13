@@ -333,9 +333,9 @@ class CuadreDeCaja(models.Model):
                     'credit': amount_dbcr,
                 }                
                 if amount_currency:
-                    debit_aml['amount_currency'] = -1 * amount_currency
-                    debit_aml['currency_id'] = foreign_currency.id
-                    debit_aml['partner_id'] = partner_id.id if partner_id else False
+                    credit_aml['amount_currency'] = -1 * amount_currency
+                    credit_aml['currency_id'] = foreign_currency.id
+                    credit_aml['partner_id'] = partner_id.id if partner_id else False
                     
                 list_of_aml_vals.append(credit_aml)
     
