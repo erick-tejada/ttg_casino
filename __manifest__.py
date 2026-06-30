@@ -2,7 +2,7 @@
 {
     'name': 'TTG - Casino',
     'author': "Tejada Tech Group EIRL",
-    'version': '18.0.0.14',
+    'version': '18.0.0.15',
     'sequence': 100,
     'category': 'Accounting/Accounting',
     'description': """
@@ -18,7 +18,7 @@
         'data/ir_sequence_data.xml',
         'data/errores_data.xml',
         'views/maquina_views.xml',
-        'views/cuadre_views.xml',
+        #'views/cuadre_views.xml',
         'views/bill_drop_views.xml',
         'views/devolucion_views.xml',
         'views/marca_maquina_views.xml',
@@ -31,7 +31,7 @@
         'views/cobro_tc_views.xml',
         'views/faltante_views.xml',
         'views/sobrante_views.xml',
-        'views/res_config_settings_views.xml',
+        #'views/res_config_settings_views.xml',
         'views/comision_marca_views.xml',
         'views/lender_deposit_views.xml',
         'views/encargado_caja_views.xml',
