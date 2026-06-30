@@ -111,7 +111,10 @@ class CuadreDeCaja(models.Model):
     
     otros_pagos_ids = fields.One2many('casino.otros.pagos', 'cuadre_id', 'Pagos Manuales')
     otros_pagos_total = fields.Monetary('Total Pagos Manuales', compute='_compute_otros_pagos', store=True) # Egreso
-    
+
+    pago_bancarizado_maquina_ids = fields.One2many('casino.pago.bancarizado.maquina', 'cuadre_id', 'Pagos Bancarizados Maquina')
+    pago_bancarizado_maquina_total = fields.Monetary('Total Pagos Bancarizados Maquina', compute='_compute_pago_bancarizado_maquina', store=True) # Egreso
+
     premios_maquina_ids = fields.One2many('casino.premios.maquina', 'cuadre_id', 'Premios/Rifas Maquinas')
     premios_maquina_total = fields.Monetary('Total Premios Maquinas', compute='_compute_premios_maquina', store=True) # Egreso
 
@@ -135,7 +138,10 @@ class CuadreDeCaja(models.Model):
     
     marca_mesa_ids = fields.One2many('casino.marca.mesa', 'cuadre_id', 'Detalle Marcas Mesas')
     marca_mesa_total = fields.Monetary('Total Marcas Mesas', compute='_compute_marcas_mesas', store=True) # Ingreso
-    
+
+    pago_bancarizado_mesa_ids = fields.One2many('casino.pago.bancarizado.mesa', 'cuadre_id', 'Pagos Bancarizados Mesa')
+    pago_bancarizado_mesa_total = fields.Monetary('Total Pagos Bancarizados Mesa', compute='_compute_pago_bancarizado_mesa', store=True) # Egreso
+
     premios_mesa_ids = fields.One2many('casino.premios.mesa', 'cuadre_id', 'Premios/Rifas Mesas')
     premios_mesa_total = fields.Monetary('Total Premios Mesas', compute='_compute_premios_mesas', store=True) # Egreso
 
@@ -235,7 +241,12 @@ class CuadreDeCaja(models.Model):
         return self._redirect_if_needed(next_state)
 
     def action_done(self):
-        
+        incomplete_lines = (self.pago_bancarizado_maquina_ids + self.pago_bancarizado_mesa_ids).filtered(
+            lambda line: not (line.pago_cliente_payment_id and line.reposicion_payment_id)
+        )
+        if incomplete_lines:
+            raise ValidationError('PAGOS BANCARIZADOS INCOMPLETOS: Debe generar el Pago al Cliente y la Reposición de todas las líneas de Pago Bancarizado antes de Cerrar.')
+
         # Clear Moves
         self._delete_moves()
 
@@ -295,6 +306,9 @@ class CuadreDeCaja(models.Model):
                 pass
             finally:
                 self.cajas_move_id = False
+
+        # Pagos Bancarizados: cancelar y desvincular los pagos generados por cada línea
+        (self.pago_bancarizado_maquina_ids + self.pago_bancarizado_mesa_ids)._cancel_payments()
 
     def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description='', partner_id=False):
             '''
@@ -433,6 +447,14 @@ class CuadreDeCaja(models.Model):
         )
         self.create_aml_dict(
             list_of_aml_vals,
+            self.company_id.maquina_pago_bancarizado_account_id,
+            self.company_id.caja_maquina_account_id,
+            self.pago_bancarizado_maquina_total,
+            False,
+            'MAQUINAS: Pagos por Pago Bancarizado',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
             self.company_id.maquina_gasto_faltante_account_id,
             self.company_id.caja_maquina_account_id,
             self.faltante_total,
@@ -480,6 +502,14 @@ class CuadreDeCaja(models.Model):
             self.pago_apuestas_mesas,
             False,
             'MESAS DOP: Pagos por Apuestas de Mesas',
+        )
+        self.create_aml_dict(
+            list_of_aml_vals,
+            self.company_id.mesa_pago_bancarizado_account_id,
+            self.company_id.caja_mesa_dop_account_id,
+            self.pago_bancarizado_mesa_total,
+            False,
+            'MESAS DOP: Pagos por Pago Bancarizado',
         )
         self.create_aml_dict(
             list_of_aml_vals,
@@ -920,7 +950,47 @@ class CuadreDeCaja(models.Model):
         }
         action['context'] = context
         return action
-    
+
+    @api.depends('pago_bancarizado_maquina_ids', 'pago_bancarizado_maquina_ids.amount')
+    def _compute_pago_bancarizado_maquina(self):
+        for record in self:
+            total = 0
+            for line in record.pago_bancarizado_maquina_ids:
+                total += line.amount
+            record.pago_bancarizado_maquina_total = total
+
+    def open_pago_bancarizado_maquina(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_pago_bancarizado_maquina")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_pago_bancarizado_maquina_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+
+    @api.depends('pago_bancarizado_mesa_ids', 'pago_bancarizado_mesa_ids.amount')
+    def _compute_pago_bancarizado_mesa(self):
+        for record in self:
+            total = 0
+            for line in record.pago_bancarizado_mesa_ids:
+                total += line.amount
+            record.pago_bancarizado_mesa_total = total
+
+    def open_pago_bancarizado_mesa(self):
+        if self.state != 'done':
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_pago_bancarizado_mesa")
+        else:
+            action = self.env["ir.actions.actions"]._for_xml_id("ttg_casino.action_pago_bancarizado_mesa_readonly")
+        action['domain'] = [('cuadre_id', '=', self.id)]
+        context = {
+            'default_cuadre_id': self.id,
+        }
+        action['context'] = context
+        return action
+
     @api.depends('marca_mesa_ids', 'marca_mesa_ids.amount')
     def _compute_marcas_mesas(self):
         for record in self:
@@ -942,11 +1012,16 @@ class CuadreDeCaja(models.Model):
         return action
     
     def open_all_move_lines(self):
+        move_ids = [self.cajas_move_id.id,
+                    self.bovedas_move_id.id,
+                    self.deposito_dop_move_id.id,
+                    self.deposito_usd_move_id.id]
+        move_ids += self.pago_bancarizado_maquina_ids.mapped('pago_cliente_payment_id.move_id').ids
+        move_ids += self.pago_bancarizado_maquina_ids.mapped('reposicion_payment_id.move_id').ids
+        move_ids += self.pago_bancarizado_mesa_ids.mapped('pago_cliente_payment_id.move_id').ids
+        move_ids += self.pago_bancarizado_mesa_ids.mapped('reposicion_payment_id.move_id').ids
         action = self.env["ir.actions.actions"]._for_xml_id("account.action_account_moves_all")
-        action['domain'] = [('move_id', 'in', [self.cajas_move_id.id, 
-                                              self.bovedas_move_id.id,
-                                              self.deposito_dop_move_id.id,
-                                              self.deposito_usd_move_id.id])]
+        action['domain'] = [('move_id', 'in', move_ids)]
         return action
 
     @api.depends('casino_tasa_usd', 'cambio_dolares')
@@ -1021,11 +1096,11 @@ class CuadreDeCaja(models.Model):
         action['context'] = context
         return action
     
-    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total', 'faltante_total', 'sobrante_total', 'premios_maquina_total')
+    @api.depends('bill_drop_total', 'tarjetas_cashout', 'devolucion_total', 'marca_maquina_total', 'recarga_tarjeta', 'otros_pagos_total', 'faltante_total', 'sobrante_total', 'premios_maquina_total', 'pago_bancarizado_maquina_total')
     def _compute_cuadre_maquina(self):
         for record in self:
             total_ingreso = record.bill_drop_total + record.marca_maquina_total + record.recarga_tarjeta
-            total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total + record.premios_maquina_total
+            total_pago = record.tarjetas_cashout + record.devolucion_total + record.otros_pagos_total + record.premios_maquina_total + record.pago_bancarizado_maquina_total
             total_maquina = total_ingreso - total_pago
             retencion_maquina = ((total_maquina / total_ingreso) * 100) if total_ingreso else 0
             resultado_caja_maquina = total_maquina + record.sobrante_total - record.faltante_total
@@ -1038,10 +1113,10 @@ class CuadreDeCaja(models.Model):
                 'reposicion_caja_maquina': resultado_caja_maquina * -1 if resultado_caja_maquina < 0.0 else 0.0,
             })
     
-    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total', 'cobro_tc_comision_total', 'cobro_tc_total', 'dop_cambio_dolares', 'cambio_dolares', 'premios_mesa_total')
+    @api.depends('apuestas_mesas', 'pago_apuestas_mesas', 'apuestas_mesas_usd', 'pago_apuestas_mesas_usd', 'marca_mesa_total', 'cobro_tc_comision_total', 'cobro_tc_total', 'dop_cambio_dolares', 'cambio_dolares', 'premios_mesa_total', 'pago_bancarizado_mesa_total')
     def _compute_cuadre_mesa(self):
         for record in self:
-            total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas - record.premios_mesa_total
+            total_dop = record.apuestas_mesas + record.marca_mesa_total - record.pago_apuestas_mesas - record.premios_mesa_total - record.pago_bancarizado_mesa_total
             retencion_dop_mesa = (total_dop / (record.apuestas_mesas + record.marca_mesa_total)) * 100 if (record.apuestas_mesas + record.marca_mesa_total) else 0
             total_usd = record.apuestas_mesas_usd - record.pago_apuestas_mesas_usd
             retencion_usd_mesa = (total_usd / record.apuestas_mesas_usd) * 100 if record.apuestas_mesas_usd else 0
@@ -1079,7 +1154,9 @@ class CuadreDeCaja(models.Model):
             record._compute_devoluciones()
             record._compute_marcas_maquina()
             record._compute_otros_pagos()
+            record._compute_pago_bancarizado_maquina()
             record._compute_marcas_mesas()
+            record._compute_pago_bancarizado_mesa()
             record._compute_dop_cambio_dolares()
             record._compute_tc()
             record._compute_faltante()

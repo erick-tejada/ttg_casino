@@ -77,9 +77,14 @@
                                     <field name="premios_maquina_total"/>
                                     <button name="open_premios_maquina" class="btn fa fa-list" type="object" aria-label="Premios Maquinas" title="Premios Maquinas" role="img"/>
                                 </div>
+                                <label for="pago_bancarizado_maquina_total"/>
+                                <div class="o_row">
+                                    <field name="pago_bancarizado_maquina_total"/>
+                                    <button name="open_pago_bancarizado_maquina" class="btn fa fa-list" type="object" aria-label="Pagos Bancarizados Maquina" title="Pagos Bancarizados Maquina" role="img"/>
+                                </div>
                             </group>
                         </group>
-                        
+
                         <h2 style="border-bottom: solid 1px #444b5a;">Mesas</h2>
                         <group name="group_mesa">
                             <group name="group_mesa_1" string="Pesos DOP">
@@ -93,6 +98,11 @@
                                 <div class="o_row">
                                     <field name="premios_mesa_total"/>
                                     <button name="open_premios_mesas" class="btn fa fa-list" type="object" aria-label="Premios Mesas" title="Premios Mesas" role="img"/>
+                                </div>
+                                <label for="pago_bancarizado_mesa_total"/>
+                                <div class="o_row">
+                                    <field name="pago_bancarizado_mesa_total"/>
+                                    <button name="open_pago_bancarizado_mesa" class="btn fa fa-list" type="object" aria-label="Pagos Bancarizados Mesa" title="Pagos Bancarizados Mesa" role="img"/>
                                 </div>
                             </group>
                             <group name="group_mesa_2" string="Dólares USD">

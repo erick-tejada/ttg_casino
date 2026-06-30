@@ -47,6 +47,7 @@ class ResConfigSettings(models.TransientModel):
     maquina_tarjeta_cashout_account_id = fields.Many2one(related='company_id.maquina_tarjeta_cashout_account_id', readonly=False, help='Cuenta de Pago por Tarjeta Cashout.')
     maquina_devolucion_account_id = fields.Many2one(related='company_id.maquina_devolucion_account_id', readonly=False, help='Cuenta de Pago por Devoluciones.')
     maquina_otros_pagos_account_id = fields.Many2one(related='company_id.maquina_otros_pagos_account_id', readonly=False, help='Cuenta de Pago por Otros Pagos.')
+    maquina_pago_bancarizado_account_id = fields.Many2one(related='company_id.maquina_pago_bancarizado_account_id', readonly=False, help='Cuenta de Pagos Bancarizados Maquina.')
     maquina_gasto_faltante_account_id = fields.Many2one(related='company_id.maquina_gasto_faltante_account_id', readonly=False, help='Cuenta de Gastp por Faltante en Caja.')
     maquina_premios_account_id = fields.Many2one(related='company_id.maquina_premios_account_id', readonly=False, help='Cuenta de Premios Maquina.')
 
@@ -59,6 +60,7 @@ class ResConfigSettings(models.TransientModel):
     mesa_ingreso_comision_tc_account_id = fields.Many2one(related='company_id.mesa_ingreso_comision_tc_account_id', readonly=False, help='Cuenta de Ingreso por Comision de TC.')
     # Pago
     mesa_pagos_account_id = fields.Many2one(related='company_id.mesa_pagos_account_id', readonly=False, help='Cuenta de Pagos por Apuestas Mesas.')
+    mesa_pago_bancarizado_account_id = fields.Many2one(related='company_id.mesa_pago_bancarizado_account_id', readonly=False, help='Cuenta de Pagos Bancarizados Mesa.')
     mesa_efectivo_tc_account_id = fields.Many2one(related='company_id.mesa_efectivo_tc_account_id', readonly=False, help='Cuenta de Efectivo de TC.')
     mesa_premios_account_id = fields.Many2one(related='company_id.mesa_premios_account_id', readonly=False, help='Cuenta de Premios Mesa.')
 
