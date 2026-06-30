@@ -71,7 +71,6 @@ class CasinoPagoBancarizadoMixin(models.AbstractModel):
             'currency_id': self.currency_id.id,
             'date': self.cuadre_id.date,
             'memo': memo,
-            'ref': memo,
             'force_destination_account_id': self._get_caja_account().id,
             'company_id': self.company_id.id,
         })
@@ -97,7 +96,6 @@ class CasinoPagoBancarizadoMixin(models.AbstractModel):
             'currency_id': self.currency_id.id,
             'date': self.cuadre_id.date,
             'memo': memo,
-            'ref': memo,
             'force_destination_account_id': self._get_caja_account().id,
             'company_id': self.company_id.id,
         })
