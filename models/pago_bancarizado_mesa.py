@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models
 
 
 class CasinoPagoBancarizadoMesa(models.Model):
@@ -6,8 +6,6 @@ class CasinoPagoBancarizadoMesa(models.Model):
     _inherit = 'casino.pago.bancarizado.mixin'
     _description = "Pagos Bancarizados Mesas"
     _order = 'cuadre_id,partner_id'
-
-    cuadre_id = fields.Many2one('casino.cuadre', string='Cuadre de Caja', required=True, ondelete='cascade')
 
     def _get_caja_account(self):
         self.ensure_one()

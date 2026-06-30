@@ -9,6 +9,8 @@ class CasinoPagoBancarizadoMixin(models.AbstractModel):
     _description = 'Pago Bancarizado (Mixin)'
     _rec_name = 'partner_id'
 
+    cuadre_id = fields.Many2one('casino.cuadre', string='Cuadre de Caja', required=True, ondelete='cascade')
+
     company_id = fields.Many2one('res.company', string='Compañía', related='cuadre_id.company_id', store=True)
     currency_id = fields.Many2one('res.currency', string='Moneda', related='cuadre_id.currency_id', store=True)
     date = fields.Date('Fecha', related='cuadre_id.date', store=True)
