@@ -241,10 +241,8 @@ class CuadreDeCaja(models.Model):
         return self._redirect_if_needed(next_state)
 
     def action_done(self):
-        incomplete_lines = (self.pago_bancarizado_maquina_ids + self.pago_bancarizado_mesa_ids).filtered(
-            lambda line: not (line.pago_cliente_payment_id and line.reposicion_payment_id)
-        )
-        if incomplete_lines:
+        is_incomplete = lambda line: not (line.pago_cliente_payment_id and line.reposicion_payment_id)
+        if self.pago_bancarizado_maquina_ids.filtered(is_incomplete) or self.pago_bancarizado_mesa_ids.filtered(is_incomplete):
             raise ValidationError('PAGOS BANCARIZADOS INCOMPLETOS: Debe generar el Pago al Cliente y la Reposición de todas las líneas de Pago Bancarizado antes de Cerrar.')
 
         # Clear Moves
@@ -308,7 +306,8 @@ class CuadreDeCaja(models.Model):
                 self.cajas_move_id = False
 
         # Pagos Bancarizados: cancelar y desvincular los pagos generados por cada línea
-        (self.pago_bancarizado_maquina_ids + self.pago_bancarizado_mesa_ids)._cancel_payments()
+        self.pago_bancarizado_maquina_ids._cancel_payments()
+        self.pago_bancarizado_mesa_ids._cancel_payments()
 
     def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description='', partner_id=False):
             '''
