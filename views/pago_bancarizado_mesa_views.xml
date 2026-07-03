@@ -10,6 +10,8 @@
                 <field name="company_id" optional="hide"/>
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                <field name="employee_id" options="{'no_create': True}" optional="show"/>
+                <field name="employee_transferencia_id" options="{'no_create': True}" optional="show"/>
                 <field name="partner_id" options="{'no_create': True}" optional="show"/>
                 <field name="account_journal_id" options="{'no_open': True, 'no_create': True}" optional="show"/>
                 <field name="outbound_payment_method_line_ids" column_invisible="1"/>
@@ -37,6 +39,8 @@
                 <field name="company_id" optional="hide"/>
                 <field name="date" optional="show"/>
                 <field name="cuadre_id" readonly="1" force_save="1" optional="hide"/>
+                <field name="employee_id" optional="show"/>
+                <field name="employee_transferencia_id" optional="show"/>
                 <field name="partner_id" options="{'no_create': True}" optional="show"/>
                 <field name="account_journal_id" options="{'no_open': True, 'no_create': True}" optional="show"/>
                 <field name="payment_method_line_id" options="{'no_open': True, 'no_create': True}" optional="show"/>

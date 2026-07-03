@@ -16,6 +16,9 @@ class CasinoPagoBancarizadoMixin(models.AbstractModel):
     date = fields.Date('Fecha', related='cuadre_id.date', store=True)
     state = fields.Selection(related='cuadre_id.state', string='Estado')
 
+    employee_id = fields.Many2one('hr.employee', string="Cajero", domain="['|', ('job_title', 'in', ['CAJERO', 'CAJERA', 'Cajera', 'Cajero']),('department_id.name','=','CAJA')]")
+    employee_transferencia_id = fields.Many2one('hr.employee', string="Nombre de Quien Realiza la Transferencia")
+
     partner_id = fields.Many2one('res.partner', string="Cliente", required=True, domain="[('x_is_casino_client', '=', True)]")
 
     account_journal_id = fields.Many2one('account.journal', string='Banco', required=True,
