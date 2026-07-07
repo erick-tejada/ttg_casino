@@ -245,8 +245,8 @@ class CuadreDeCaja(models.Model):
         if self.pago_bancarizado_maquina_ids.filtered(is_incomplete) or self.pago_bancarizado_mesa_ids.filtered(is_incomplete):
             raise ValidationError('PAGOS BANCARIZADOS INCOMPLETOS: Debe generar el Pago al Cliente y la Reposición de todas las líneas de Pago Bancarizado antes de Cerrar.')
 
-        # Clear Moves
-        self._delete_moves()
+        # Clear Moves (sin tocar los Pagos Bancarizados ya generados)
+        self._delete_moves(delete_pagos_bancarizados=False)
 
         # Re-compute values to make sure all is correct
         self._compute_all()
@@ -271,7 +271,7 @@ class CuadreDeCaja(models.Model):
                     body="Este cuadre fue recalculado automáticamente porque el cuadre del día %s fue cerrado." % (self.date.strftime('%d/%m/%Y'))
                 )
 
-    def _delete_moves(self):
+    def _delete_moves(self, delete_pagos_bancarizados=True):
         if self.deposito_dop_move_id:
             self.deposito_dop_move_id.button_cancel()
             try:
@@ -306,8 +306,10 @@ class CuadreDeCaja(models.Model):
                 self.cajas_move_id = False
 
         # Pagos Bancarizados: cancelar y desvincular los pagos generados por cada línea
-        self.pago_bancarizado_maquina_ids._cancel_payments()
-        self.pago_bancarizado_mesa_ids._cancel_payments()
+        # (se omite al llamar desde action_done, para no perder los pagos ya generados)
+        if delete_pagos_bancarizados:
+            self.pago_bancarizado_maquina_ids._cancel_payments()
+            self.pago_bancarizado_mesa_ids._cancel_payments()
 
     def create_aml_dict(self, list_of_aml_vals, account_debit, account_credit, amount_dbcr, invert_dbcr, description, amount_currency=0.0, foreign_currency=False, credit_currency_description='', partner_id=False):
             '''
