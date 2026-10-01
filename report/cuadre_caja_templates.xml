@@ -73,6 +73,10 @@
                         <td>RIFAS Y PREMIOS</td>
                         <td class="text-right"><span t-field="doc.premios_maquina_total"/></td>
                     </tr>
+                    <tr>
+                        <td>PAGOS BANCARIZADOS</td>
+                        <td class="text-right"><span t-field="doc.pago_bancarizado_maquina_total"/></td>
+                    </tr>
                     <tr class="is-subtotal text-right">
                         <td name="td_maquina_section_subtotal" colspan="99">
                             <strong><span t-field="doc.egreso_maquina"/></strong>
@@ -167,6 +171,10 @@
                     <tr>
                         <td>PAGO RIFAS Y PREMIOS MESAS DOP</td>
                         <td class="text-right"><span t-field="doc.premios_mesa_total"/></td>
+                    </tr>
+                    <tr>
+                        <td>PAGOS BANCARIZADOS MESAS DOP</td>
+                        <td class="text-right"><span t-field="doc.pago_bancarizado_mesa_total"/></td>
                     </tr>
                     <tr>
                         <td><strong>GANANCIA / PÉRDIDA DOP</strong></td>
@@ -356,6 +364,10 @@
                                 <td colspan="4">(+) Ganancia/Perdida</td>
                                 <td class="text-right"><span t-field="doc.total_dop_mesa" t-attf-class="{{ 'negative' if doc.total_dop_mesa &lt; 0.0 else '' }}"/></td>
                             </tr>
+                            <tr class="text-muted">
+                                <td colspan="4" style="padding-left: 20px;"><em>Incluye Pagos Bancarizados Mesas</em></td>
+                                <td class="text-right"><em><span t-field="doc.pago_bancarizado_mesa_total"/></em></td>
+                            </tr>
                             <tr>
                                 <td colspan="4">(+) Comisión Cobrada TC</td>
                                 <td class="text-right"><span t-field="doc.cobro_tc_comision_total"/></td>
@@ -382,6 +394,10 @@
                             <tr>
                                 <td colspan="4">(+) Ganancia/Perdida</td>
                                 <td class="text-right"><span t-field="doc.total_maquina" t-attf-class="{{ 'negative' if doc.total_maquina &lt; 0.0 else '' }}"/></td>
+                            </tr>
+                            <tr class="text-muted">
+                                <td colspan="4" style="padding-left: 20px;"><em>Incluye Pagos Bancarizados Máquinas</em></td>
+                                <td class="text-right"><em><span t-field="doc.pago_bancarizado_maquina_total"/></em></td>
                             </tr>
                             <tr>
                                 <td colspan="4">(+) Sobrante en Caja</td>
