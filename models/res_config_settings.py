@@ -36,6 +36,10 @@ class ResConfigSettings(models.TransientModel):
     banco_dop_journal_id = fields.Many2one(related='company_id.banco_dop_journal_id', readonly=False, help='Diario de Banco DOP.')
     banco_usd_journal_id = fields.Many2one(related='company_id.banco_usd_journal_id', readonly=False, help='Diario de Banco USD.')
 
+    # Auditoría de Contadores (DRGT)
+    casino_slot_audit_required = fields.Boolean(related='company_id.casino_slot_audit_required', readonly=False)
+    casino_slot_audit_tolerance = fields.Float(related='company_id.casino_slot_audit_tolerance', readonly=False)
+
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------
     # Ingreso

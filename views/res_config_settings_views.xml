@@ -71,6 +71,14 @@
 <!--                            </div>-->
                         </setting>
                     </block>
+<block title="Auditoría de Contadores (DRGT)" name="slot_audit_setting_container">
+                        <setting id="casino_slot_audit_required" string="Requerir Contadores de DRGT" help="Un cuadre no se puede presentar a Contabilidad sin importar el archivo de contadores de DRGT.">
+                            <field name="casino_slot_audit_required"/>
+                        </setting>
+                        <setting id="casino_slot_audit_tolerance" string="Tolerancia de Diferencia" help="Diferencia máxima (RD$) entre el Resultado según Contadores y el Resultado Caja Máquina. Si se supera, el Auditor debe escribir una justificación.">
+                            <field name="casino_slot_audit_tolerance"/>
+                        </setting>
+                    </block>
 <!--                    bloque 3-->
 
                     <block title="Fondos de Bóveda">

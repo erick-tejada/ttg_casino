@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ************ CONTADORES DE SLOT (DRGT) ************ -->
+    <record id="view_slot_meter_list" model="ir.ui.view">
+        <field name="name">casino.slot.meter.list</field>
+        <field name="model">casino.slot.meter</field>
+        <field name="arch" type="xml">
+            <list string="Contadores de Slot" create="false" edit="false" delete="false">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="date"/>
+                <field name="maquina_id"/>
+                <field name="position" optional="hide"/>
+                <field name="serial" optional="hide"/>
+                <field name="manufacturer" optional="show"/>
+                <field name="model_name" optional="show"/>
+                <field name="game" optional="show"/>
+                <field name="ngwine" sum="Total" decoration-danger="ngwine &lt; 0"/>
+                <field name="bdie" sum="Total"/>
+                <field name="tap" sum="Total" optional="show"/>
+                <field name="cre" sum="Total" optional="show"/>
+                <field name="gtie" sum="Total" optional="show"/>
+                <field name="gtoe" sum="Total" optional="show"/>
+                <field name="gjoe" sum="Total" optional="hide"/>
+                <field name="gtin" sum="Total" optional="hide"/>
+                <field name="gtine" sum="Total" optional="hide"/>
+                <field name="gp" sum="Total" optional="show"/>
+                <field name="ccoe" sum="Total" optional="hide"/>
+                <field name="pwe" sum="Total" optional="hide"/>
+                <field name="clic" sum="Total" optional="hide"/>
+                <field name="cloc" sum="Total" optional="hide"/>
+                <field name="et" sum="Total" optional="hide"/>
+                <field name="st" sum="Total" optional="hide"/>
+                <field name="avg_bet" optional="hide"/>
+                <field name="retention" widget="percentage" optional="show"/>
+                <field name="egm_audit" optional="hide"/>
+                <field name="audit" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_slot_meter_form" model="ir.ui.view">
+        <field name="name">casino.slot.meter.form</field>
+        <field name="model">casino.slot.meter</field>
+        <field name="arch" type="xml">
+            <form string="Contadores de Slot" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="maquina_id"/></h1>
+                    </div>
+                    <group>
+                        <group string="Máquina">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="cuadre_id"/>
+                            <field name="date"/>
+                            <field name="position"/>
+                            <field name="inventory"/>
+                            <field name="serial"/>
+                            <field name="manufacturer"/>
+                            <field name="model_name"/>
+                            <field name="game"/>
+                        </group>
+                        <group string="Resultado">
+                            <field name="ngwine"/>
+                            <field name="gtie"/>
+                            <field name="gtoe"/>
+                            <field name="gjoe"/>
+                            <field name="gp"/>
+                            <field name="avg_bet"/>
+                            <field name="retention" widget="percentage"/>
+                        </group>
+                        <group string="Entradas y Salidas">
+                            <field name="bdie"/>
+                            <field name="clic"/>
+                            <field name="et"/>
+                            <field name="cloc"/>
+                            <field name="ccoe"/>
+                            <field name="tap"/>
+                            <field name="st"/>
+                            <field name="cre"/>
+                        </group>
+                        <group string="Otros">
+                            <field name="gtin"/>
+                            <field name="gtine"/>
+                            <field name="pwe"/>
+                            <field name="egm_audit"/>
+                            <field name="audit"/>
+                            <field name="extra_data" invisible="not extra_data"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_slot_meter_pivot" model="ir.ui.view">
+        <field name="name">casino.slot.meter.pivot</field>
+        <field name="model">casino.slot.meter</field>
+        <field name="arch" type="xml">
+            <pivot string="Contadores de Slot" display_quantity="0" sample="1">
+                <field name="maquina_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="ngwine" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_slot_meter_graph" model="ir.ui.view">
+        <field name="name">casino.slot.meter.graph</field>
+        <field name="model">casino.slot.meter</field>
+        <field name="arch" type="xml">
+            <graph string="Contadores de Slot" type="line" sample="1">
+                <field name="date" interval="day"/>
+                <field name="ngwine" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_slot_meter_search" model="ir.ui.view">
+        <field name="name">casino.slot.meter.search</field>
+        <field name="model">casino.slot.meter</field>
+        <field name="arch" type="xml">
+            <search string="Contadores de Slot">
+                <field name="maquina_id"/>
+                <field name="manufacturer"/>
+                <field name="model_name"/>
+                <field name="game"/>
+                <field name="cuadre_id"/>
+                <filter name="filter_date" string="Fecha" date="date"/>
+                <separator/>
+                <filter name="perdida" string="Con Pérdida" domain="[('ngwine', '&lt;', 0)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_by_maquina" string="Máquina" context="{'group_by': 'maquina_id'}"/>
+                    <filter name="group_by_manufacturer" string="Fabricante" context="{'group_by': 'manufacturer'}"/>
+                    <filter name="group_by_model" string="Modelo" context="{'group_by': 'model_name'}"/>
+                    <filter name="group_by_game" string="Juego" context="{'group_by': 'game'}"/>
+                    <filter name="group_by_date" string="Fecha" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_slot_meter" model="ir.actions.act_window">
+        <field name="name">Contadores de Slot (DRGT)</field>
+        <field name="res_model">casino.slot.meter</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="view_id" ref="view_slot_meter_list"/>
+        <field name="search_view_id" ref="view_slot_meter_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aún no hay contadores importados.
+            </p>
+            <p>
+                Los contadores se importan desde cada Cuadre de Caja, en la pestaña "Auditoría de Contadores".
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_casino_report_slot_meter"
+        name="Contadores de Slot (DRGT)"
+        parent="ttg_casino.menu_casino_informes"
+        action="ttg_casino.action_slot_meter"
+        sequence="30"/>
+
+    <!-- ************ ASISTENTE DE IMPORTACIÓN ************ -->
+    <record id="view_slot_meter_import_form" model="ir.ui.view">
+        <field name="name">casino.slot.meter.import.form</field>
+        <field name="model">casino.slot.meter.import</field>
+        <field name="arch" type="xml">
+            <form string="Importar Contadores de DRGT">
+                <field name="currency_id" invisible="1"/>
+                <field name="has_lines" invisible="1"/>
+                <div class="alert alert-info" role="alert">
+                    Importe el reporte "Slot Analysis" de DRGT del día <field name="date" readonly="1" class="fw-bold"/>.
+                    Las filas de máquinas y la fila de totales se leen del archivo; el cuadro de ajustes que se agrega
+                    debajo en Excel se ignora: esos valores se escriben aquí.
+                </div>
+                <div class="alert alert-warning" role="alert" invisible="not has_lines">
+                    Este cuadre ya tiene contadores importados. Si selecciona un archivo, reemplazará los anteriores.
+                    Sin archivo, solo se actualizan los valores de abajo.
+                </div>
+                <group>
+                    <group>
+                        <field name="cuadre_id" invisible="1"/>
+                        <field name="file" filename="filename"/>
+                        <field name="filename" invisible="1"/>
+                    </group>
+                    <group string="Valores del resumen de DRGT">
+                        <field name="audit_handpay_liability"/>
+                        <field name="audit_variacion_efectivo"/>
+                        <field name="audit_billetes_no_registrados"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Importar" name="action_import" type="object" class="oe_highlight"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ************ PESTAÑA EN EL CUADRE ************ -->
+    <record id="cuadre_form_slot_audit" model="ir.ui.view">
+        <field name="name">casino.cuadre.form.slot.audit</field>
+        <field name="model">casino.cuadre</field>
+        <field name="inherit_id" ref="ttg_casino.cuadre_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="action_open_slot_meters" icon="fa-tachometer" type="object"
+                        groups="ttg_casino.group_casino_audit" invisible="not slot_meter_count">
+                    <field name="slot_meter_count" widget="statinfo" string="Contadores"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='accounting']" position="before">
+                <page name="slot_audit" string="Auditoría de Contadores" groups="ttg_casino.group_casino_audit">
+                    <div class="mb-3" invisible="state == 'draft'">
+                        <button name="action_open_slot_meter_import" type="object" class="btn btn-primary"
+                                icon="fa-upload" string="Importar Contadores de DRGT"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="state != 'draft'">
+                        Los contadores se importan cuando Caja presenta el cuadre al Auditor.
+                    </div>
+                    <group>
+                        <group string="Archivo Importado">
+                            <field name="slot_meter_file" filename="slot_meter_filename" readonly="1" invisible="not slot_meter_file"/>
+                            <field name="slot_meter_filename" invisible="1"/>
+                            <field name="slot_meter_import_date" invisible="not slot_meter_import_date"/>
+                            <field name="slot_meter_import_user_id" invisible="not slot_meter_import_user_id"/>
+                        </group>
+                    </group>
+                    <group invisible="not slot_meter_count">
+                        <group string="Cuadre de Contadores">
+                            <field name="audit_ngwine" string="(+) Ganancia según Contadores (NGWINE)"/>
+                            <field name="audit_handpay_liability" string="(+) Handpay Liability" readonly="state in ('accounting', 'done')"/>
+                            <field name="audit_sobrantes" string="(+) Sobrantes"/>
+                            <field name="audit_rifas" string="(−) Rifas"/>
+                            <field name="audit_devoluciones" string="(−) Devoluciones"/>
+                            <field name="audit_variacion_efectivo" string="(+) Variación de Efectivo" readonly="state in ('accounting', 'done')"/>
+                            <field name="audit_billetes_no_registrados" string="(+) Billetes No Registrados" readonly="state in ('accounting', 'done')"/>
+                            <field name="audit_credito_maquina" string="(+) Crédito en Máquina (CRE)"/>
+                            <field name="audit_resultado" class="fw-bold"/>
+                        </group>
+                        <group string="Comparación con Caja">
+                            <field name="audit_resultado" string="Resultado según Contadores"/>
+                            <field name="resultado_caja_maquina" string="Resultado Caja Máquina"/>
+                            <field name="audit_diferencia" string="Diferencia"
+                                   decoration-danger="audit_fuera_tolerancia" decoration-success="not audit_fuera_tolerancia" class="fw-bold"/>
+                            <field name="audit_fuera_tolerancia" invisible="1"/>
+                            <div colspan="2" class="text-danger" invisible="not audit_fuera_tolerancia">
+                                La diferencia supera la tolerancia. Para presentar a Contabilidad, escriba la justificación.
+                            </div>
+                            <field name="audit_justificacion" colspan="2" nolabel="1"
+                                   placeholder="Justificación de la diferencia..."
+                                   invisible="not audit_fuera_tolerancia and not audit_justificacion"
+                                   readonly="state in ('accounting', 'done')"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ************ LISTA DE CUADRES ************ -->
+    <record id="view_cuadre_list_slot_audit" model="ir.ui.view">
+        <field name="name">casino.cuadre.list.slot.audit</field>
+        <field name="model">casino.cuadre</field>
+        <field name="inherit_id" ref="ttg_casino.view_cuadre_list"/>
+        <field name="arch" type="xml">
+            <field name="resultado_caja_maquina" position="after">
+                <field name="audit_fuera_tolerancia" column_invisible="1"/>
+                <field name="audit_diferencia" string="Dif. Contadores" optional="show" groups="ttg_casino.group_casino_audit"
+                       decoration-danger="audit_fuera_tolerancia"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

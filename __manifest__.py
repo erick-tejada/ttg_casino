@@ -2,7 +2,7 @@
 {
     'name': 'TTG - Casino',
     'author': "Tejada Tech Group EIRL",
-    'version': '18.0.0.22',
+    'version': '18.0.0.23',
     'sequence': 100,
     'category': 'Accounting/Accounting',
     'description': """
@@ -43,6 +43,7 @@
         'views/premios_maquina_views.xml',
         'views/premios_mesa_views.xml',
         'views/casino_views.xml',
+        'views/slot_meter_views.xml',
         'report/comision_marca_templates.xml',
         'report/comision_marca_report.xml',
         'report/cuadre_caja_templates.xml',

@@ -77,3 +77,7 @@ class ResComapany(models.Model):
         'product.product',
         string='Productos para Órdenes Masivas',
     )
+
+    # Auditoría de Contadores (DRGT)
+    casino_slot_audit_required = fields.Boolean('Requerir Contadores de DRGT', default=True, help='Si está activo, un cuadre no se puede presentar a Contabilidad sin importar el archivo de contadores de DRGT.')
+    casino_slot_audit_tolerance = fields.Float('Tolerancia de Diferencia en Contadores', default=3.0, help='Diferencia máxima (en pesos) entre el Resultado según Contadores y el Resultado Caja Máquina sin justificación.')
