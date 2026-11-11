@@ -60,5 +60,5 @@
             'ttg_casino/static/src/scss/casino.scss',
         ],
     },
-    'license': 'LGPL-3',
+    'license': 'Other proprietary',
 }
