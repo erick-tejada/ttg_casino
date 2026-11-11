@@ -1,7 +1,7 @@
 # ttg_casino
 Modulos de Control de Ingresos para Casinos
 
-## Auditoría de Contadores de Slot (DRGT) — 18.0.0.23
+## Auditoría de Contadores de Slot (DRGT) — 18.0.0.23 (+ fixes 18.0.0.24)
 
 - El Auditor importa el reporte "Slot Analysis" de DRGT (`.xls` XML tal como lo exporta DRGT, o `.xlsx`/`.xls`)
   desde la pestaña **Auditoría de Contadores** del cuadre, cuando Caja ya lo presentó (Auditoría, Contabilidad o

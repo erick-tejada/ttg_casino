@@ -24,7 +24,7 @@ class Sobrante(models.Model):
     def unlink(self):
         if any(record.state == 'done' for record in self):
             raise ValidationError('CUADRE CERRADO: No puede borrar un Sobrante si el Cuadre está cerrado.')
-        res = super(Devolucion, self).unlink()
+        res = super(Sobrante, self).unlink()
         return res
 
 
@@ -47,5 +47,5 @@ class Faltante(models.Model):
     def unlink(self):
         if any(record.state == 'done' for record in self):
             raise ValidationError('CUADRE CERRADO: No puede borrar un Faltante si el Cuadre está cerrado.')
-        res = super(Devolucion, self).unlink()
+        res = super(Faltante, self).unlink()
         return res
