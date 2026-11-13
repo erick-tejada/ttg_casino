@@ -39,6 +39,7 @@ class ResConfigSettings(models.TransientModel):
     # Auditoría de Contadores (DRGT)
     casino_slot_audit_required = fields.Boolean(related='company_id.casino_slot_audit_required', readonly=False)
     casino_slot_audit_tolerance = fields.Float(related='company_id.casino_slot_audit_tolerance', readonly=False)
+    casino_nombre_comercial = fields.Char(related='company_id.casino_nombre_comercial', readonly=False)
 
     # MAQUINAS
     # ----------------------------------------------------------------------------------------------------------------

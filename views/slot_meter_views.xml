@@ -171,23 +171,28 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="has_lines" invisible="1"/>
                 <div class="alert alert-info" role="alert">
-                    Importe el reporte "Slot Analysis" de DRGT del día <field name="date" readonly="1" class="fw-bold"/>.
-                    Las filas de máquinas y la fila de totales se leen del archivo; el cuadro de ajustes que se agrega
-                    debajo en Excel se ignora: esos valores se escriben aquí.
+                    Importe los reportes "Slot Analysis" y "Operation Balance" de DRGT del día
+                    <field name="date" readonly="1" class="fw-bold"/>. El cuadro de ajustes que se agrega debajo en
+                    Excel se ignora. Sin Operation Balance, escriba Handpay Liability y Variación de Efectivo aquí.
                 </div>
                 <div class="alert alert-warning" role="alert" invisible="not has_lines">
                     Este cuadre ya tiene contadores importados. Si selecciona un archivo, reemplazará los anteriores.
                     Sin archivo, solo se actualizan los valores de abajo.
                 </div>
                 <group>
-                    <group>
+                    <group string="Archivos de DRGT">
                         <field name="cuadre_id" invisible="1"/>
-                        <field name="file" filename="filename"/>
+                        <field name="file" filename="filename" string="Slot Analysis"/>
                         <field name="filename" invisible="1"/>
+                        <field name="balance_file" filename="balance_filename" string="Operation Balance"/>
+                        <field name="balance_filename" invisible="1"/>
                     </group>
-                    <group string="Valores del resumen de DRGT">
-                        <field name="audit_handpay_liability"/>
-                        <field name="audit_variacion_efectivo"/>
+                    <group string="Ajustes">
+                        <field name="audit_handpay_liability" invisible="balance_file"/>
+                        <field name="audit_variacion_efectivo" invisible="balance_file"/>
+                        <div colspan="2" class="text-muted" invisible="not balance_file">
+                            Handpay Liability y Variación de Efectivo se tomarán del Operation Balance.
+                        </div>
                         <field name="audit_billetes_no_registrados"/>
                     </group>
                 </group>
@@ -214,8 +219,18 @@
             <xpath expr="//page[@name='accounting']" position="before">
                 <page name="slot_audit" string="Auditoría de Contadores" groups="ttg_casino.group_casino_audit">
                     <div class="mb-3" invisible="state == 'draft'">
-                        <button name="action_open_slot_meter_import" type="object" class="btn btn-primary"
-                                icon="fa-upload" string="Importar Contadores de DRGT"/>
+                        <button name="action_open_slot_meter_import" type="object" class="btn btn-primary me-2"
+                                icon="fa-upload" string="Importar Contadores de DRGT" invisible="audit_approved"/>
+                        <button name="action_approve_slot_audit" type="object" class="btn btn-secondary me-2"
+                                icon="fa-check" string="Aprobar Auditoría"
+                                invisible="audit_approved or not slot_meter_count or state not in ('accounting', 'done')"
+                                confirm="Al aprobar, las observaciones y los valores de la auditoría quedan bloqueados. ¿Continuar?"/>
+                        <button name="action_print_slot_audit" type="object" class="btn btn-secondary"
+                                icon="fa-print" string="Imprimir Auditoría de Contadores" invisible="not slot_meter_count"/>
+                    </div>
+                    <div class="alert alert-success" role="alert" invisible="not audit_approved">
+                        Auditoría aprobada el <field name="audit_approved_date" readonly="1"/> por
+                        <field name="audit_approved_user_id" readonly="1" options="{'no_open': True}"/>.
                     </div>
                     <div class="alert alert-info" role="alert" invisible="state != 'draft'">
                         Los contadores se importan cuando Caja presenta el cuadre al Auditor.
@@ -226,17 +241,20 @@
                             <field name="slot_meter_filename" invisible="1"/>
                             <field name="slot_meter_import_date" invisible="not slot_meter_import_date"/>
                             <field name="slot_meter_import_user_id" invisible="not slot_meter_import_user_id"/>
+                            <field name="audit_balance_file" filename="audit_balance_filename" readonly="1" invisible="not audit_balance_file"/>
+                            <field name="audit_balance_filename" invisible="1"/>
+                            <field name="audit_approved" invisible="1"/>
                         </group>
                     </group>
                     <group invisible="not slot_meter_count">
                         <group string="Cuadre de Contadores">
                             <field name="audit_ngwine" string="(+) Ganancia según Contadores (NGWINE)"/>
-                            <field name="audit_handpay_liability" string="(+) Handpay Liability" readonly="state in ('accounting', 'done')"/>
+                            <field name="audit_handpay_liability" string="(+) Handpay Liability" readonly="audit_approved"/>
                             <field name="audit_sobrantes" string="(+) Sobrantes"/>
                             <field name="audit_rifas" string="(−) Rifas"/>
                             <field name="audit_devoluciones" string="(−) Devoluciones"/>
-                            <field name="audit_variacion_efectivo" string="(+) Variación de Efectivo" readonly="state in ('accounting', 'done')"/>
-                            <field name="audit_billetes_no_registrados" string="(+) Billetes No Registrados" readonly="state in ('accounting', 'done')"/>
+                            <field name="audit_variacion_efectivo" string="(+) Variación de Efectivo" readonly="audit_approved"/>
+                            <field name="audit_billetes_no_registrados" string="(+) Billetes No Registrados" readonly="audit_approved"/>
                             <field name="audit_credito_maquina" string="(+) Crédito en Máquina (CRE)"/>
                             <field name="audit_resultado" class="fw-bold"/>
                         </group>
@@ -246,14 +264,18 @@
                             <field name="audit_diferencia" string="Diferencia"
                                    decoration-danger="audit_fuera_tolerancia" decoration-success="not audit_fuera_tolerancia" class="fw-bold"/>
                             <field name="audit_fuera_tolerancia" invisible="1"/>
-                            <div colspan="2" class="text-danger" invisible="not audit_fuera_tolerancia">
-                                La diferencia supera la tolerancia. Para presentar a Contabilidad, escriba la justificación.
+                            <field name="audit_estado" decoration-success="audit_estado == 'conciliado'"
+                                   decoration-info="audit_estado == 'justificado'" decoration-danger="audit_estado == 'pendiente'"/>
+                            <div colspan="2" class="text-danger" invisible="audit_estado != 'pendiente'">
+                                La diferencia supera la tolerancia. Escriba la justificación en las Observaciones de Auditoría
+                                antes de aprobar.
                             </div>
-                            <field name="audit_justificacion" colspan="2" nolabel="1"
-                                   placeholder="Justificación de la diferencia..."
-                                   invisible="not audit_fuera_tolerancia and not audit_justificacion"
-                                   readonly="state in ('accounting', 'done')"/>
                         </group>
+                    </group>
+                    <group string="Observaciones de Auditoría" invisible="not slot_meter_count">
+                        <field name="audit_justificacion" colspan="2" nolabel="1"
+                               placeholder="Observaciones y justificaciones del Auditor..."
+                               readonly="audit_approved"/>
                     </group>
                 </page>
             </xpath>

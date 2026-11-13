@@ -17,6 +17,21 @@ def _cell(value):
     return '<Cell><Data ss:Type="Number">%s</Data></Cell>' % value
 
 
+def build_overview(date_str='01.01.30', handpay=0.25, eft=12649.23, credit=-15.0, egm=0.0):
+    rows = [['Overview (RD$)'], ['Period: %s - %s \u2022 Options: Table counts done on: drTMS' % (date_str, date_str)],
+            ['', 'Difference', 0.04, '', 'Cash Win/Loss Meters', -23821.01],
+            ['+', 'Cash Win/Loss Meters', -23821.01, '+', 'EGM Cash Win/Loss Meters', egm],
+            ['', '', '', '+', 'Handpay Liability Movement', handpay],
+            ['', '', '', '+', 'EFT Cash Liability Movement', eft],
+            ['+', 'Custom Accounts In', 0, '+', 'Credit Meter Cash Liability Movement', credit],
+            ['', '', '', '', '', '', '', 'EFT Cash Liability Movement', 999999]]
+    body = ''.join('<Row>%s</Row>' % ''.join(_cell(v) for v in r) for r in rows)
+    xml = ('<?xml version="1.0"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" '
+           'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
+           '<Worksheet ss:Name="1. Overview RD$"><Table>%s</Table></Worksheet></Workbook>') % body
+    return xml.encode()
+
+
 def build_file(machines, total_override=None, headers=HEADERS, box=True):
     """machines: list of dicts {code, NGWINE, CRE, BDIE, TAP, GP, ...}. Devuelve bytes SpreadsheetML como DRGT."""
     rows = ['<Row>%s</Row>' % ''.join(_cell(h) for h in headers)]
@@ -207,6 +222,8 @@ class TestSlotMeterAudit(TransactionCase):
         cuadre.action_accounting()
         self.assertEqual(cuadre.state, 'accounting')
         self.assertIn('Error de centavos en DRGT', cuadre.message_ids[0].body)
+        self.assertTrue(cuadre.audit_approved)
+        self.assertEqual(cuadre.audit_estado, 'justificado')
 
     def test_tolerance_is_configurable(self):
         self.company.casino_slot_audit_tolerance = 10.0
@@ -261,3 +278,101 @@ class TestSlotMeterAudit(TransactionCase):
         as_caja.invalidate_recordset()
         self.assertAlmostEqual(as_caja.resultado_caja_maquina, 1300.0)
         as_caja.action_audit()
+
+    # ---------------------------------------------------------------- Operation Balance
+    def _overview_for(self, cuadre, **kw):
+        kw.setdefault('date_str', cuadre.date.strftime('%d.%m.%y'))
+        kw.setdefault('egm', 1300.25)
+        kw.setdefault('credit', -10.25)
+        return build_overview(**kw)
+
+    def test_operation_balance_fills_values(self):
+        cuadre = self._new_cuadre('2030-02-01')
+        self._import(cuadre)
+        cuadre.with_user(self.auditor).import_operation_balance(self._overview_for(cuadre, handpay=5.0, eft=0.0), 'ob.xls')
+        self.assertAlmostEqual(cuadre.audit_handpay_liability, 5.0)
+        self.assertAlmostEqual(cuadre.audit_variacion_efectivo, 0.0)
+        self.assertAlmostEqual(cuadre.audit_balance_credito_maquina, -10.25)
+        self.assertAlmostEqual(cuadre.audit_diferencia, 0.0)
+        self.assertEqual(cuadre.audit_balance_filename, 'ob.xls')
+
+    def test_operation_balance_wrong_date(self):
+        cuadre = self._new_cuadre('2030-02-02')
+        with self.assertRaisesRegex(UserError, 'del 01/02/2030 al 01/02/2030'):
+            cuadre.with_user(self.auditor).import_operation_balance(build_overview(date_str='01.02.30'), 'ob.xls')
+
+    def test_operation_balance_other_day_than_slot_file(self):
+        cuadre = self._new_cuadre('2030-02-03')
+        self._import(cuadre)
+        with self.assertRaisesRegex(UserError, 'no corresponden al mismo día'):
+            cuadre.with_user(self.auditor).import_operation_balance(self._overview_for(cuadre, egm=999.0), 'ob.xls')
+        self.assertFalse(cuadre.audit_balance_file)
+
+    def test_wizard_with_operation_balance_ignores_typed_values(self):
+        cuadre = self._new_cuadre('2030-02-04')
+        wizard = self.env['casino.slot.meter.import'].with_user(self.auditor).with_context(default_cuadre_id=cuadre.id).create({
+            'file': base64.b64encode(build_file(self.lines)), 'filename': 'slot.xls',
+            'balance_file': base64.b64encode(self._overview_for(cuadre, handpay=5.0, eft=1.5)), 'balance_filename': 'ob.xls',
+            'audit_handpay_liability': 777.0, 'audit_variacion_efectivo': 777.0, 'audit_billetes_no_registrados': 2.0,
+        })
+        wizard.action_import()
+        self.assertAlmostEqual(cuadre.audit_handpay_liability, 5.0)
+        self.assertAlmostEqual(cuadre.audit_variacion_efectivo, 1.5)
+        self.assertAlmostEqual(cuadre.audit_billetes_no_registrados, 2.0)
+
+    def test_operation_balance_rejects_slot_file(self):
+        cuadre = self._new_cuadre('2030-02-05')
+        with self.assertRaisesRegex(UserError, 'Operation Balance'):
+            cuadre.with_user(self.auditor).import_operation_balance(build_file(self.lines), 'x.xls')
+
+    # ---------------------------------------------------------------- Aprobación y bloqueo
+    def test_approval_locks_observations(self):
+        cuadre = self._new_cuadre('2030-02-06')
+        self._import(cuadre)
+        cuadre.audit_handpay_liability = 5.0
+        cuadre.audit_justificacion = 'Todo conforme.'
+        self.assertEqual(cuadre.audit_estado, 'conciliado')
+        cuadre.action_accounting()
+        self.assertTrue(cuadre.audit_approved)
+        self.assertEqual(cuadre.audit_approved_user_id, self.env.user)
+        with self.assertRaisesRegex(UserError, 'ya fue aprobada'):
+            cuadre.with_user(self.auditor).audit_justificacion = 'Cambio posterior'
+        with self.assertRaisesRegex(UserError, 'ya fue aprobada'):
+            self._import(cuadre)
+        cuadre.cash_received = True  # otros campos siguen editables
+        # Devolver a Borrador quita la aprobación
+        cuadre.action_draft()
+        self.assertFalse(cuadre.audit_approved)
+        cuadre.audit_justificacion = 'Corregido'
+
+    def test_approve_historical_cuadre(self):
+        cuadre = self._new_cuadre('2030-02-07', state='done')
+        self._import(cuadre)
+        cuadre.audit_handpay_liability = 14.39
+        with self.assertRaisesRegex(UserError, 'justificación'):
+            cuadre.with_user(self.auditor).action_approve_slot_audit()
+        cuadre.audit_justificacion = 'Diferencia histórica revisada.'
+        cuadre.with_user(self.auditor).action_approve_slot_audit()
+        self.assertTrue(cuadre.audit_approved)
+        self.assertEqual(cuadre.audit_approved_user_id, self.auditor)
+        with self.assertRaisesRegex(UserError, 'Solo el Auditor'):
+            self._new_cuadre('2030-02-08', state='done').with_user(self.cajero).action_approve_slot_audit()
+
+    def test_estado_sin_contadores_y_pendiente(self):
+        cuadre = self._new_cuadre('2030-02-09')
+        self.assertEqual(cuadre.audit_estado, 'sin_contadores')
+        self._import(cuadre)
+        cuadre.audit_handpay_liability = 50.0
+        self.assertEqual(cuadre.audit_estado, 'pendiente')
+
+    def test_print_report(self):
+        cuadre = self._new_cuadre('2030-02-10')
+        self._import(cuadre)
+        cuadre.audit_handpay_liability = 5.0
+        cuadre.audit_justificacion = 'Línea 1\nLínea 2'
+        action = cuadre.with_user(self.auditor).action_print_slot_audit()
+        self.assertEqual(action['report_name'], 'ttg_casino.report_slot_audit')
+        html = self.env['ir.actions.report']._render_qweb_html('ttg_casino.report_slot_audit', cuadre.ids)[0].decode()
+        for text in ('CUADRE DE AUDITORÍA DE CONTADORES', 'CASINO PLATINO', 'RD$ 1,300.25', 'RD$ 1,295.00',
+                     'Conciliado', 'Línea 1', 'pendiente de aprobación', 'slot.xls', 'REVISADO POR / CONTABILIDAD'):
+            self.assertIn(text, html)

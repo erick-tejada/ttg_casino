@@ -240,3 +240,60 @@ def parse(content):
         'fingerprint': hashlib.sha256(canonical.encode()).hexdigest(),
     }
 
+
+
+# ------------------------------------------------------------------------------------------------
+# Reporte "Operation Balance" / Overview (RD$) de DRGT
+# ------------------------------------------------------------------------------------------------
+OVERVIEW_VALUES = {
+    'handpay_liability': 'Handpay Liability Movement',
+    'variacion_efectivo': 'EFT Cash Liability Movement',
+    'credito_maquina': 'Credit Meter Cash Liability Movement',
+    'egm_win_loss': 'EGM Cash Win/Loss Meters',
+}
+_PERIOD_RE = re.compile(r'Period:\s*(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s*-\s*(\d{1,2})\.(\d{1,2})\.(\d{2,4})')
+
+
+def _period_dates(text):
+    import datetime
+    m = _PERIOD_RE.search(text or '')
+    if not m:
+        return None
+    parts = [int(g) for g in m.groups()]
+    dates = []
+    for d, mth, y in (parts[0:3], parts[3:6]):
+        if y < 100:
+            y += 2000
+        try:
+            dates.append(datetime.date(y, mth, d))
+        except ValueError:
+            return None
+    return tuple(dates)
+
+
+def parse_overview(content):
+    """Lee el reporte "Operation Balance" (hoja Overview RD$) de DRGT.
+
+    Devuelve dict(period=(fecha_desde, fecha_hasta) o None, values={clave: número}).
+    Cada valor se toma de la celda a la derecha de la primera etiqueta que coincide.
+    """
+    rows = read_rows(content)
+    texts = [[_to_text(c) for c in row] for row in rows]
+    if not any('overview' in c.lower() for row in texts[:3] for c in row if c):
+        raise SlotMeterFileError('El archivo no es el reporte "Operation Balance" (Overview RD$) de DRGT.')
+    period = None
+    for row in texts[:5]:
+        for cell in row:
+            period = period or _period_dates(cell)
+    values = {}
+    for key, label in OVERVIEW_VALUES.items():
+        for r, row in enumerate(rows):
+            for c, cell in enumerate(texts[r]):
+                if cell == label and key not in values:
+                    nxt = row[c + 1] if c + 1 < len(row) else None
+                    number = to_number(nxt)
+                    if number is not None and _to_text(nxt) != '':
+                        values[key] = number
+        if key not in values and key != 'egm_win_loss':
+            raise SlotMeterFileError('No se encontró "%s" en el reporte Operation Balance.' % label)
+    return {'period': period, 'values': values}

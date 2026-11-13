@@ -2,7 +2,7 @@
 {
     'name': 'TTG - Casino',
     'author': "Tejada Tech Group EIRL",
-    'version': '18.0.0.24',
+    'version': '18.0.0.25',
     'sequence': 100,
     'category': 'Accounting/Accounting',
     'description': """
@@ -52,6 +52,7 @@
         'report/detalle_bill_drop_report.xml',
         'report/bill_drop_mesas_report.xml',
         'report/detalle_marcas_por_prestamista.xml',
+        'report/slot_audit_report.xml',
     ],
     #'demo': ['data/account_ttg_demo.xml'],
     'installable': True,

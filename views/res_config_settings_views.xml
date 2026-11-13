@@ -78,6 +78,9 @@
                         <setting id="casino_slot_audit_tolerance" string="Tolerancia de Diferencia" help="Diferencia máxima (RD$) entre el Resultado según Contadores y el Resultado Caja Máquina. Si se supera, el Auditor debe escribir una justificación.">
                             <field name="casino_slot_audit_tolerance"/>
                         </setting>
+                        <setting id="casino_nombre_comercial" string="Nombre Comercial" help="Se imprime debajo de la razón social en el Cuadre de Auditoría de Contadores.">
+                            <field name="casino_nombre_comercial"/>
+                        </setting>
                     </block>
 <!--                    bloque 3-->
 

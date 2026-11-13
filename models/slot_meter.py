@@ -92,7 +92,50 @@ class CuadreDeCaja(models.Model):
     audit_diferencia = fields.Monetary('Diferencia vs Resultado Caja Máquina', compute='_compute_slot_audit', store=True,
                                        help='Resultado según Contadores menos Resultado Caja Máquina.')
     audit_fuera_tolerancia = fields.Boolean('Fuera de Tolerancia', compute='_compute_slot_audit', store=True)
-    audit_justificacion = fields.Text('Justificación de la Diferencia', copy=False, tracking=True)
+    audit_justificacion = fields.Text('Observaciones de Auditoría', copy=False, tracking=True,
+                                      help='Observaciones y justificaciones del Auditor. Obligatorias si la diferencia '
+                                           'supera la tolerancia. Se bloquean al aprobar la auditoría.')
+    audit_estado = fields.Selection([
+        ('sin_contadores', 'Sin contadores importados'),
+        ('conciliado', 'Conciliado'),
+        ('justificado', 'Diferencia justificada'),
+        ('pendiente', 'Diferencia pendiente de justificación'),
+    ], string='Estado de Conciliación', compute='_compute_audit_estado', store=True)
+    audit_approved = fields.Boolean('Auditoría Aprobada', copy=False, readonly=True, tracking=True)
+    audit_approved_date = fields.Datetime('Aprobada el', copy=False, readonly=True)
+    audit_approved_user_id = fields.Many2one('res.users', 'Aprobada por', copy=False, readonly=True)
+
+    # Reporte "Operation Balance" de DRGT
+    audit_balance_file = fields.Binary('Archivo Operation Balance', attachment=True, copy=False)
+    audit_balance_filename = fields.Char('Nombre del Archivo Operation Balance', copy=False)
+    audit_balance_credito_maquina = fields.Monetary('Crédito en Máquina según Operation Balance', copy=False, readonly=True,
+                                                    help='"Credit Meter Cash Liability Movement". Se compara con la suma de la columna CRE.')
+    audit_balance_egm_win_loss = fields.Monetary('Ganancia EGM según Operation Balance', copy=False, readonly=True,
+                                                 help='"EGM Cash Win/Loss Meters". Se compara con la suma de la columna NGWINE.')
+
+    AUDIT_LOCKED_FIELDS = ('audit_justificacion', 'audit_handpay_liability', 'audit_variacion_efectivo',
+                           'audit_billetes_no_registrados', 'slot_meter_file', 'audit_balance_file')
+
+    @api.depends('slot_meter_ids', 'audit_fuera_tolerancia', 'audit_justificacion')
+    def _compute_audit_estado(self):
+        for record in self:
+            if not record.slot_meter_ids:
+                record.audit_estado = 'sin_contadores'
+            elif not record.audit_fuera_tolerancia:
+                record.audit_estado = 'conciliado'
+            elif (record.audit_justificacion or '').strip():
+                record.audit_estado = 'justificado'
+            else:
+                record.audit_estado = 'pendiente'
+
+    def write(self, vals):
+        locked = set(vals) & set(self.AUDIT_LOCKED_FIELDS)
+        if locked and not self.env.context.get('casino_audit_unlock'):
+            approved = self.filtered('audit_approved')
+            if approved:
+                raise UserError(_('La auditoría de contadores del %s ya fue aprobada; sus observaciones y valores no se '
+                                  'pueden modificar.') % ', '.join(approved.mapped(lambda r: r._slot_date_label())))
+        return super().write(vals)
 
     def _compute_slot_meter_count(self):
         data = self.env['casino.slot.meter'].sudo()._read_group([('cuadre_id', 'in', self.ids)], ['cuadre_id'], ['__count'])
@@ -136,6 +179,8 @@ class CuadreDeCaja(models.Model):
         if not self.env.user.has_group('ttg_casino.group_casino_audit'):
             raise UserError(_('Solo el Auditor puede importar los contadores de las máquinas.'))
         for record in self:
+            if record.audit_approved:
+                raise UserError(_('La auditoría de contadores del %s ya fue aprobada.') % record._slot_date_label())
             if record.state == 'draft':
                 raise UserError(_('El cuadre del %s todavía está en Borrador. Los contadores se importan después de que Caja '
                                   'lo presente al Auditor.') % record._slot_date_label())
@@ -193,7 +238,66 @@ class CuadreDeCaja(models.Model):
         if previous:
             body += ' ' + _('Se reemplazaron %s líneas de una importación anterior.') % previous
         self.message_post(body=body)
+        self._check_slot_files_match()
         return True
+
+    def import_operation_balance(self, content, filename=False):
+        """Importa el reporte "Operation Balance" de DRGT: llena Handpay Liability y Variación de Efectivo."""
+        self.ensure_one()
+        self._check_slot_meter_import_allowed()
+        try:
+            parsed = slot_meter_parser.parse_overview(content)
+        except slot_meter_parser.SlotMeterFileError as e:
+            raise UserError(str(e))
+        period = parsed['period']
+        if not period:
+            raise UserError(_('No se encontró el período ("Period: ...") en el reporte Operation Balance. Expórtelo de '
+                              'DRGT sin modificarlo.'))
+        if period[0] != self.date or period[1] != self.date:
+            raise UserError(_('El reporte Operation Balance es del %(desde)s al %(hasta)s, pero el cuadre es del %(fecha)s.',
+                              desde=period[0].strftime('%d/%m/%Y'), hasta=period[1].strftime('%d/%m/%Y'),
+                              fecha=self._slot_date_label()))
+        values = parsed['values']
+        self._check_slot_files_match(egm=values.get('egm_win_loss', 0.0), credito=values['credito_maquina'], has_balance=True)
+        self.write({
+            'audit_handpay_liability': values['handpay_liability'],
+            'audit_variacion_efectivo': values['variacion_efectivo'],
+            'audit_balance_credito_maquina': values['credito_maquina'],
+            'audit_balance_egm_win_loss': values.get('egm_win_loss', 0.0),
+            'audit_balance_file': base64.b64encode(content),
+            'audit_balance_filename': filename or 'operation_balance.xls',
+        })
+        self.message_post(body=_('Operation Balance de DRGT importado (%(file)s): Handpay Liability %(hp)s, Variación de '
+                                 'Efectivo %(var)s.', file=filename or '', hp=self._fmt_amount(values['handpay_liability']),
+                                 var=self._fmt_amount(values['variacion_efectivo'])))
+        return True
+
+    def _slot_files_mismatches(self, egm=None, credito=None, has_balance=None):
+        """Diferencias entre el Slot Analysis y el Operation Balance (señal de archivos de días distintos)."""
+        self.ensure_one()
+        issues = []
+        has_balance = bool(self.audit_balance_file) if has_balance is None else has_balance
+        if not (self.slot_meter_ids and has_balance):
+            return issues
+        egm = self.audit_balance_egm_win_loss if egm is None else egm
+        credito = self.audit_balance_credito_maquina if credito is None else credito
+        currency = self.currency_id or self.company_id.currency_id
+        ngwine = currency.round(sum(self.slot_meter_ids.mapped('ngwine')))
+        cre = currency.round(sum(self.slot_meter_ids.mapped('cre')))
+        if float_compare(ngwine, egm, precision_digits=1) != 0:
+            issues.append(_('Ganancia de contadores: Slot Analysis %(a)s, Operation Balance %(b)s.',
+                            a=self._fmt_amount(ngwine), b=self._fmt_amount(egm)))
+        if float_compare(cre, credito, precision_digits=1) != 0:
+            issues.append(_('Crédito en máquina: Slot Analysis %(a)s, Operation Balance %(b)s.',
+                            a=self._fmt_amount(cre), b=self._fmt_amount(credito)))
+        return issues
+
+    def _check_slot_files_match(self, **kwargs):
+        for record in self:
+            issues = record._slot_files_mismatches(**kwargs)
+            if issues:
+                raise UserError(_('El Slot Analysis y el Operation Balance no corresponden al mismo día:\n%s')
+                                % '\n'.join(issues))
 
     def _fmt_amount(self, amount):
         return '{:,.2f}'.format(amount)
@@ -230,20 +334,54 @@ class CuadreDeCaja(models.Model):
                 continue
             if record.audit_fuera_tolerancia and not (record.audit_justificacion or '').strip():
                 raise UserError(_('La diferencia entre los contadores y Caja es de %(diff)s, mayor que la tolerancia de '
-                                  '%(tol)s. Escriba la justificación en la pestaña "Auditoría de Contadores" antes de '
-                                  'presentar a Contabilidad.',
+                                  '%(tol)s. Escriba la justificación en las Observaciones de Auditoría antes de '
+                                  'aprobar la auditoría.',
                                   diff=record._fmt_amount(record.audit_diferencia),
                                   tol=record._fmt_amount(record.company_id.casino_slot_audit_tolerance)))
+
+    def _approve_slot_audit(self):
+        for record in self.filtered(lambda r: r.slot_meter_ids and not r.audit_approved):
+            record.with_context(casino_audit_unlock=True).write({
+                'audit_approved': True,
+                'audit_approved_date': fields.Datetime.now(),
+                'audit_approved_user_id': self.env.user.id,
+            })
+            body = _('Auditoría de contadores aprobada: Resultado según Contadores %(res)s, Resultado Caja Máquina %(caja)s, '
+                     'diferencia %(diff)s (%(estado)s).', res=record._fmt_amount(record.audit_resultado),
+                     caja=record._fmt_amount(record.resultado_caja_maquina), diff=record._fmt_amount(record.audit_diferencia),
+                     estado=dict(record._fields['audit_estado']._description_selection(self.env))[record.audit_estado])
+            if (record.audit_justificacion or '').strip():
+                body += ' ' + _('Observaciones: %s') % record.audit_justificacion.strip()
+            record.message_post(body=body)
 
     def action_accounting(self):
         self._compute_all()
         self._check_slot_audit()
         res = super().action_accounting()
-        for record in self.filtered('slot_meter_ids'):
-            body = _('Auditoría de contadores: Resultado según Contadores %(res)s, Resultado Caja Máquina %(caja)s, '
-                     'diferencia %(diff)s.', res=record._fmt_amount(record.audit_resultado),
-                     caja=record._fmt_amount(record.resultado_caja_maquina), diff=record._fmt_amount(record.audit_diferencia))
-            if record.audit_fuera_tolerancia:
-                body += ' ' + _('Justificación: %s') % record.audit_justificacion.strip()
-            record.message_post(body=body)
+        self._approve_slot_audit()
         return res
+
+    def action_approve_slot_audit(self):
+        """Aprobar la auditoría de un cuadre que ya pasó a Contabilidad o está cerrado (carga de días anteriores)."""
+        if not self.env.user.has_group('ttg_casino.group_casino_audit'):
+            raise UserError(_('Solo el Auditor puede aprobar la auditoría de contadores.'))
+        for record in self:
+            if not record.slot_meter_ids:
+                raise UserError(_('Importe el archivo de contadores antes de aprobar la auditoría.'))
+        self._check_slot_audit()
+        self._approve_slot_audit()
+        return True
+
+    def action_draft(self):
+        res = super().action_draft()
+        approved = self.filtered('audit_approved')
+        if approved:
+            approved.with_context(casino_audit_unlock=True).write({
+                'audit_approved': False, 'audit_approved_date': False, 'audit_approved_user_id': False})
+            for record in approved:
+                record.message_post(body=_('El cuadre volvió a Borrador: la auditoría de contadores debe aprobarse de nuevo.'))
+        return res
+
+    def action_print_slot_audit(self):
+        self.ensure_one()
+        return self.env.ref('ttg_casino.action_report_slot_audit').report_action(self)

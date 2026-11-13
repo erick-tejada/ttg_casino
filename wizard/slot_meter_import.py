@@ -14,6 +14,9 @@ class SlotMeterImport(models.TransientModel):
     currency_id = fields.Many2one('res.currency', related='cuadre_id.currency_id')
     file = fields.Binary('Reporte "Slot Analysis" de DRGT')
     filename = fields.Char('Nombre del Archivo')
+    balance_file = fields.Binary('Reporte "Operation Balance" de DRGT',
+                                 help='Si lo sube, Handpay Liability y Variación de Efectivo se toman de este archivo.')
+    balance_filename = fields.Char('Nombre del Archivo Operation Balance')
     has_lines = fields.Boolean(compute='_compute_has_lines')
     audit_handpay_liability = fields.Monetary('Handpay Liability', help='"Handpay Liability Movement" del resumen de DRGT.')
     audit_variacion_efectivo = fields.Monetary('Variación de Efectivo', help='"EFT Cash Liability Movement" del resumen de DRGT.')
@@ -46,9 +49,13 @@ class SlotMeterImport(models.TransientModel):
             raise UserError(_('Seleccione el archivo "Slot Analysis" exportado desde DRGT.'))
         else:
             cuadre._check_slot_meter_import_allowed()
-        cuadre.write({
-            'audit_handpay_liability': self.audit_handpay_liability,
-            'audit_variacion_efectivo': self.audit_variacion_efectivo,
-            'audit_billetes_no_registrados': self.audit_billetes_no_registrados,
-        })
+        vals = {'audit_billetes_no_registrados': self.audit_billetes_no_registrados}
+        if self.balance_file:
+            cuadre.import_operation_balance(base64.b64decode(self.balance_file), self.balance_filename)
+        else:
+            vals.update({
+                'audit_handpay_liability': self.audit_handpay_liability,
+                'audit_variacion_efectivo': self.audit_variacion_efectivo,
+            })
+        cuadre.write(vals)
         return {'type': 'ir.actions.act_window_close'}

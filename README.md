@@ -14,3 +14,15 @@ Modulos de Control de Ingresos para Casinos
   Registrados + Crédito en Máquina (CRE). Se compara con Resultado Caja Máquina.
 - Presentar a Contabilidad exige el archivo (configurable) y una justificación si la diferencia supera la
   tolerancia (RD$3 por defecto). Ajustes en Casino > Configuraciones.
+
+### 18.0.0.25 — Reporte imprimible, aprobación y Operation Balance
+- Botón "Imprimir Auditoría de Contadores" (PDF Carta, plantilla de Irwing): datos del archivo, cuadre de contadores,
+  comparación con Caja, estado de conciliación, observaciones y firmas.
+- Observaciones de Auditoría siempre visibles; obligatorias si la diferencia supera la tolerancia. Se bloquean al aprobar
+  (al presentar a Contabilidad, o con "Aprobar Auditoría" en cuadres ya en Contabilidad/Cerrados). Devolver a Borrador
+  quita la aprobación.
+- Estado de conciliación: Sin contadores / Conciliado / Diferencia justificada / Diferencia pendiente de justificación.
+- Import opcional del reporte "Operation Balance" (Overview RD$) de DRGT: llena Handpay Liability y Variación de
+  Efectivo, valida que el período sea la fecha del cuadre y que su ganancia EGM y crédito en máquina coincidan con el
+  Slot Analysis (detecta archivos de días distintos).
+- Ajuste "Nombre Comercial" (por defecto CASINO PLATINO) para el encabezado.
