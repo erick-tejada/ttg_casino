@@ -32,6 +32,24 @@ def build_overview(date_str='01.01.30', handpay=0.25, eft=12649.23, credit=-15.0
     return xml.encode()
 
 
+def build_cash_desk(date_str=None, rifas=5000.0, devoluciones=2360.0):
+    rows = []
+    if date_str:
+        rows.append(['Period: %s - %s \u2022 Devices: DP01 [DP11 [001-100-001 [Caja01-Maquinas]]]' % (date_str, date_str)])
+    rows += [['Account', 'Opening', 'Closing', 'Difference', 'In', 'Out', 'Movement', 'Variance'],
+             ['Inventory'], ['DOP Bill', 2017000, 2017000, '-', 5000000, 909000, 4091000, -4091000],
+             ['Account'], ['Handpay Ticket Handpay', '-', 529661, 529661, 529661, '-', 529661, '-'],
+             ['Custom Account'],
+             ['DEVOLUCION FALLA DE MAQUINA', '-', devoluciones, devoluciones, devoluciones, '-', devoluciones, '-'],
+             ['RIFA MAQUINA RIFA EFECTIVO', '-', rifas, rifas, rifas, '-', rifas, '-'],
+             ['RIFA MAQUINA RIFA EFECTIVO 2', '-', '-', '-', '-', '-', '-', '-']]
+    body = ''.join('<Row>%s</Row>' % ''.join(_cell(v) for v in r) for r in rows)
+    xml = ('<?xml version="1.0"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" '
+           'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
+           '<Worksheet ss:Name="1. Overview RD$"><Table>%s</Table></Worksheet></Workbook>') % body
+    return xml.encode()
+
+
 def build_file(machines, total_override=None, headers=HEADERS, box=True):
     """machines: list of dicts {code, NGWINE, CRE, BDIE, TAP, GP, ...}. Devuelve bytes SpreadsheetML como DRGT."""
     rows = ['<Row>%s</Row>' % ''.join(_cell(h) for h in headers)]
@@ -376,3 +394,54 @@ class TestSlotMeterAudit(TransactionCase):
         for text in ('CUADRE DE AUDITORÍA DE CONTADORES', 'CASINO PLATINO', 'RD$ 1,300.25', 'RD$ 1,295.00',
                      'Conciliado', 'Línea 1', 'pendiente de aprobación', 'slot.xls', 'REVISADO POR / CONTABILIDAD'):
             self.assertIn(text, html)
+
+    # ---------------------------------------------------------------- Caja DRGT (Rifas y Devoluciones)
+    def test_cash_desk_matches(self):
+        cuadre = self._new_cuadre('2030-03-01')
+        self.env['casino.premios.maquina'].create({'cuadre_id': cuadre.id, 'employee_id': self.employee.id,
+                                                   'employee_sales_id': self.employee.id, 'premio_id': self.premio.id,
+                                                   'partner_id': self.partner.id, 'amount': 5000.0})
+        self.env['casino.devolucion'].create({'cuadre_id': cuadre.id, 'maquina_id': self.machines[1].id,
+                                              'partner_id': self.partner.id, 'error_id': self.error.id, 'amount': 2360.0})
+        cuadre.with_user(self.auditor).import_cash_desk(build_cash_desk('01.03.30'), 'caja.xls')
+        self.assertAlmostEqual(cuadre.audit_drgt_rifas, 5000.0)
+        self.assertAlmostEqual(cuadre.audit_drgt_devoluciones, 2360.0)
+        self.assertFalse(cuadre.audit_cash_mismatch)
+
+    def test_cash_desk_flags_difference_without_changing_formula(self):
+        cuadre = self._new_cuadre('2030-03-02')
+        self._import(cuadre)
+        cuadre.audit_handpay_liability = 5.0
+        before = cuadre.audit_resultado
+        cuadre.with_user(self.auditor).import_cash_desk(build_cash_desk(), 'caja.xlsx')
+        self.assertTrue(cuadre.audit_cash_mismatch)
+        self.assertAlmostEqual(cuadre.audit_dif_rifas, -5000.0)
+        self.assertAlmostEqual(cuadre.audit_dif_devoluciones, -2360.0)
+        self.assertAlmostEqual(cuadre.audit_resultado, before)  # la fórmula sigue usando lo registrado por Caja
+        self.assertIn('no coinciden', cuadre.message_ids[0].body)
+        self.assertIn('no trae el período', cuadre.message_ids[0].body)
+        # Solo marca: no bloquea la aprobación
+        cuadre.action_accounting()
+        self.assertTrue(cuadre.audit_approved)
+        html = self.env['ir.actions.report']._render_qweb_html('ttg_casino.report_slot_audit', cuadre.ids)[0].decode()
+        self.assertIn('RIFAS Y DEVOLUCIONES (CUADRE vs DRGT)', html)
+        self.assertIn('no coinciden con DRGT', html)
+
+    def test_cash_desk_wrong_date_and_wrong_file(self):
+        cuadre = self._new_cuadre('2030-03-03')
+        with self.assertRaisesRegex(UserError, 'pero el cuadre es del 03/03/2030'):
+            cuadre.with_user(self.auditor).import_cash_desk(build_cash_desk('01.03.30'), 'caja.xls')
+        with self.assertRaisesRegex(UserError, 'reporte de Caja'):
+            cuadre.with_user(self.auditor).import_cash_desk(build_overview(), 'x.xls')
+
+    def test_wizard_with_cash_desk(self):
+        cuadre = self._new_cuadre('2030-03-04')
+        wizard = self.env['casino.slot.meter.import'].with_user(self.auditor).with_context(default_cuadre_id=cuadre.id).create({
+            'file': base64.b64encode(build_file(self.lines)), 'filename': 'slot.xls',
+            'cash_file': base64.b64encode(build_cash_desk('04.03.30', rifas=0, devoluciones=0)), 'cash_filename': 'caja.xls',
+            'audit_handpay_liability': 5.0,
+        })
+        wizard.action_import()
+        self.assertEqual(cuadre.audit_cash_filename, 'caja.xls')
+        self.assertFalse(cuadre.audit_cash_mismatch)
+        self.assertAlmostEqual(cuadre.audit_diferencia, 0.0)

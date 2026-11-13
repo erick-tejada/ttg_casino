@@ -85,10 +85,22 @@
                         <td t-attf-class="amount {{ 'negative' if doc.audit_fuera_tolerancia else '' }}" t-out="money(doc.audit_diferencia)"/></tr>
                 </table>
 
+                <table class="datos" t-if="doc.audit_cash_file">
+                    <tr><th>RIFAS Y DEVOLUCIONES (CUADRE vs DRGT)</th><th class="amount" style="width: 20%;">CUADRE</th>
+                        <th class="amount" style="width: 20%;">DRGT</th><th class="amount" style="width: 20%;">DIFERENCIA</th></tr>
+                    <tr><td>Rifas</td><td class="amount" t-out="money(doc.premios_maquina_total)"/>
+                        <td class="amount" t-out="money(doc.audit_drgt_rifas)"/>
+                        <td t-attf-class="amount {{ 'negative' if doc.audit_dif_rifas else '' }}" t-out="money(doc.audit_dif_rifas)"/></tr>
+                    <tr><td>Devoluciones</td><td class="amount" t-out="money(doc.devolucion_total)"/>
+                        <td class="amount" t-out="money(doc.audit_drgt_devoluciones)"/>
+                        <td t-attf-class="amount {{ 'negative' if doc.audit_dif_devoluciones else '' }}" t-out="money(doc.audit_dif_devoluciones)"/></tr>
+                </table>
+
                 <div>
                     <strong>Estado de conciliación:</strong>
                     <span t-out="estados.get(doc.audit_estado, '')"/>
                     <span style="color: #666;">(tolerancia <t t-out="money(company.casino_slot_audit_tolerance)"/>)</span>
+                    <span t-if="doc.audit_cash_mismatch" class="negative"> · Rifas/Devoluciones no coinciden con DRGT.</span>
                 </div>
                 <div style="margin-bottom: 4px;">
                     <strong>Auditoría:</strong>

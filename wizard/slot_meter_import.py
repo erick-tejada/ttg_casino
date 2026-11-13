@@ -17,6 +17,9 @@ class SlotMeterImport(models.TransientModel):
     balance_file = fields.Binary('Reporte "Operation Balance" de DRGT',
                                  help='Si lo sube, Handpay Liability y Variación de Efectivo se toman de este archivo.')
     balance_filename = fields.Char('Nombre del Archivo Operation Balance')
+    cash_file = fields.Binary('Reporte de Caja de DRGT',
+                              help='Reporte de Caja (cuentas) de DRGT. Sus Rifas y Devoluciones se comparan con las del cuadre.')
+    cash_filename = fields.Char('Nombre del Archivo de Caja')
     has_lines = fields.Boolean(compute='_compute_has_lines')
     audit_handpay_liability = fields.Monetary('Handpay Liability', help='"Handpay Liability Movement" del resumen de DRGT.')
     audit_variacion_efectivo = fields.Monetary('Variación de Efectivo', help='"EFT Cash Liability Movement" del resumen de DRGT.')
@@ -57,5 +60,7 @@ class SlotMeterImport(models.TransientModel):
                 'audit_handpay_liability': self.audit_handpay_liability,
                 'audit_variacion_efectivo': self.audit_variacion_efectivo,
             })
+        if self.cash_file:
+            cuadre.import_cash_desk(base64.b64decode(self.cash_file), self.cash_filename)
         cuadre.write(vals)
         return {'type': 'ir.actions.act_window_close'}

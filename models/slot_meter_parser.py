@@ -297,3 +297,51 @@ def parse_overview(content):
         if key not in values and key != 'egm_win_loss':
             raise SlotMeterFileError('No se encontró "%s" en el reporte Operation Balance.' % label)
     return {'period': period, 'values': values}
+
+
+# ------------------------------------------------------------------------------------------------
+# Reporte de Caja (Cash Desk) de DRGT: cuentas personalizadas de Rifas y Devoluciones
+# ------------------------------------------------------------------------------------------------
+CASH_DESK_PREFIXES = {
+    'rifas': ('RIFA',),
+    'devoluciones': ('DEVOLUCION', 'DEVOLUCIÓN'),
+}
+
+
+def parse_cash_desk(content):
+    """Lee el reporte de Caja (Cash Desk) de DRGT.
+
+    Devuelve dict(period=(desde, hasta) o None, values={'rifas': x, 'devoluciones': y}, accounts=[(cuenta, monto)]).
+    Suma la columna "Movement" de las cuentas cuyo nombre empieza con RIFA / DEVOLUCION.
+    """
+    rows = read_rows(content)
+    texts = [[_to_text(c) for c in row] for row in rows]
+    header_idx = None
+    for i, row in enumerate(texts):
+        names = [_norm_header(c) for c in row]
+        if 'Account' in names and 'Movement' in names:
+            header_idx = i
+            break
+    if header_idx is None:
+        raise SlotMeterFileError('El archivo no es el reporte de Caja de DRGT (no se encontraron las columnas '
+                                 '"Account" y "Movement").')
+    names = [_norm_header(c) for c in texts[header_idx]]
+    col_account, col_movement = names.index('Account'), names.index('Movement')
+    period = None
+    for row in texts[:header_idx + 1]:
+        for cell in row:
+            period = period or _period_dates(cell)
+    values = dict.fromkeys(CASH_DESK_PREFIXES, 0.0)
+    accounts = []
+    for r in range(header_idx + 1, len(rows)):
+        name = texts[r][col_account] if col_account < len(texts[r]) else ''
+        upper = name.upper()
+        for key, prefixes in CASH_DESK_PREFIXES.items():
+            if upper.startswith(prefixes):
+                raw = rows[r][col_movement] if col_movement < len(rows[r]) else None
+                number = to_number('0' if _to_text(raw) in ('', '-') else raw)
+                if number is None:
+                    raise SlotMeterFileError('El monto de la cuenta "%s" no es un número: %s' % (name, raw))
+                values[key] += number
+                accounts.append((name, number))
+    return {'period': period, 'values': {k: round(v, 2) for k, v in values.items()}, 'accounts': accounts}

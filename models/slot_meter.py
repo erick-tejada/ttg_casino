@@ -113,8 +113,30 @@ class CuadreDeCaja(models.Model):
     audit_balance_egm_win_loss = fields.Monetary('Ganancia EGM según Operation Balance', copy=False, readonly=True,
                                                  help='"EGM Cash Win/Loss Meters". Se compara con la suma de la columna NGWINE.')
 
+    # Reporte de Caja de DRGT: Rifas y Devoluciones según DRGT, comparadas con las registradas por Caja en el cuadre
+    audit_cash_file = fields.Binary('Archivo de Caja DRGT', attachment=True, copy=False)
+    audit_cash_filename = fields.Char('Nombre del Archivo de Caja DRGT', copy=False)
+    audit_drgt_rifas = fields.Monetary('Rifas según DRGT', copy=False, readonly=True)
+    audit_drgt_devoluciones = fields.Monetary('Devoluciones según DRGT', copy=False, readonly=True)
+    audit_dif_rifas = fields.Monetary('Diferencia Rifas (Cuadre - DRGT)', compute='_compute_audit_cash_diff', store=True)
+    audit_dif_devoluciones = fields.Monetary('Diferencia Devoluciones (Cuadre - DRGT)', compute='_compute_audit_cash_diff', store=True)
+    audit_cash_mismatch = fields.Boolean('Rifas/Devoluciones no Coinciden con DRGT', compute='_compute_audit_cash_diff', store=True)
+
     AUDIT_LOCKED_FIELDS = ('audit_justificacion', 'audit_handpay_liability', 'audit_variacion_efectivo',
-                           'audit_billetes_no_registrados', 'slot_meter_file', 'audit_balance_file')
+                           'audit_billetes_no_registrados', 'slot_meter_file', 'audit_balance_file', 'audit_cash_file')
+
+    @api.depends('audit_cash_file', 'audit_drgt_rifas', 'audit_drgt_devoluciones', 'premios_maquina_total', 'devolucion_total')
+    def _compute_audit_cash_diff(self):
+        for record in self:
+            currency = record.currency_id or record.company_id.currency_id
+            if record.audit_cash_file:
+                record.audit_dif_rifas = currency.round(record.premios_maquina_total - record.audit_drgt_rifas)
+                record.audit_dif_devoluciones = currency.round(record.devolucion_total - record.audit_drgt_devoluciones)
+                record.audit_cash_mismatch = not (currency.is_zero(record.audit_dif_rifas)
+                                                  and currency.is_zero(record.audit_dif_devoluciones))
+            else:
+                record.audit_dif_rifas = record.audit_dif_devoluciones = 0.0
+                record.audit_cash_mismatch = False
 
     @api.depends('slot_meter_ids', 'audit_fuera_tolerancia', 'audit_justificacion')
     def _compute_audit_estado(self):
@@ -270,6 +292,37 @@ class CuadreDeCaja(models.Model):
         self.message_post(body=_('Operation Balance de DRGT importado (%(file)s): Handpay Liability %(hp)s, Variación de '
                                  'Efectivo %(var)s.', file=filename or '', hp=self._fmt_amount(values['handpay_liability']),
                                  var=self._fmt_amount(values['variacion_efectivo'])))
+        return True
+
+    def import_cash_desk(self, content, filename=False):
+        """Importa el reporte de Caja de DRGT: guarda Rifas y Devoluciones según DRGT para compararlas con el cuadre."""
+        self.ensure_one()
+        self._check_slot_meter_import_allowed()
+        try:
+            parsed = slot_meter_parser.parse_cash_desk(content)
+        except slot_meter_parser.SlotMeterFileError as e:
+            raise UserError(str(e))
+        period = parsed['period']
+        if period and (period[0] != self.date or period[1] != self.date):
+            raise UserError(_('El reporte de Caja de DRGT es del %(desde)s al %(hasta)s, pero el cuadre es del %(fecha)s.',
+                              desde=period[0].strftime('%d/%m/%Y'), hasta=period[1].strftime('%d/%m/%Y'),
+                              fecha=self._slot_date_label()))
+        values = parsed['values']
+        self.write({
+            'audit_drgt_rifas': values['rifas'],
+            'audit_drgt_devoluciones': values['devoluciones'],
+            'audit_cash_file': base64.b64encode(content),
+            'audit_cash_filename': filename or 'caja_drgt.xlsx',
+        })
+        body = _('Reporte de Caja de DRGT importado (%(file)s): Rifas %(rifas)s (cuadre %(rifas_c)s), Devoluciones '
+                 '%(dev)s (cuadre %(dev_c)s).', file=filename or '', rifas=self._fmt_amount(values['rifas']),
+                 rifas_c=self._fmt_amount(self.premios_maquina_total), dev=self._fmt_amount(values['devoluciones']),
+                 dev_c=self._fmt_amount(self.devolucion_total))
+        if not period:
+            body += ' ' + _('El archivo no trae el período, no se pudo validar la fecha.')
+        if self.audit_cash_mismatch:
+            body += ' ' + _('ATENCIÓN: no coinciden con lo registrado por Caja.')
+        self.message_post(body=body)
         return True
 
     def _slot_files_mismatches(self, egm=None, credito=None, has_balance=None):

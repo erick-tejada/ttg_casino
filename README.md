@@ -26,3 +26,9 @@ Modulos de Control de Ingresos para Casinos
   Efectivo, valida que el período sea la fecha del cuadre y que su ganancia EGM y crédito en máquina coincidan con el
   Slot Analysis (detecta archivos de días distintos).
 - Ajuste "Nombre Comercial" (por defecto CASINO PLATINO) para el encabezado.
+
+### 18.0.0.26 — Rifas y Devoluciones contra el reporte de Caja de DRGT
+- Tercer archivo opcional en la importación: reporte de Caja (cuentas) de DRGT. Suma la columna Movement de las cuentas
+  RIFA* y DEVOLUCION*, valida el período si el archivo lo trae, y muestra Cuadre vs DRGT con su diferencia (pestaña,
+  lista de cuadres y PDF). Solo marca: no cambia la fórmula (usa lo registrado por Caja) ni bloquea la aprobación.
+- Billetes No Registrados se sigue digitando a mano (no está en ningún reporte de DRGT).
