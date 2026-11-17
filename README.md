@@ -32,3 +32,9 @@ Modulos de Control de Ingresos para Casinos
   RIFA* y DEVOLUCION*, valida el período si el archivo lo trae, y muestra Cuadre vs DRGT con su diferencia (pestaña,
   lista de cuadres y PDF). Solo marca: no cambia la fórmula (usa lo registrado por Caja) ni bloquea la aprobación.
 - Billetes No Registrados se sigue digitando a mano (no está en ningún reporte de DRGT).
+
+### 18.0.0.27 — Ajustes al reporte (feedback del cliente 17/11)
+- Rifas y Devoluciones del cuadre de contadores se toman del reporte de Caja de DRGT cuando se importa (si no, del cuadre).
+- Nueva línea editable "(+) Devoluciones Devueltas" (devoluciones que el cliente devolvió en Caja al finalizar el turno).
+- Se quita del PDF la tabla "Rifas y Devoluciones (Cuadre vs DRGT)" y su aviso; en pantalla queda como informativa.
+- Tolerancia por defecto RD$ 99.00.

@@ -79,9 +79,11 @@ class CuadreDeCaja(models.Model):
     audit_sobrantes = fields.Monetary('Sobrantes', compute='_compute_slot_audit', store=True,
                                       help='Total de Sobrantes registrados en este cuadre.')
     audit_rifas = fields.Monetary('Rifas', compute='_compute_slot_audit', store=True,
-                                  help='Total de Premios/Rifas de Máquinas registrados en este cuadre.')
+                                  help='Rifas del reporte de Caja de DRGT. Si no se ha importado, las registradas en este cuadre.')
     audit_devoluciones = fields.Monetary('Devoluciones', compute='_compute_slot_audit', store=True,
-                                        help='Total de Devoluciones registradas en este cuadre.')
+                                        help='Devoluciones del reporte de Caja de DRGT. Si no se ha importado, las registradas en este cuadre.')
+    audit_devoluciones_devueltas = fields.Monetary('Devoluciones Devueltas', copy=False, tracking=True,
+                                                   help='Devoluciones que el cliente devolvió en Caja al finalizar el turno.')
     audit_variacion_efectivo = fields.Monetary('Variación de Efectivo', copy=False, tracking=True,
                                                help='"EFT Cash Liability Movement" del resumen de DRGT.')
     audit_billetes_no_registrados = fields.Monetary('Billetes No Registrados', copy=False, tracking=True,
@@ -123,7 +125,8 @@ class CuadreDeCaja(models.Model):
     audit_cash_mismatch = fields.Boolean('Rifas/Devoluciones no Coinciden con DRGT', compute='_compute_audit_cash_diff', store=True)
 
     AUDIT_LOCKED_FIELDS = ('audit_justificacion', 'audit_handpay_liability', 'audit_variacion_efectivo',
-                           'audit_billetes_no_registrados', 'slot_meter_file', 'audit_balance_file', 'audit_cash_file')
+                           'audit_billetes_no_registrados', 'audit_devoluciones_devueltas', 'slot_meter_file',
+                           'audit_balance_file', 'audit_cash_file')
 
     @api.depends('audit_cash_file', 'audit_drgt_rifas', 'audit_drgt_devoluciones', 'premios_maquina_total', 'devolucion_total')
     def _compute_audit_cash_diff(self):
@@ -166,18 +169,25 @@ class CuadreDeCaja(models.Model):
             record.slot_meter_count = counts.get(record.id, 0)
 
     @api.depends('slot_meter_ids.ngwine', 'slot_meter_ids.cre', 'audit_handpay_liability', 'audit_variacion_efectivo',
-                 'audit_billetes_no_registrados', 'sobrante_total', 'premios_maquina_total', 'devolucion_total',
+                 'audit_billetes_no_registrados', 'audit_devoluciones_devueltas', 'sobrante_total', 'premios_maquina_total',
+                 'devolucion_total', 'audit_cash_file', 'audit_drgt_rifas', 'audit_drgt_devoluciones',
                  'resultado_caja_maquina', 'company_id.casino_slot_audit_tolerance')
     def _compute_slot_audit(self):
         for record in self:
             currency = record.currency_id or record.company_id.currency_id
             ngwine = currency.round(sum(record.slot_meter_ids.mapped('ngwine')))
             credito = currency.round(sum(record.slot_meter_ids.mapped('cre')))
+            # Rifas y Devoluciones: del reporte de Caja de DRGT si se importó; si no, las registradas en el cuadre.
+            if record.audit_cash_file:
+                rifas, devoluciones = record.audit_drgt_rifas, record.audit_drgt_devoluciones
+            else:
+                rifas, devoluciones = record.premios_maquina_total, record.devolucion_total
             resultado = (ngwine
                          + record.audit_handpay_liability
                          + record.sobrante_total
-                         - record.premios_maquina_total
-                         - record.devolucion_total
+                         - rifas
+                         - devoluciones
+                         + record.audit_devoluciones_devueltas
                          + record.audit_variacion_efectivo
                          + record.audit_billetes_no_registrados
                          + credito)
@@ -187,8 +197,8 @@ class CuadreDeCaja(models.Model):
             record.audit_ngwine = ngwine
             record.audit_credito_maquina = credito
             record.audit_sobrantes = record.sobrante_total
-            record.audit_rifas = record.premios_maquina_total
-            record.audit_devoluciones = record.devolucion_total
+            record.audit_rifas = rifas
+            record.audit_devoluciones = devoluciones
             record.audit_resultado = resultado if record.slot_meter_ids else 0.0
             record.audit_diferencia = diferencia
             record.audit_fuera_tolerancia = bool(record.slot_meter_ids) and float_compare(

@@ -408,24 +408,32 @@ class TestSlotMeterAudit(TransactionCase):
         self.assertAlmostEqual(cuadre.audit_drgt_devoluciones, 2360.0)
         self.assertFalse(cuadre.audit_cash_mismatch)
 
-    def test_cash_desk_flags_difference_without_changing_formula(self):
+    def test_cash_desk_values_used_in_formula(self):
         cuadre = self._new_cuadre('2030-03-02')
         self._import(cuadre)
         cuadre.audit_handpay_liability = 5.0
-        before = cuadre.audit_resultado
+        self.assertAlmostEqual(cuadre.audit_resultado, 1295.0)
         cuadre.with_user(self.auditor).import_cash_desk(build_cash_desk(), 'caja.xlsx')
         self.assertTrue(cuadre.audit_cash_mismatch)
         self.assertAlmostEqual(cuadre.audit_dif_rifas, -5000.0)
-        self.assertAlmostEqual(cuadre.audit_dif_devoluciones, -2360.0)
-        self.assertAlmostEqual(cuadre.audit_resultado, before)  # la fórmula sigue usando lo registrado por Caja
+        self.assertAlmostEqual(cuadre.audit_rifas, 5000.0)
+        self.assertAlmostEqual(cuadre.audit_devoluciones, 2360.0)
+        # la fórmula usa Rifas y Devoluciones de DRGT
+        self.assertAlmostEqual(cuadre.audit_resultado, 1295.0 - 5000.0 - 2360.0)
+        # Devoluciones devueltas en Caja al finalizar el turno se suman
+        cuadre.audit_devoluciones_devueltas = 2360.0
+        self.assertAlmostEqual(cuadre.audit_resultado, 1295.0 - 5000.0)
         self.assertIn('no coinciden', cuadre.message_ids[0].body)
         self.assertIn('no trae el período', cuadre.message_ids[0].body)
-        # Solo marca: no bloquea la aprobación
+        cuadre.audit_justificacion = 'Rifa de 5,000 no registrada por Caja.'
         cuadre.action_accounting()
         self.assertTrue(cuadre.audit_approved)
+        with self.assertRaisesRegex(UserError, 'ya fue aprobada'):
+            cuadre.audit_devoluciones_devueltas = 1.0
         html = self.env['ir.actions.report']._render_qweb_html('ttg_casino.report_slot_audit', cuadre.ids)[0].decode()
-        self.assertIn('RIFAS Y DEVOLUCIONES (CUADRE vs DRGT)', html)
-        self.assertIn('no coinciden con DRGT', html)
+        self.assertIn('(+) Devoluciones Devueltas', html)
+        self.assertNotIn('CUADRE vs DRGT', html)
+        self.assertNotIn('no coinciden con DRGT', html)
 
     def test_cash_desk_wrong_date_and_wrong_file(self):
         cuadre = self._new_cuadre('2030-03-03')
@@ -438,10 +446,14 @@ class TestSlotMeterAudit(TransactionCase):
         cuadre = self._new_cuadre('2030-03-04')
         wizard = self.env['casino.slot.meter.import'].with_user(self.auditor).with_context(default_cuadre_id=cuadre.id).create({
             'file': base64.b64encode(build_file(self.lines)), 'filename': 'slot.xls',
-            'cash_file': base64.b64encode(build_cash_desk('04.03.30', rifas=0, devoluciones=0)), 'cash_filename': 'caja.xls',
-            'audit_handpay_liability': 5.0,
+            'cash_file': base64.b64encode(build_cash_desk('04.03.30', rifas=0, devoluciones=100)), 'cash_filename': 'caja.xls',
+            'audit_handpay_liability': 5.0, 'audit_devoluciones_devueltas': 100.0,
         })
         wizard.action_import()
         self.assertEqual(cuadre.audit_cash_filename, 'caja.xls')
-        self.assertFalse(cuadre.audit_cash_mismatch)
+        self.assertAlmostEqual(cuadre.audit_devoluciones_devueltas, 100.0)
+        self.assertTrue(cuadre.audit_cash_mismatch)
         self.assertAlmostEqual(cuadre.audit_diferencia, 0.0)
+
+    def test_default_tolerance(self):
+        self.assertEqual(self.env['res.company']._fields['casino_slot_audit_tolerance'].default(self.env['res.company']), 99.0)

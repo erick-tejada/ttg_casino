@@ -195,6 +195,7 @@
                         <div colspan="2" class="text-muted" invisible="not balance_file">
                             Handpay Liability y Variación de Efectivo se tomarán del Operation Balance.
                         </div>
+                        <field name="audit_devoluciones_devueltas"/>
                         <field name="audit_billetes_no_registrados"/>
                     </group>
                 </group>
@@ -257,6 +258,7 @@
                             <field name="audit_sobrantes" string="(+) Sobrantes"/>
                             <field name="audit_rifas" string="(−) Rifas"/>
                             <field name="audit_devoluciones" string="(−) Devoluciones"/>
+                            <field name="audit_devoluciones_devueltas" string="(+) Devoluciones Devueltas" readonly="audit_approved"/>
                             <field name="audit_variacion_efectivo" string="(+) Variación de Efectivo" readonly="audit_approved"/>
                             <field name="audit_billetes_no_registrados" string="(+) Billetes No Registrados" readonly="audit_approved"/>
                             <field name="audit_credito_maquina" string="(+) Crédito en Máquina (CRE)"/>
@@ -276,7 +278,7 @@
                             </div>
                         </group>
                     </group>
-                    <group string="Rifas y Devoluciones: Cuadre vs DRGT" invisible="not audit_cash_file">
+                    <group string="Rifas y Devoluciones: Cuadre vs DRGT (informativo)" invisible="not audit_cash_file">
                         <group>
                             <field name="audit_cash_mismatch" invisible="1"/>
                             <field name="premios_maquina_total" string="Rifas en el Cuadre"/>
@@ -289,8 +291,8 @@
                             <field name="audit_dif_devoluciones" string="Diferencia Devoluciones" decoration-danger="audit_dif_devoluciones != 0"/>
                         </group>
                         <div colspan="2" class="alert alert-warning mb-0" role="alert" invisible="not audit_cash_mismatch">
-                            Las Rifas o Devoluciones registradas por Caja no coinciden con DRGT. Revíselas con Caja y
-                            explique la diferencia en las Observaciones.
+                            Las Rifas o Devoluciones registradas por Caja no coinciden con DRGT. El cuadre de contadores
+                            usa los montos de DRGT; revise con Caja lo registrado en el cuadre.
                         </div>
                     </group>
                     <group string="Observaciones de Auditoría" invisible="not slot_meter_count">

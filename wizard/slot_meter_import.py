@@ -23,6 +23,8 @@ class SlotMeterImport(models.TransientModel):
     has_lines = fields.Boolean(compute='_compute_has_lines')
     audit_handpay_liability = fields.Monetary('Handpay Liability', help='"Handpay Liability Movement" del resumen de DRGT.')
     audit_variacion_efectivo = fields.Monetary('Variación de Efectivo', help='"EFT Cash Liability Movement" del resumen de DRGT.')
+    audit_devoluciones_devueltas = fields.Monetary('Devoluciones Devueltas',
+                                                   help='Devoluciones que el cliente devolvió en Caja al finalizar el turno.')
     audit_billetes_no_registrados = fields.Monetary('Billetes No Registrados',
                                                     help='Billetes que la máquina no contabilizó pero aparecieron en el conteo de Caja.')
 
@@ -40,6 +42,7 @@ class SlotMeterImport(models.TransientModel):
                 'audit_handpay_liability': cuadre.audit_handpay_liability,
                 'audit_variacion_efectivo': cuadre.audit_variacion_efectivo,
                 'audit_billetes_no_registrados': cuadre.audit_billetes_no_registrados,
+                'audit_devoluciones_devueltas': cuadre.audit_devoluciones_devueltas,
             })
         return res
 
@@ -52,7 +55,8 @@ class SlotMeterImport(models.TransientModel):
             raise UserError(_('Seleccione el archivo "Slot Analysis" exportado desde DRGT.'))
         else:
             cuadre._check_slot_meter_import_allowed()
-        vals = {'audit_billetes_no_registrados': self.audit_billetes_no_registrados}
+        vals = {'audit_billetes_no_registrados': self.audit_billetes_no_registrados,
+                'audit_devoluciones_devueltas': self.audit_devoluciones_devueltas}
         if self.balance_file:
             cuadre.import_operation_balance(base64.b64decode(self.balance_file), self.balance_filename)
         else:
