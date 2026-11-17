@@ -83,7 +83,7 @@ class CuadreDeCaja(models.Model):
     audit_devoluciones = fields.Monetary('Devoluciones', compute='_compute_slot_audit', store=True,
                                         help='Devoluciones del reporte de Caja de DRGT. Si no se ha importado, las registradas en este cuadre.')
     audit_devoluciones_devueltas = fields.Monetary('Devoluciones Devueltas', copy=False, tracking=True,
-                                                   help='Devoluciones que el cliente devolvió en Caja al finalizar el turno.')
+                                                   help='La devolución fue devuelta en Caja al finalizar el turno.')
     audit_variacion_efectivo = fields.Monetary('Variación de Efectivo', copy=False, tracking=True,
                                                help='"EFT Cash Liability Movement" del resumen de DRGT.')
     audit_billetes_no_registrados = fields.Monetary('Billetes No Registrados', copy=False, tracking=True,

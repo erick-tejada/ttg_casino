@@ -71,7 +71,7 @@
                     <tr><td>(+) Sobrantes</td><td class="amount" t-out="money(doc.audit_sobrantes)"/></tr>
                     <tr><td>(-) Rifas</td><td class="amount" t-out="money(doc.audit_rifas)"/></tr>
                     <tr><td>(-) Devoluciones</td><td class="amount" t-out="money(doc.audit_devoluciones)"/></tr>
-                    <tr><td>(+) Devoluciones Devueltas</td><td class="amount" t-out="money(doc.audit_devoluciones_devueltas)"/></tr>
+                    <tr><td>(+) Devoluciones Devueltas <span style="color: #666; font-size: 10px; margin-left: 12px;">Nota: la devolución fue devuelta en Caja al finalizar el turno.</span></td><td class="amount" t-out="money(doc.audit_devoluciones_devueltas)"/></tr>
                     <tr><td>(+) Variación de Efectivo</td><td class="amount" t-out="money(doc.audit_variacion_efectivo)"/></tr>
                     <tr><td>(+) Billetes No Registrados</td><td class="amount" t-out="money(doc.audit_billetes_no_registrados)"/></tr>
                     <tr><td>(+) Crédito en Máquina (CRE)</td><td class="amount" t-out="money(doc.audit_credito_maquina)"/></tr>

@@ -24,7 +24,7 @@ class SlotMeterImport(models.TransientModel):
     audit_handpay_liability = fields.Monetary('Handpay Liability', help='"Handpay Liability Movement" del resumen de DRGT.')
     audit_variacion_efectivo = fields.Monetary('Variación de Efectivo', help='"EFT Cash Liability Movement" del resumen de DRGT.')
     audit_devoluciones_devueltas = fields.Monetary('Devoluciones Devueltas',
-                                                   help='Devoluciones que el cliente devolvió en Caja al finalizar el turno.')
+                                                   help='La devolución fue devuelta en Caja al finalizar el turno.')
     audit_billetes_no_registrados = fields.Monetary('Billetes No Registrados',
                                                     help='Billetes que la máquina no contabilizó pero aparecieron en el conteo de Caja.')
 

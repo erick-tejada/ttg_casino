@@ -432,6 +432,7 @@ class TestSlotMeterAudit(TransactionCase):
             cuadre.audit_devoluciones_devueltas = 1.0
         html = self.env['ir.actions.report']._render_qweb_html('ttg_casino.report_slot_audit', cuadre.ids)[0].decode()
         self.assertIn('(+) Devoluciones Devueltas', html)
+        self.assertIn('la devolución fue devuelta en Caja al finalizar el turno', html)
         self.assertNotIn('CUADRE vs DRGT', html)
         self.assertNotIn('no coinciden con DRGT', html)
 
