@@ -458,3 +458,13 @@ class TestSlotMeterAudit(TransactionCase):
 
     def test_default_tolerance(self):
         self.assertEqual(self.env['res.company']._fields['casino_slot_audit_tolerance'].default(self.env['res.company']), 99.0)
+
+    def test_devueltas_note_hidden_when_zero(self):
+        cuadre = self._new_cuadre('2030-03-05')
+        self._import(cuadre)
+        render = lambda: self.env['ir.actions.report']._render_qweb_html('ttg_casino.report_slot_audit', cuadre.ids)[0].decode()
+        html = render()
+        self.assertIn('(+) Devoluciones Devueltas', html)
+        self.assertNotIn('fue devuelta en Caja', html)
+        cuadre.audit_devoluciones_devueltas = 500.0
+        self.assertIn('fue devuelta en Caja', render())
