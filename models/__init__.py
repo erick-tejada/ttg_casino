@@ -23,3 +23,4 @@ from . import tipo_premio
 from . import rifas_premios_maquina
 from . import rifas_premios_mesa
 from . import slot_meter
+from . import mesa_audit

@@ -81,4 +81,6 @@ class ResComapany(models.Model):
     # Auditoría de Contadores (DRGT)
     casino_slot_audit_required = fields.Boolean('Requerir Contadores de DRGT', default=True, help='Si está activo, un cuadre no se puede presentar a Contabilidad sin importar el archivo de contadores de DRGT.')
     casino_slot_audit_tolerance = fields.Float('Tolerancia de Diferencia en Contadores', default=99.0, help='Diferencia máxima (en pesos) entre el Resultado según Contadores y el Resultado Caja Máquina sin justificación.')
+    casino_mesa_audit_required = fields.Boolean('Requerir Resultados de Mesas de DRGT', default=True, help='Si está activo, un cuadre no se puede presentar a Contabilidad sin importar el reporte de resultados de mesas y el Chip Liability de DRGT.')
+    casino_mesa_audit_tolerance = fields.Float('Tolerancia de Variación de Mesas', default=99.0, help='Variación máxima (en pesos) entre la Ganancia/Pérdida de Mesas y la de Caja sin justificación.')
     casino_nombre_comercial = fields.Char('Nombre Comercial del Casino', default='CASINO PLATINO', help='Se imprime debajo de la razón social en el Cuadre de Auditoría de Contadores.')

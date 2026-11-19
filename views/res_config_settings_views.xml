@@ -71,12 +71,18 @@
 <!--                            </div>-->
                         </setting>
                     </block>
-<block title="Auditoría de Contadores (DRGT)" name="slot_audit_setting_container">
+<block title="Auditoría de Contadores y Mesas (DRGT)" name="slot_audit_setting_container">
                         <setting id="casino_slot_audit_required" string="Requerir Contadores de DRGT" help="Un cuadre no se puede presentar a Contabilidad sin importar el archivo de contadores de DRGT.">
                             <field name="casino_slot_audit_required"/>
                         </setting>
                         <setting id="casino_slot_audit_tolerance" string="Tolerancia de Diferencia" help="Diferencia máxima (RD$) entre el Resultado según Contadores y el Resultado Caja Máquina. Si se supera, el Auditor debe escribir una justificación.">
                             <field name="casino_slot_audit_tolerance"/>
+                        </setting>
+                        <setting id="casino_mesa_audit_required" string="Requerir Resultados de Mesas de DRGT" help="Un cuadre no se puede presentar a Contabilidad sin importar el reporte de resultados de mesas y el Chip Liability de DRGT.">
+                            <field name="casino_mesa_audit_required"/>
+                        </setting>
+                        <setting id="casino_mesa_audit_tolerance" string="Tolerancia de Variación de Mesas" help="Variación máxima (RD$) entre la Ganancia/Pérdida de Mesas y la de Caja. Si se supera, el Auditor debe escribir una justificación.">
+                            <field name="casino_mesa_audit_tolerance"/>
                         </setting>
                         <setting id="casino_nombre_comercial" string="Nombre Comercial" help="Se imprime debajo de la razón social en el Cuadre de Auditoría de Contadores.">
                             <field name="casino_nombre_comercial"/>

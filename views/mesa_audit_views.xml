@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Código DRGT en Mesas -->
+    <record id="view_mesa_list_drgt" model="ir.ui.view">
+        <field name="name">casino.mesa.list.drgt</field>
+        <field name="model">casino.mesa</field>
+        <field name="inherit_id" ref="ttg_casino.view_mesa_list"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="drgt_code"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- ************ RESULTADOS POR MESA ************ -->
+    <record id="view_mesa_result_list" model="ir.ui.view">
+        <field name="name">casino.mesa.result.list</field>
+        <field name="model">casino.mesa.result</field>
+        <field name="arch" type="xml">
+            <list string="Resultados por Mesa" create="false" edit="false" delete="false">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="currency_usd_id" column_invisible="1"/>
+                <field name="date" optional="show"/>
+                <field name="mesa_id"/>
+                <field name="table_code" optional="hide"/>
+                <field name="game" optional="show"/>
+                <field name="net_opening" sum="Total" optional="hide"/>
+                <field name="net_closing" sum="Total" optional="hide"/>
+                <field name="net_fills" sum="Total"/>
+                <field name="pred_bill_dop" sum="Total" optional="hide"/>
+                <field name="pred_usd" sum="Total" optional="hide"/>
+                <field name="pred_gross_drop" sum="Total"/>
+                <field name="act_bill_dop" sum="Total" optional="hide"/>
+                <field name="act_usd" sum="Total" optional="hide"/>
+                <field name="act_gross_drop" sum="Total"/>
+                <field name="variance_gross_drop" sum="Total" decoration-danger="variance_gross_drop != 0"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mesa_result_pivot" model="ir.ui.view">
+        <field name="name">casino.mesa.result.pivot</field>
+        <field name="model">casino.mesa.result</field>
+        <field name="arch" type="xml">
+            <pivot string="Resultados por Mesa" display_quantity="0" sample="1">
+                <field name="mesa_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="pred_gross_drop" type="measure"/>
+                <field name="net_fills" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_mesa_result_search" model="ir.ui.view">
+        <field name="name">casino.mesa.result.search</field>
+        <field name="model">casino.mesa.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="mesa_id"/>
+                <field name="game"/>
+                <filter name="filter_date" string="Fecha" date="date"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_mesa" string="Mesa" context="{'group_by': 'mesa_id'}"/>
+                    <filter name="group_game" string="Juego" context="{'group_by': 'game'}"/>
+                    <filter name="group_date" string="Fecha" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mesa_result" model="ir.actions.act_window">
+        <field name="name">Resultados de Mesas (DRGT)</field>
+        <field name="res_model">casino.mesa.result</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="search_view_id" ref="view_mesa_result_search"/>
+    </record>
+
+    <!-- ************ INVENTARIO DE FICHAS ************ -->
+    <record id="view_chip_liability_list" model="ir.ui.view">
+        <field name="name">casino.chip.liability.list</field>
+        <field name="model">casino.chip.liability</field>
+        <field name="arch" type="xml">
+            <list string="Inventario de Fichas" create="false" edit="false" delete="false">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="date" optional="hide"/>
+                <field name="location_type" optional="hide"/>
+                <field name="location_code"/>
+                <field name="name"/>
+                <field name="begin_qty" sum="Total"/>
+                <field name="begin_amount" sum="Total"/>
+                <field name="move_qty" sum="Total"/>
+                <field name="move_amount" sum="Total" decoration-info="move_amount != 0"/>
+                <field name="end_qty" sum="Total"/>
+                <field name="end_amount" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_chip_liability_search" model="ir.ui.view">
+        <field name="name">casino.chip.liability.search</field>
+        <field name="model">casino.chip.liability</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="location_code"/>
+                <field name="mesa_id"/>
+                <field name="chip_type"/>
+                <filter name="cash_desk" string="Caja de Mesas" domain="[('location_type', '=', 'cash_desk')]"/>
+                <filter name="tables" string="Mesas" domain="[('location_type', '=', 'table')]"/>
+                <filter name="with_movement" string="Con Movimiento" domain="[('move_amount', '!=', 0)]"/>
+                <filter name="filter_date" string="Fecha" date="date"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_location" string="Ubicación" context="{'group_by': 'location_code'}"/>
+                    <filter name="group_chip" string="Ficha" context="{'group_by': 'name'}"/>
+                    <filter name="group_date" string="Fecha" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_chip_liability" model="ir.actions.act_window">
+        <field name="name">Inventario de Fichas (DRGT)</field>
+        <field name="res_model">casino.chip.liability</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_chip_liability_search"/>
+        <field name="context">{'search_default_group_location': 1}</field>
+    </record>
+
+    <menuitem id="menu_casino_report_mesa_result" name="Resultados de Mesas (DRGT)"
+        parent="ttg_casino.menu_casino_informes" action="ttg_casino.action_mesa_result" sequence="40"/>
+    <menuitem id="menu_casino_report_chip_liability" name="Inventario de Fichas (DRGT)"
+        parent="ttg_casino.menu_casino_informes" action="ttg_casino.action_chip_liability" sequence="50"/>
+
+    <!-- ************ ASISTENTE ************ -->
+    <record id="view_mesa_audit_import_form" model="ir.ui.view">
+        <field name="name">casino.mesa.audit.import.form</field>
+        <field name="model">casino.mesa.audit.import</field>
+        <field name="arch" type="xml">
+            <form string="Importar Resultados de Mesas de DRGT">
+                <field name="has_lines" invisible="1"/>
+                <div class="alert alert-info" role="alert">
+                    Importe el reporte de resultados de mesas y el Chip Liability de DRGT del día
+                    <field name="date" readonly="1" class="fw-bold"/>. Los USD se convierten con la tasa del cuadre
+                    (<field name="casino_tasa_usd" readonly="1" class="fw-bold"/>).
+                </div>
+                <div class="alert alert-warning" role="alert" invisible="not has_lines">
+                    Este cuadre ya tiene resultados de mesas importados. Los archivos que seleccione reemplazarán los anteriores.
+                </div>
+                <group>
+                    <field name="cuadre_id" invisible="1"/>
+                    <field name="result_file" filename="result_filename" string="Resultados de Mesas"/>
+                    <field name="result_filename" invisible="1"/>
+                    <field name="chip_file" filename="chip_filename" string="Chip Liability"/>
+                    <field name="chip_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="Importar" name="action_import" type="object" class="oe_highlight"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ************ PESTAÑA EN EL CUADRE ************ -->
+    <record id="cuadre_form_mesa_audit" model="ir.ui.view">
+        <field name="name">casino.cuadre.form.mesa.audit</field>
+        <field name="model">casino.cuadre</field>
+        <field name="inherit_id" ref="ttg_casino.cuadre_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='accounting']" position="before">
+                <page name="mesa_audit" string="Auditoría de Mesas" groups="ttg_casino.group_casino_audit">
+                    <field name="mesa_approved" invisible="1"/>
+                    <field name="mesa_audit_has_result" invisible="1"/>
+                    <field name="mesa_fuera_tolerancia" invisible="1"/>
+                    <div class="mb-3" invisible="state == 'draft'">
+                        <button name="action_open_mesa_audit_import" type="object" class="btn btn-primary me-2"
+                                icon="fa-upload" string="Importar Resultados de Mesas de DRGT" invisible="mesa_approved"/>
+                        <button name="action_approve_mesa_audit" type="object" class="btn btn-secondary me-2"
+                                icon="fa-check" string="Aprobar Auditoría de Mesas"
+                                invisible="mesa_approved or not mesa_audit_has_result or state not in ('accounting', 'done')"
+                                confirm="Al aprobar, las observaciones y los archivos de mesas quedan bloqueados. ¿Continuar?"/>
+                        <button name="action_print_mesa_audit" type="object" class="btn btn-secondary"
+                                icon="fa-print" string="Imprimir Auditoría de Mesas" invisible="not mesa_audit_has_result"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="state != 'draft'">
+                        Los resultados de mesas se importan cuando Caja presenta el cuadre al Auditor.
+                    </div>
+                    <div class="alert alert-success" role="alert" invisible="not mesa_approved">
+                        Auditoría de mesas aprobada el <field name="mesa_approved_date" readonly="1"/> por
+                        <field name="mesa_approved_user_id" readonly="1" options="{'no_open': True}"/>.
+                    </div>
+                    <group>
+                        <group string="Archivos Importados">
+                            <field name="mesa_result_file" filename="mesa_result_filename" readonly="1" invisible="not mesa_result_file"/>
+                            <field name="mesa_result_filename" invisible="1"/>
+                            <field name="mesa_chip_file" filename="mesa_chip_filename" readonly="1" invisible="not mesa_chip_file"/>
+                            <field name="mesa_chip_filename" invisible="1"/>
+                            <field name="mesa_import_date" invisible="not mesa_import_date"/>
+                            <field name="mesa_import_user_id" invisible="not mesa_import_user_id"/>
+                            <field name="casino_tasa_usd" readonly="1" string="Tasa USD"/>
+                        </group>
+                    </group>
+                    <group invisible="not mesa_audit_has_result">
+                        <group string="Cuadre de Mesas (Predicted Result)">
+                            <field name="mesa_pred_bill_dop" string="Bill RD$"/>
+                            <field name="mesa_pred_usd" string="Amount USD"/>
+                            <field name="mesa_pred_usd_dop" string="USD Convertido"/>
+                            <field name="mesa_pred_gross_drop" string="Gross Drop"/>
+                            <field name="mesa_net_fills" string="(−) Net Fills"/>
+                            <field name="mesa_audit_resultado" class="fw-bold"/>
+                        </group>
+                        <group string="Cuadre de Caja (Actual Count)">
+                            <field name="mesa_act_bill_dop" string="Bill RD$"/>
+                            <field name="mesa_act_usd" string="Amount USD"/>
+                            <field name="mesa_act_usd_dop" string="USD Convertido"/>
+                            <field name="mesa_act_gross_drop" string="Gross Drop"/>
+                            <field name="mesa_pagos_caja" string="(−) Pagos de Caja"/>
+                            <field name="mesa_audit_caja_resultado" class="fw-bold"/>
+                        </group>
+                        <group string="Conciliaciones">
+                            <field name="mesa_chip_conciliacion" string="Chip Liability (Net Fills − Pagos de Caja)"/>
+                            <field name="mesa_variacion" string="Variación (Mesas − Caja)" class="fw-bold"
+                                   decoration-danger="mesa_fuera_tolerancia" decoration-success="not mesa_fuera_tolerancia"/>
+                            <field name="mesa_estado" decoration-success="mesa_estado == 'conciliado'"
+                                   decoration-info="mesa_estado == 'justificado'" decoration-danger="mesa_estado == 'pendiente'"/>
+                            <div colspan="2" class="text-danger" invisible="mesa_estado != 'pendiente'">
+                                La Variación supera la tolerancia. Escriba la justificación en las Observaciones antes de aprobar.
+                            </div>
+                        </group>
+                        <group string="Chip Liability – Caja de Mesas">
+                            <field name="mesa_chip_begin" string="Inventario Inicial"/>
+                            <field name="mesa_chip_movement" string="Movimiento"/>
+                            <field name="mesa_chip_end" string="Inventario Final"/>
+                        </group>
+                    </group>
+                    <group string="Resultados por Mesa" invisible="not mesa_audit_has_result">
+                        <field name="mesa_result_ids" nolabel="1" colspan="2" readonly="1"/>
+                    </group>
+                    <group string="Inventario de Fichas por Ubicación" invisible="not chip_liability_ids">
+                        <field name="chip_liability_ids" nolabel="1" colspan="2" readonly="1"/>
+                    </group>
+                    <group string="Observaciones" invisible="not mesa_audit_has_result">
+                        <field name="mesa_observaciones" colspan="2" nolabel="1" readonly="mesa_approved"
+                               placeholder="Comentarios del auditor, explicación de diferencias, incidencias..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_cuadre_list_mesa_audit" model="ir.ui.view">
+        <field name="name">casino.cuadre.list.mesa.audit</field>
+        <field name="model">casino.cuadre</field>
+        <field name="inherit_id" ref="ttg_casino.view_cuadre_list"/>
+        <field name="arch" type="xml">
+            <field name="resultado_caja_mesa" position="after">
+                <field name="mesa_fuera_tolerancia" column_invisible="1"/>
+                <field name="mesa_variacion" string="Variación Mesas" optional="show" groups="ttg_casino.group_casino_audit"
+                       decoration-danger="mesa_fuera_tolerancia"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

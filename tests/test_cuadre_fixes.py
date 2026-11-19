@@ -22,7 +22,8 @@ class TestCuadreFixes(TransactionCase):
         vals.update({'cierre_journal_id': cls.journal.id, 'banco_dop_journal_id': cls.bank.id,
                      'banco_usd_journal_id': cls.bank.id, 'tc_comision_percent': 0.0345, 'tc_itbis_percent': 0.02,
                      'tc_partner_id': cls.env['res.partner'].create({'name': 'Procesador TC'}).id,
-                     'casino_slot_audit_required': False, 'casino_refresh_future': False})
+                     'casino_slot_audit_required': False, 'casino_refresh_future': False,
+                     'casino_mesa_audit_required': False})
         cls.company.write(vals)
         # Como en producción: el método de cobro del banco tiene su cuenta.
         cls.deposit_account = Account.create({'code': '999002', 'name': 'Cobros Pendientes Test', 'account_type': 'asset_current', 'reconcile': True})

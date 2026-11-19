@@ -104,6 +104,10 @@ def _rows_spreadsheetml(content):
                     cells.append('')
             data = cell.find('ss:Data', ns)
             cells.append(data.text if data is not None and data.text is not None else '')
+            merge = cell.get('{%s}MergeAcross' % SS_NS)
+            if merge:
+                # Celdas combinadas: las columnas cubiertas quedan vacías para que las siguientes caigan en su posición.
+                cells.extend([''] * int(merge))
         rows.append(cells)
     return rows
 
@@ -347,3 +351,199 @@ def parse_cash_desk(content):
                 values[key] += number
                 accounts.append((name, number))
     return {'period': period, 'values': {k: round(v, 2) for k, v in values.items()}, 'accounts': accounts}
+
+
+# ------------------------------------------------------------------------------------------------
+# Mesas: reporte "Table Result" de DRGT
+# ------------------------------------------------------------------------------------------------
+_USD_RE = re.compile(r'^\s*(-?[\d,]+(?:\.\d+)?)\s*\(\s*(-?[\d,]+(?:\.\d+)?)\s*RD\$\s*\)\s*$')
+TABLE_COMMON = {'Table': 'table_code', 'Game': 'game', 'Net Opening': 'net_opening', 'Net Closing': 'net_closing',
+                'Net Fills': 'net_fills'}
+TABLE_GROUPS = {
+    'Predicted Result': {'Bill RD$': 'pred_bill_dop', 'Amount USD': 'pred_usd', 'Gross Drop': 'pred_gross_drop',
+                         'Net Drop': 'pred_net_drop'},
+    'Actual Count': {'Bill USD': 'act_usd', 'Bill RD$': 'act_bill_dop', 'Gross Drop': 'act_gross_drop',
+                     'Net Drop': 'act_net_drop'},
+    'Variance': {'Gross Drop': 'variance_gross_drop'},
+}
+TABLE_USD_FIELDS = ('pred_usd', 'act_usd')
+TABLE_TOTAL_FIELDS = ('net_fills', 'pred_bill_dop', 'pred_gross_drop', 'act_bill_dop', 'act_gross_drop')
+
+
+def _usd_cell(value):
+    """'350.00 (19,950.00 RD$)' -> (350.0, 19950.0); '-' o vacío -> (0, 0)."""
+    text = _to_text(value)
+    if text in ('', '-'):
+        return 0.0, 0.0
+    m = _USD_RE.match(text)
+    if m:
+        return float(m.group(1).replace(',', '')), float(m.group(2).replace(',', ''))
+    number = to_number(text)
+    if number is None:
+        raise SlotMeterFileError('Monto en USD no reconocido: "%s".' % text)
+    return number, 0.0
+
+
+def _num_cell(value, label):
+    text = _to_text(value)
+    if text in ('', '-'):
+        return 0.0
+    number = to_number(value)
+    if number is None:
+        raise SlotMeterFileError('El valor "%s" de %s no es un número.' % (text, label))
+    return number
+
+
+def parse_table_result(content):
+    """Lee el reporte de resultados de mesas de DRGT (Predicted Result / Actual Count / Variance).
+
+    Devuelve dict(lines=[...], totals={...}, fingerprint=str). Cada línea trae los montos en RD$ y, para USD,
+    el monto en dólares y su equivalente en RD$ según DRGT (pred_usd_dop / act_usd_dop).
+    """
+    rows = read_rows(content)
+    texts = [[_norm_header(_to_text(c)) for c in row] for row in rows]
+    header_idx = None
+    for i, row in enumerate(texts):
+        if 'Table' in row and 'Net Fills' in row:
+            header_idx = i
+            break
+    if header_idx is None or header_idx == 0:
+        raise SlotMeterFileError('El archivo no es el reporte de resultados de mesas de DRGT (no se encontraron las '
+                                 'columnas "Table" y "Net Fills").')
+    groups_row = texts[header_idx - 1]
+    headers = texts[header_idx]
+    group_of, current = [], None
+    for col in range(len(headers)):
+        label = groups_row[col] if col < len(groups_row) else ''
+        if label:
+            current = label
+        group_of.append(current)
+    columns = {}
+    for col, header in enumerate(headers):
+        if header in TABLE_COMMON and group_of[col] is None:
+            columns[TABLE_COMMON[header]] = col
+        elif group_of[col] in TABLE_GROUPS and header in TABLE_GROUPS[group_of[col]]:
+            columns[TABLE_GROUPS[group_of[col]][header]] = col
+    expected = list(TABLE_COMMON.values()) + [f for g in TABLE_GROUPS.values() for f in g.values()]
+    missing = [f for f in expected if f not in columns]
+    if missing:
+        raise SlotMeterFileError('Al reporte de mesas le faltan columnas (%s). Expórtelo de DRGT sin modificarlo.'
+                                 % ', '.join(missing))
+
+    lines, total_row = [], None
+    for row_number, row in enumerate(rows[header_idx + 1:], start=header_idx + 2):
+        cell = lambda f: row[columns[f]] if columns[f] < len(row) else ''
+        code = _to_text(cell('table_code'))
+        if not code:
+            continue
+        if to_number(code) is not None:
+            total_row = row
+            break
+        line = {'table_code': code, 'game': _to_text(cell('game'))}
+        for field in expected:
+            if field in ('table_code', 'game'):
+                continue
+            if field in TABLE_USD_FIELDS:
+                line[field], line[field + '_dop'] = _usd_cell(cell(field))
+            else:
+                line[field] = _num_cell(cell(field), 'la mesa %s (fila %s)' % (code, row_number))
+        lines.append(line)
+    if not lines:
+        raise SlotMeterFileError('El reporte de mesas no contiene mesas.')
+    codes = [l['table_code'] for l in lines]
+    duplicated = sorted({c for c in codes if codes.count(c) > 1})
+    if duplicated:
+        raise SlotMeterFileError('El reporte de mesas trae mesas repetidas: %s.' % ', '.join(duplicated))
+    totals = {f: round(sum(l[f] for l in lines), 2) for f in TABLE_TOTAL_FIELDS + TABLE_USD_FIELDS}
+    if total_row:
+        for field in TABLE_TOTAL_FIELDS:
+            col = columns[field]
+            file_total = _num_cell(total_row[col] if col < len(total_row) else '', 'el total')
+            if abs(file_total - totals[field]) > 0.05:
+                raise SlotMeterFileError('La suma de las mesas (%.2f) no coincide con el total del archivo (%.2f). '
+                                         'Vuelva a exportar el reporte.' % (totals[field], file_total))
+    canonical = json.dumps(sorted([[l['table_code']] + [round(l[f], 2) for f in sorted(l) if isinstance(l[f], float)]
+                                   for l in lines]))
+    return {'lines': lines, 'totals': totals, 'fingerprint': hashlib.sha256(canonical.encode()).hexdigest()}
+
+
+# ------------------------------------------------------------------------------------------------
+# Mesas: reporte "Chip Liability" de DRGT
+# ------------------------------------------------------------------------------------------------
+_CHIP_RE = re.compile(r'^(.+?)\s+-\s+(-?[\d,]+(?:\.\d+)?)$')
+_CHIP_LOCATIONS = {'Cash Desk': 'cash_desk', 'Table': 'table'}
+
+
+def parse_chip_liability(content):
+    """Lee el reporte "Chip Liability" de DRGT: inventario de fichas por ubicación (Caja de Mesas y cada mesa).
+
+    Devuelve dict(period=(desde, hasta) o None, locations=[{type, code, name, lines=[...]}], totals={...}).
+    El inventario final de cada línea se calcula (inicial + movimiento) y se valida contra el del archivo.
+    """
+    rows = read_rows(content)
+    texts = [[_norm_header(_to_text(c)) for c in row] for row in rows]
+    if not any('Chip Liability' in c for row in texts[:3] for c in row):
+        raise SlotMeterFileError('El archivo no es el reporte "Chip Liability" de DRGT.')
+    period = None
+    for row in texts[:5]:
+        for c in row:
+            period = period or _period_dates(c)
+    header_idx = None
+    for i, row in enumerate(texts):
+        if 'Beginning Inventory' in row and 'Movement' in row and 'Ending Inventory' in row:
+            header_idx = i
+            break
+    if header_idx is None:
+        raise SlotMeterFileError('No se encontraron las columnas Beginning Inventory / Movement / Ending Inventory.')
+    head = texts[header_idx]
+    cols = {'begin': head.index('Beginning Inventory'), 'move': head.index('Movement'), 'end': head.index('Ending Inventory')}
+
+    def pair(row, key, label):
+        col = cols[key]
+        qty = _num_cell(row[col] if col < len(row) else '', label)
+        amount = _num_cell(row[col + 1] if col + 1 < len(row) else '', label)
+        return qty, amount
+
+    locations, current, grand = [], None, None
+    for row_number, row in enumerate(rows[header_idx + 2:], start=header_idx + 3):
+        first = _to_text(row[0]) if row else ''
+        if not first:
+            if any(_to_text(c) for c in row):
+                grand = row
+            continue
+        kind = first.split(' - ')[0].strip()
+        if kind in _CHIP_LOCATIONS:
+            parts = [p.strip() for p in first.split(' - ')]
+            current = {'type': _CHIP_LOCATIONS[kind], 'code': parts[-1], 'name': first, 'lines': [],
+                       'file_amounts': {k: pair(row, k, first)[1] for k in cols}}
+            locations.append(current)
+            continue
+        m = _CHIP_RE.match(first)
+        if not m or current is None:
+            raise SlotMeterFileError('Fila %s del Chip Liability no reconocida: "%s".' % (row_number, first))
+        label = '%s (%s)' % (first, current['code'])
+        bq, ba = pair(row, 'begin', label)
+        mq, ma = pair(row, 'move', label)
+        eq, ea = pair(row, 'end', label)
+        if abs(bq + mq - eq) > 0.001 or abs(ba + ma - ea) > 0.005:
+            raise SlotMeterFileError('En %s el inventario final del archivo no es inicial + movimiento.' % label)
+        current['lines'].append({'chip_type': m.group(1).strip(), 'denomination': float(m.group(2).replace(',', '')),
+                                 'begin_qty': bq, 'begin_amount': ba, 'move_qty': mq, 'move_amount': ma,
+                                 'file_end_amount': ea})
+    if not locations:
+        raise SlotMeterFileError('El Chip Liability no contiene ubicaciones (Caja de Mesas o mesas).')
+    for loc in locations:
+        for key, field in (('begin', 'begin_amount'), ('move', 'move_amount')):
+            total = round(sum(l[field] for l in loc['lines']), 2)
+            if abs(total - loc['file_amounts'][key]) > 0.05:
+                raise SlotMeterFileError('En %s la suma de las fichas (%.2f) no coincide con el total del archivo (%.2f).'
+                                         % (loc['code'], total, loc['file_amounts'][key]))
+    totals = {'begin': round(sum(l['begin_amount'] for loc in locations for l in loc['lines']), 2),
+              'move': round(sum(l['move_amount'] for loc in locations for l in loc['lines']), 2)}
+    totals['end'] = round(totals['begin'] + totals['move'], 2)
+    if grand:
+        file_begin = _num_cell(grand[cols['begin'] + 1] if cols['begin'] + 1 < len(grand) else '', 'el total')
+        if abs(file_begin - totals['begin']) > 0.05:
+            raise SlotMeterFileError('La suma del Chip Liability (%.2f) no coincide con el total del archivo (%.2f).'
+                                     % (totals['begin'], file_begin))
+    return {'period': period, 'locations': locations, 'totals': totals}

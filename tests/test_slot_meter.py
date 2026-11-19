@@ -85,7 +85,8 @@ class TestSlotMeterAudit(TransactionCase):
         super().setUpClass()
         cls.company = cls.env.company
         cls.company.write({'tc_comision_percent': 0.0345, 'tc_itbis_percent': 0.0,
-                           'casino_slot_audit_required': True, 'casino_slot_audit_tolerance': 3.0})
+                           'casino_slot_audit_required': True, 'casino_slot_audit_tolerance': 3.0,
+                           'casino_mesa_audit_required': False})
         brand = cls.env['casino.maquina.marca'].create({'name': 'TEST BRAND'})
         model = cls.env['casino.maquina.modelo'].create({'name': 'TEST MODEL', 'brand_id': brand.id})
         cls.machines = cls.env['casino.maquina'].create([
