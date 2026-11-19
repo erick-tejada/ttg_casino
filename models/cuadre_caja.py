@@ -383,6 +383,19 @@ class CuadreDeCaja(models.Model):
 
         return move_id
 
+    def _get_bank_deposit_account(self, journal):
+        """Cuenta de los depósitos a banco: la del primer método de cobro del diario; si no tiene, la cuenta
+        de cobros pendientes del plan contable (o la de transferencias), igual que hace Odoo en los pagos."""
+        method_lines = journal.inbound_payment_method_line_ids
+        if method_lines and method_lines[0].payment_account_id:
+            return method_lines[0].payment_account_id
+        chart_template = self.with_context(allowed_company_ids=self.company_id.root_id.ids).env['account.chart.template']
+        account = (chart_template.ref('account_journal_payment_debit_account_id', raise_if_not_found=False)
+                   or self.company_id.transfer_account_id)
+        if not account:
+            raise UserError('CUENTA DE DEPÓSITO NO CONFIGURADA: Configure la cuenta de cobros del diario %s.' % journal.display_name)
+        return account
+
     def _create_moves(self):
         
         # ASIENTO 1: OPERACIONES
@@ -632,11 +645,7 @@ class CuadreDeCaja(models.Model):
         list_of_aml_vals = []
         # ******** DESPOSITO DESDE BOVEDA DOP A BANCO ********
         journal_id = self.company_id.banco_dop_journal_id
-        inbound_payment_method_line_ids = journal_id.inbound_payment_method_line_ids
-        if inbound_payment_method_line_ids and inbound_payment_method_line_ids[0].payment_account_id:
-            bank_account_id = inbound_payment_method_line_ids[0].payment_account_id
-        else:
-            bank_account_id = self.company_id.account_journal_payment_debit_account_id
+        bank_account_id = self._get_bank_deposit_account(journal_id)
         
         if self.dop_boveda_a_depositar_banco:
             amount = self.dop_boveda_a_depositar_banco
@@ -655,6 +664,7 @@ class CuadreDeCaja(models.Model):
         # MANEJAR TARJETA DE CREDITO Y SU COMISION
         if self.cobro_tc_total:
             cobro_tc_total = self.cobro_tc_total
+            tc_partner_id = self.company_id.tc_partner_id
             
             # Montos a mover
             itbis_retenido_tc = self.currency_id.round(cobro_tc_total * self.company_id.tc_itbis_percent)
@@ -671,8 +681,7 @@ class CuadreDeCaja(models.Model):
                     'ITBIS Retenido por Cobros con Tarjeta de Crédito',
                     partner_id=tc_partner_id,
                 )
-            
-            tc_partner_id = self.company_id.tc_partner_id
+
             
             self.create_aml_dict(
                 list_of_aml_vals,
@@ -700,11 +709,7 @@ class CuadreDeCaja(models.Model):
         # ******** DESPOSITO DESDE BOVEDA USD A BANCO ********
         list_of_aml_vals = []
         journal_id = self.company_id.banco_usd_journal_id
-        inbound_payment_method_line_ids = journal_id.inbound_payment_method_line_ids
-        if inbound_payment_method_line_ids and inbound_payment_method_line_ids[0].payment_account_id:
-            bank_account_id = inbound_payment_method_line_ids[0].payment_account_id
-        else:
-            bank_account_id = self.company_id.account_journal_payment_debit_account_id
+        bank_account_id = self._get_bank_deposit_account(journal_id)
 
         if self.usd_boveda_a_depositar_banco:
             amount = self.usd_boveda_a_depositar_banco
