@@ -17,7 +17,7 @@ def _cell(value):
     return '<Cell><Data ss:Type="Number">%s</Data></Cell>' % value
 
 
-def build_overview(date_str='01.01.30', handpay=0.25, eft=12649.23, credit=-15.0, egm=0.0):
+def build_overview(date_str='01.01.30', handpay=0.25, eft=12649.23, credit=-15.0, egm=0.0, noncash=None):
     rows = [['Overview (RD$)'], ['Period: %s - %s \u2022 Options: Table counts done on: drTMS' % (date_str, date_str)],
             ['', 'Difference', 0.04, '', 'Cash Win/Loss Meters', -23821.01],
             ['+', 'Cash Win/Loss Meters', -23821.01, '+', 'EGM Cash Win/Loss Meters', egm],
@@ -25,6 +25,8 @@ def build_overview(date_str='01.01.30', handpay=0.25, eft=12649.23, credit=-15.0
             ['', '', '', '+', 'EFT Cash Liability Movement', eft],
             ['+', 'Custom Accounts In', 0, '+', 'Credit Meter Cash Liability Movement', credit],
             ['', '', '', '', '', '', '', 'EFT Cash Liability Movement', 999999]]
+    if noncash is not None:
+        rows.append(['', '', '', '-', 'Noncash Credit Meter Liability Movement', noncash])
     body = ''.join('<Row>%s</Row>' % ''.join(_cell(v) for v in r) for r in rows)
     xml = ('<?xml version="1.0"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" '
            'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
@@ -468,3 +470,20 @@ class TestSlotMeterAudit(TransactionCase):
         self.assertNotIn('fue devuelta en Caja', html)
         cuadre.audit_devoluciones_devueltas = 500.0
         self.assertIn('fue devuelta en Caja', render())
+
+    def test_operation_balance_noncash_credit(self):
+        """17/11: la columna CRE incluye créditos promocionales (no efectivo); el cuadre usa solo el efectivo."""
+        cuadre = self._new_cuadre('2030-03-06')
+        self._import(cuadre)  # CRE total -10.25
+        # efectivo -15.25 + no efectivo 5.00 = -10.25 (CRE): coinciden
+        cuadre.with_user(self.auditor).import_operation_balance(
+            self._overview_for(cuadre, handpay=5.0, eft=0.0, credit=-15.25, noncash=5.0), 'ob.xls')
+        self.assertAlmostEqual(cuadre.audit_balance_credito_no_efectivo, 5.0)
+        self.assertAlmostEqual(cuadre.audit_credito_maquina, -15.25)
+        self.assertAlmostEqual(cuadre.audit_resultado, 1300.25 + 5.0 - 15.25)
+        # sin la línea de no efectivo, -15.25 no coincide con la columna CRE: archivos de días distintos
+        other = self._new_cuadre('2030-03-07')
+        self._import(other, build_file([dict(l, NGWINE=l.get('NGWINE', 0) + 1) for l in self.lines]))
+        with self.assertRaisesRegex(UserError, 'efectivo \\+ no efectivo'):
+            other.with_user(self.auditor).import_operation_balance(
+                build_overview(date_str='07.03.30', egm=1303.25, credit=-15.25), 'ob.xls')

@@ -88,8 +88,9 @@ class CuadreDeCaja(models.Model):
                                                help='"EFT Cash Liability Movement" del resumen de DRGT.')
     audit_billetes_no_registrados = fields.Monetary('Billetes No Registrados', copy=False, tracking=True,
                                                     help='Billetes que la máquina no contabilizó pero aparecieron en el conteo de Caja.')
-    audit_credito_maquina = fields.Monetary('Crédito en Máquina (CRE)', compute='_compute_slot_audit', store=True,
-                                            help='Suma de la columna CRE del archivo de contadores.')
+    audit_credito_maquina = fields.Monetary('Crédito en Máquina', compute='_compute_slot_audit', store=True,
+                                            help='Crédito en efectivo que quedó en las máquinas ("Credit Meter Cash Liability Movement" del Operation '
+                                                 'Balance). Sin Operation Balance, la suma de la columna CRE del Slot Analysis.')
     audit_resultado = fields.Monetary('Resultado según Contadores', compute='_compute_slot_audit', store=True)
     audit_diferencia = fields.Monetary('Diferencia vs Resultado Caja Máquina', compute='_compute_slot_audit', store=True,
                                        help='Resultado según Contadores menos Resultado Caja Máquina.')
@@ -112,6 +113,9 @@ class CuadreDeCaja(models.Model):
     audit_balance_filename = fields.Char('Nombre del Archivo Operation Balance', copy=False)
     audit_balance_credito_maquina = fields.Monetary('Crédito en Máquina según Operation Balance', copy=False, readonly=True,
                                                     help='"Credit Meter Cash Liability Movement". Se compara con la suma de la columna CRE.')
+    audit_balance_credito_no_efectivo = fields.Monetary('Crédito No Efectivo según Operation Balance', copy=False, readonly=True,
+                                                        help='"Noncash Credit Meter Liability Movement" (créditos promocionales). '
+                                                             'No entra en el cuadre; con el crédito en efectivo debe sumar la columna CRE.')
     audit_balance_egm_win_loss = fields.Monetary('Ganancia EGM según Operation Balance', copy=False, readonly=True,
                                                  help='"EGM Cash Win/Loss Meters". Se compara con la suma de la columna NGWINE.')
 
@@ -171,12 +175,17 @@ class CuadreDeCaja(models.Model):
     @api.depends('slot_meter_ids.ngwine', 'slot_meter_ids.cre', 'audit_handpay_liability', 'audit_variacion_efectivo',
                  'audit_billetes_no_registrados', 'audit_devoluciones_devueltas', 'sobrante_total', 'premios_maquina_total',
                  'devolucion_total', 'audit_cash_file', 'audit_drgt_rifas', 'audit_drgt_devoluciones',
+                 'audit_balance_file', 'audit_balance_credito_maquina',
                  'resultado_caja_maquina', 'company_id.casino_slot_audit_tolerance')
     def _compute_slot_audit(self):
         for record in self:
             currency = record.currency_id or record.company_id.currency_id
             ngwine = currency.round(sum(record.slot_meter_ids.mapped('ngwine')))
-            credito = currency.round(sum(record.slot_meter_ids.mapped('cre')))
+            if record.audit_balance_file:
+                # Solo el crédito en efectivo: la columna CRE también incluye créditos promocionales (no efectivo).
+                credito = currency.round(record.audit_balance_credito_maquina)
+            else:
+                credito = currency.round(sum(record.slot_meter_ids.mapped('cre')))
             # Rifas y Devoluciones: del reporte de Caja de DRGT si se importó; si no, las registradas en el cuadre.
             if record.audit_cash_file:
                 rifas, devoluciones = record.audit_drgt_rifas, record.audit_drgt_devoluciones
@@ -290,11 +299,14 @@ class CuadreDeCaja(models.Model):
                               desde=period[0].strftime('%d/%m/%Y'), hasta=period[1].strftime('%d/%m/%Y'),
                               fecha=self._slot_date_label()))
         values = parsed['values']
-        self._check_slot_files_match(egm=values.get('egm_win_loss', 0.0), credito=values['credito_maquina'], has_balance=True)
+        self._check_slot_files_match(egm=values.get('egm_win_loss', 0.0),
+                                     credito=values['credito_maquina'] + values.get('credito_no_efectivo', 0.0),
+                                     has_balance=True)
         self.write({
             'audit_handpay_liability': values['handpay_liability'],
             'audit_variacion_efectivo': values['variacion_efectivo'],
             'audit_balance_credito_maquina': values['credito_maquina'],
+            'audit_balance_credito_no_efectivo': values.get('credito_no_efectivo', 0.0),
             'audit_balance_egm_win_loss': values.get('egm_win_loss', 0.0),
             'audit_balance_file': base64.b64encode(content),
             'audit_balance_filename': filename or 'operation_balance.xls',
@@ -343,7 +355,8 @@ class CuadreDeCaja(models.Model):
         if not (self.slot_meter_ids and has_balance):
             return issues
         egm = self.audit_balance_egm_win_loss if egm is None else egm
-        credito = self.audit_balance_credito_maquina if credito is None else credito
+        if credito is None:
+            credito = self.audit_balance_credito_maquina + self.audit_balance_credito_no_efectivo
         currency = self.currency_id or self.company_id.currency_id
         ngwine = currency.round(sum(self.slot_meter_ids.mapped('ngwine')))
         cre = currency.round(sum(self.slot_meter_ids.mapped('cre')))
@@ -351,7 +364,7 @@ class CuadreDeCaja(models.Model):
             issues.append(_('Ganancia de contadores: Slot Analysis %(a)s, Operation Balance %(b)s.',
                             a=self._fmt_amount(ngwine), b=self._fmt_amount(egm)))
         if float_compare(cre, credito, precision_digits=1) != 0:
-            issues.append(_('Crédito en máquina: Slot Analysis %(a)s, Operation Balance %(b)s.',
+            issues.append(_('Crédito en máquina (efectivo + no efectivo): Slot Analysis %(a)s, Operation Balance %(b)s.',
                             a=self._fmt_amount(cre), b=self._fmt_amount(credito)))
         return issues
 

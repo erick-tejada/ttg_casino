@@ -249,8 +249,10 @@ OVERVIEW_VALUES = {
     'handpay_liability': 'Handpay Liability Movement',
     'variacion_efectivo': 'EFT Cash Liability Movement',
     'credito_maquina': 'Credit Meter Cash Liability Movement',
+    'credito_no_efectivo': 'Noncash Credit Meter Liability Movement',
     'egm_win_loss': 'EGM Cash Win/Loss Meters',
 }
+OVERVIEW_OPTIONAL = ('egm_win_loss', 'credito_no_efectivo')
 _PERIOD_RE = re.compile(r'Period:\s*(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s*-\s*(\d{1,2})\.(\d{1,2})\.(\d{2,4})')
 
 
@@ -294,7 +296,7 @@ def parse_overview(content):
                     number = to_number(nxt)
                     if number is not None and _to_text(nxt) != '':
                         values[key] = number
-        if key not in values and key != 'egm_win_loss':
+        if key not in values and key not in OVERVIEW_OPTIONAL:
             raise SlotMeterFileError('No se encontró "%s" en el reporte Operation Balance.' % label)
     return {'period': period, 'values': values}
 

@@ -261,7 +261,7 @@
                             <field name="audit_devoluciones_devueltas" string="(+) Devoluciones Devueltas" readonly="audit_approved"/>
                             <field name="audit_variacion_efectivo" string="(+) Variación de Efectivo" readonly="audit_approved"/>
                             <field name="audit_billetes_no_registrados" string="(+) Billetes No Registrados" readonly="audit_approved"/>
-                            <field name="audit_credito_maquina" string="(+) Crédito en Máquina (CRE)"/>
+                            <field name="audit_credito_maquina" string="(+) Crédito en Máquina"/>
                             <field name="audit_resultado" class="fw-bold"/>
                         </group>
                         <group string="Comparación con Caja">
